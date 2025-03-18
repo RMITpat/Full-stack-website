@@ -1,4 +1,6 @@
-export default function helloWorld(){
+import React from "react";
+
+export default function HelloWorld(){
     return (
         <div>
             <p>
@@ -7,3 +9,4 @@ export default function helloWorld(){
         </div>
     );
 }
+
