@@ -8,8 +8,9 @@ import {
 
 import InputField from '@/components/InputField'
 import SelectField from '@/components/SelectField'
-import NavBar from '@/components/NavBar'
 import { useEffect, useState } from "react";
+import EmailField from "@/components/EmailFeild";
+import {PassFieldStrIndicator} from "@/components/PassFieldStrIndicator";
 
 //interface formdata to describe the fields of the registration
 interface FormData { 
@@ -69,18 +70,16 @@ const RegistrationForm: React.FC = () => {
 
     return (
         <>
-        <NavBar />
-        {/*FIXME remove*/}
         <p>last form submission was {JSON.stringify(dataSubmission)}</p>
         <Box p={8} maxW="500px" mx="auto">
-            <VStack spacing={8} align="stretch">
+
                 <Heading textAlign="center">Registration Form</Heading>
                 <Text textAlign="center" color="gray.600">
                     Please fill out all the fields below
                 </Text>
 
                 <form onSubmit={handleSubmit}>
-                    <VStack spacing={4}>
+
                         <InputField
                             label="Name"
                             type="text"
@@ -89,13 +88,12 @@ const RegistrationForm: React.FC = () => {
                             placeholder="Enter your name"
                             isRequired
                         />
-                        <InputField
-                            label="Email"
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="Enter your email"
-                            isRequired
+                        <EmailField
+                            label={"Email"}
+                            placeholder={"example@domain.com"}
+                        />
+                        <PassFieldStrIndicator
+
                         />
                         <InputField
                             label="Age"
@@ -114,9 +112,9 @@ const RegistrationForm: React.FC = () => {
                         <Button type="submit" colorScheme="blue" width="100%" mt={4}>
                             Submit
                         </Button>
-                    </VStack>
+
                 </form>
-            </VStack>
+
         </Box>
         </>
     );

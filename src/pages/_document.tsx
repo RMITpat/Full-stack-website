@@ -1,5 +1,6 @@
 import { Head, Html, Main, NextScript } from 'next/document';
 import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core';
+import NavBar from "@/components/NavBar";
 
 export default function Document() {
     return (
@@ -8,6 +9,7 @@ export default function Document() {
                 <ColorSchemeScript defaultColorScheme="auto" />
             </Head>
             <body>
+            <NavBar/>
             <Main />
             <NextScript />
             </body>
