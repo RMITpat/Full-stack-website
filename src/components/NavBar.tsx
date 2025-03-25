@@ -1,21 +1,25 @@
 import Link from "next/link";
 import React from "react";
+import { Stack } from '@mantine/core'
 
 export default function NavBar() {
 
     return (
-        <nav className = "bg-blue-400 p-4 w-full"> 
-            <div className = "   flex items-center justify-between ">
-                <Link href = "/" passHref>
-                TeachTeam
-                </Link>
-                <Link href = "/registration" passHref>
-                Login
-                </Link>
+        <Stack
+            bg="var(--mantine-color-body)"
+            align="stretch"
+            justify="center"
+            gap="md">
 
-            </div>
-           
-        </nav>
+            <Link href = "/registration" passHref>
+                Login
+            </Link>
+
+            <Link href = "/" passHref>
+                TeachTeam
+            </Link>
+        </Stack>
+
     );
 
 }

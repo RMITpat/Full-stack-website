@@ -1,9 +1,10 @@
 import '@mantine/core/styles.css';
-import type { AppProps } from 'next/app';
 import '@mantine/core/styles.css';
-import { createTheme, MantineProvider } from '@mantine/core';
-import { AppShell, Burger } from '@mantine/core';
+import type { AppProps } from 'next/app';
+
+import { createTheme, MantineProvider, AppShell, Burger, Stack} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+
 import NavBar from "@/components/NavBar";
 
 const theme = createTheme({
@@ -19,9 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">
           <AppShell
-              header={{ height: 60 }}
+              header={{ height: 45 }}
               navbar={{
-                  width: 300,
+                  width: 200,
                   breakpoint: 'sm',
                   collapsed: { mobile: !opened },
               }}
