@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    VStack,
     Heading,
     Text,
 } from "@chakra-ui/react";
