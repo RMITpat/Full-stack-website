@@ -11,7 +11,7 @@ export default function NavBar() {
             justify="center"
             gap="md">
 
-            <Link href = "/registration" passHref>
+            <Link href = "/Login" passHref>
                 Login
             </Link>
 

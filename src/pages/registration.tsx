@@ -1,15 +1,11 @@
-import {
-    Box,
-    Button,
-    Heading,
-    Text,
-} from "@chakra-ui/react";
+import { Button, Heading, Text,} from "@chakra-ui/react";
 
 import InputField from '@/components/InputField'
 import SelectField from '@/components/SelectField'
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import EmailField from "@/components/EmailFeild";
 import {PassFieldStrIndicator} from "@/components/PassFieldStrIndicator";
+import {Stack} from '@mantine/core';
 
 //interface formdata to describe the fields of the registration
 interface FormData { 
@@ -18,6 +14,7 @@ interface FormData {
     age: string
     occupation: string
 }
+
 const RegistrationForm: React.FC = () => {
     //this is type FormData. setFormData is used to set all of them. held in variable formData
     const [formData, setFormData] = useState<FormData>({
@@ -70,7 +67,14 @@ const RegistrationForm: React.FC = () => {
     return (
         <>
         <p>last form submission was {JSON.stringify(dataSubmission)}</p>
-        <Box p={8} maxW="500px" mx="auto">
+            <Stack
+                h={300}
+
+                bg="var(--mantine-color-body)"
+                align="center"
+                justify="center"
+                gap="md"
+            >
 
                 <Heading textAlign="center">Registration Form</Heading>
                 <Text textAlign="center" color="gray.600">
@@ -114,7 +118,7 @@ const RegistrationForm: React.FC = () => {
 
                 </form>
 
-        </Box>
+        </Stack>
         </>
     );
 };
