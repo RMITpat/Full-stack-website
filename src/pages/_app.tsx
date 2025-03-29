@@ -8,6 +8,7 @@ import { useDisclosure } from '@mantine/hooks';
 
 import NavBar from "@/components/NavBar";
 import DummyLocalStore from "@/pages/api/DummyLocalStore";
+import { LoginProvider } from './contexts/LoginContext';
 
 const theme = createTheme({
     fontFamily: 'Open Sans, Sans-Serif',
@@ -22,6 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">
+        <LoginProvider>
           <AppShell
               header={{ height: 45 }}
               navbar={{
@@ -49,6 +51,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   <Component {...pageProps} />
               </AppShell.Main>
           </AppShell>
+          </LoginProvider>
 
       </MantineProvider>
   );
