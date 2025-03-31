@@ -1,6 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { useLoginContext } from "./contexts/LoginContext";
-import { Autocomplete, Flex } from "@mantine/core";
+import {
+  AccordionControl,
+  AccordionItem,
+  AccordionPanel,
+  Autocomplete,
+  Flex,
+  Stack,
+} from "@mantine/core";
 import {
   TextInput,
   Text,
@@ -11,6 +18,7 @@ import {
   Modal,
   Group,
   SegmentedControl,
+  Accordion,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -48,6 +56,11 @@ export default function Home() {
     ["Skills", "skills"],
     ["Credentials", "credentials"],
   ];
+  let coursesArray: [string, string, string][] = [
+    ["Sigma 101", "COSC1048", "Semester 1"],
+    ["Competitive Eating", "COSC4839", "Semester 2"],
+    ["Introduction to Lebron", "COSC4830", "Semester 1"],
+  ];
 
   const form = useForm<detailValues>({
     mode: "uncontrolled",
@@ -69,90 +82,109 @@ export default function Home() {
   return (
     <>
       <p>welcome to home page</p>
-      {occupation == 'signedOut' ? (
+      {occupation == "signedOut" ? (
         <p>Please sign in</p>
-      ) : occupation == 'lecturer' ? (
+      ) : occupation == "lecturer" ? (
         <p>You are a lecturer</p>
-      ) : occupation === 'tutor' ? (
+      ) : occupation === "tutor" ? (
         <>
           <p>You are a tutor</p>
-          <Box>
-            <Flex
-              direction="column"
-              style={{
-                border: "1px solid black",
-                maxWidth: "500px",
-                backgroundColor: theme.primaryColor,
-                fontFamily: theme.fontFamily,
-                padding: theme.spacing.md,
-              }}
-            >
-              <Title order={2}>Your Details</Title>
-              {detailArray.map((field, index) => (
-                <>
-                  <Title order={4} key={index}>
-                    {field[0]}
-                  </Title>
-                  {submittedValues ? (
-                    <Text>{submittedValues[field[1]]}</Text>
-                  ) : (
-                    <Text>Not set</Text>
-                  )}
-                </>
-              ))}
-            </Flex>
-            <Button variant="filled" size="md" onClick={open}>
-              Update Details
-            </Button>
-          </Box>
-          <Modal opened={opened} onClose={close} title="Update Details">
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-              <TextInput
-                {...form.getInputProps("name")}
-                mt="md"
-                label="Name"
-                placeholder="Name"
-              />
-              <TextInput
-                {...form.getInputProps("previousRoles")}
-                mt="md"
-                label="Previous Roles"
-                placeholder="Previous Roles"
-              />
-              <Text
-                size="sm"
-                style={{ marginBottom: "3px", marginTop: "16px" }}
+          <Group justify="flex-start" grow gap="xl" align="flex-start">
+            <Stack>
+              <Title>Courses</Title>
+              <Accordion>
+                {coursesArray.map((course, index) => (
+                  <AccordionItem value={course[0]}>
+                    <AccordionControl>{course[0]}</AccordionControl>
+                    <AccordionPanel>
+                      <Stack>
+                        {" "}
+                        {course[1]} {course[2]}
+                        <Button>Apply</Button>
+                      </Stack>
+                    </AccordionPanel>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </Stack>
+
+            <Box>
+              <Flex
+                direction="column"
+                style={{
+                  border: "1px solid black",
+                  maxWidth: "500px",
+                  backgroundColor: theme.primaryColor,
+                  fontFamily: theme.fontFamily,
+                  padding: theme.spacing.md,
+                }}
               >
-                Availability
-              </Text>
-              <SegmentedControl
-                {...form.getInputProps("availability")}
-                data={["Part time", "Full time"]}
-                //value={form.values.availability}
-                //onChange={(value) => form.setFieldValue("availability", value)}
-              ></SegmentedControl>
-              <TextInput
-                {...form.getInputProps("skills")}
-                mt="md"
-                label="Skills"
-                placeholder="Skills"
-              />
-              <TextInput
-                {...form.getInputProps("credentials")}
-                mt="md"
-                label="Credentials"
-                placeholder="Credentials"
-              />
-              <Group justify="center" mt="md">
-                <Button type="submit">Update</Button>
-              </Group>
-            </form>
-          </Modal>
+                <Title order={2}>Your Details</Title>
+                {detailArray.map((field, index) => (
+                  <>
+                    <Title order={4} key={index}>
+                      {field[0]}
+                    </Title>
+                    {submittedValues ? (
+                      <Text>{submittedValues[field[1]]}</Text>
+                    ) : (
+                      <Text>Not set</Text>
+                    )}
+                  </>
+                ))}
+              </Flex>
+              <Button variant="filled" size="md" onClick={open}>
+                Update Details
+              </Button>
+            </Box>
+            <Modal opened={opened} onClose={close} title="Update Details">
+              <form onSubmit={form.onSubmit(handleSubmit)}>
+                <TextInput
+                  {...form.getInputProps("name")}
+                  mt="md"
+                  label="Name"
+                  placeholder="Name"
+                />
+                <TextInput
+                  {...form.getInputProps("previousRoles")}
+                  mt="md"
+                  label="Previous Roles"
+                  placeholder="Previous Roles"
+                />
+                <Text
+                  size="sm"
+                  style={{ marginBottom: "3px", marginTop: "16px" }}
+                >
+                  Availability
+                </Text>
+                <SegmentedControl
+                  {...form.getInputProps("availability")}
+                  data={["Part time", "Full time"]}
+                  //value={form.values.availability}
+                  //onChange={(value) => form.setFieldValue("availability", value)}
+                ></SegmentedControl>
+                <TextInput
+                  {...form.getInputProps("skills")}
+                  mt="md"
+                  label="Skills"
+                  placeholder="Skills"
+                />
+                <TextInput
+                  {...form.getInputProps("credentials")}
+                  mt="md"
+                  label="Credentials"
+                  placeholder="Credentials"
+                />
+                <Group justify="center" mt="md">
+                  <Button type="submit">Update</Button>
+                </Group>
+              </form>
+            </Modal>
+          </Group>
         </>
       ) : (
         <p>Unknown status</p>
       )}
-      
     </>
   );
 }
