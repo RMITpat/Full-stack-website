@@ -69,9 +69,11 @@ export default function Home() {
   return (
     <>
       <p>welcome to home page</p>
-      {occupation == "lecturer" ? (
+      {occupation == 'signedOut' ? (
+        <p>Please sign in</p>
+      ) : occupation == 'lecturer' ? (
         <p>You are a lecturer</p>
-      ) : (
+      ) : occupation === 'tutor' ? (
         <>
           <p>You are a tutor</p>
           <Box>
@@ -147,7 +149,10 @@ export default function Home() {
             </form>
           </Modal>
         </>
+      ) : (
+        <p>Unknown status</p>
       )}
+      
     </>
   );
 }
