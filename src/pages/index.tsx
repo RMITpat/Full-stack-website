@@ -32,8 +32,6 @@ export default function Home() {
     detailValues | undefined
   >(undefined);
 
- 
-
   useEffect(() => {
     const lastFormSubmission = localStorage.getItem("tutorDetails");
 
@@ -95,7 +93,9 @@ export default function Home() {
                   </Title>
                   {submittedValues ? (
                     <Text>{submittedValues[field[1]]}</Text>
-                  ) : null}
+                  ) : (
+                    <Text>Not set</Text>
+                  )}
                 </>
               ))}
             </Flex>
