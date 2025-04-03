@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { useLoginContext } from "../pages/contexts/LoginContext";
 import {
   AccordionControl,
@@ -22,21 +22,21 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+import { Course } from "../interfaces/interfaces"
+import { DetailValues } from "../interfaces/interfaces"
 
-interface detailValues {
-  name: string;
-  previousRoles: string;
-  availability: string;
-  skills: string;
-  credentials: string;
+//courses[name, code, semester applicantsArray[applicantDetails]]
+interface tutorHomePageProps {
+  courses: Course[]
+  setCourses: Dispatch<SetStateAction<Course[]>>
 }
 
-export default function PassLogin() {
+const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) => {
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
 
   const [submittedValues, setSubmittedValues] = useState<
-    detailValues | undefined
+    DetailValues | undefined
   >(undefined);
 
   useEffect(() => {
@@ -47,21 +47,20 @@ export default function PassLogin() {
       setSubmittedValues(JSON.parse(lastFormSubmission));
     }
   }, []);
+  
 
-  let detailArray: [string, keyof detailValues][] = [
+  let detailArray: [string, keyof DetailValues][] = [
     ["Name", "name"],
     ["Previous Roles", "previousRoles"],
     ["Availability", "availability"],
     ["Skills", "skills"],
     ["Credentials", "credentials"],
   ];
-  let coursesArray: [string, string, string][] = [
-    ["Sigma 101", "COSC1048", "Semester 1"],
-    ["Competitive Eating", "COSC4839", "Semester 2"],
-    ["Introduction to Lebron", "COSC4830", "Semester 1"],
-  ];
+  
+  
+  
 
-  const form = useForm<detailValues>({
+  const form = useForm<DetailValues>({
     mode: "uncontrolled",
     initialValues: {
       name: "",
@@ -77,24 +76,41 @@ export default function PassLogin() {
     setSubmittedValues(values);
     localStorage.setItem("tutorDetails", JSON.stringify(values));
   };
+  const applyForCourse = (course: Course) => {
+    const tutorDetails = localStorage.getItem("tutorDetails")
 
+    if (tutorDetails) {
+      const tutorDetailsParsed: DetailValues = JSON.parse(tutorDetails)
+
+      course.applicants.push(tutorDetailsParsed)
+      localStorage.setItem("courseDetails", JSON.stringify(courses))
+      console.log(course.applicants)
+      console.log(courses)
+    }
+    
+  };
   return (
     <>
+    
       <Group justify="flex-start" grow gap="xl" align="flex-start">
         <Stack>
           <Title>Courses</Title>
           <Accordion>
-            {coursesArray.map((course, index) => (
-              <AccordionItem value={course[0]}>
-                <AccordionControl>{course[0]}</AccordionControl>
+            {courses.map((course, index) => (
+              <>
+              <AccordionItem value={course.name}>
+                <AccordionControl>{course.name}</AccordionControl>
                 <AccordionPanel>
                   <Stack>
                     {" "}
-                    {course[1]} {course[2]}
-                    <Button>Apply</Button>
+                    {course.courseCode} {course.semester}
+                    <Button onClick={() => applyForCourse(course)} >Apply</Button>
+                    
                   </Stack>
                 </AccordionPanel>
               </AccordionItem>
+              
+              </>
             ))}
           </Accordion>
         </Stack>
@@ -172,3 +188,5 @@ export default function PassLogin() {
     </>
   );
 }
+
+export default tutorHomePage

@@ -45,7 +45,7 @@ export function LoginProvider({ children }: LoginProviderProps) {
   //   }
 
   // }, []);
-  const occupationString = "tutor";
+  const occupationString = "lecturer";
   return (
     <loginContext.Provider value={occupationString}>
       {children}
