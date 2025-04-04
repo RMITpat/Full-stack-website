@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { Stack } from '@mantine/core'
+import { Stack, Button} from '@mantine/core'
+
 
 export default function NavBar() {
 
@@ -10,14 +11,16 @@ export default function NavBar() {
             align="stretch"
             justify="center"
             gap="md">
-
-            <Link href = "/Login" passHref>
-                Login
-            </Link>
-
-            <Link href = "/" passHref>
-                TeachTeam
-            </Link>
+            <Button mt={"sm"}>
+                <Link href = "/Login" passHref>
+                    Login
+                </Link>
+            </Button>
+            <Button mt={"sm"}>
+                <Link href = "/" passHref>
+                    TeachTeam
+                </Link>
+            </Button>
         </Stack>
 
     );

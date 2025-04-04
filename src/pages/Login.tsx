@@ -2,8 +2,16 @@
 import { TextInput, Button, PasswordInput} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import {useEffect, useState} from "react";
+import {useLoginContext} from "@/pages/contexts/LoginContext";
 
 export default function Login() {
+    interface user {
+        email: string;
+        name: string;
+        type: string;
+    }
+
+
     const form = useForm({
         mode: 'controlled',
         initialValues: {
@@ -16,20 +24,24 @@ export default function Login() {
     });
     const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null);
 
+    //this authenticates a user signing in with the password accociated with the email they entered in the login form
     useEffect(() => {
-        console.log("submittedValues use effect ran");
+        // @ts-ignore
+
         const dummyFromLocal= JSON.parse(localStorage.getItem('DummyData'))
+            // @ts-ignore
             ? JSON.parse(localStorage.getItem('DummyData')) : false;
 
         const checkPass = dummyFromLocal && dummyFromLocal[form.values.email]
             ? dummyFromLocal[form.values.email].password === form.values.password
             : false;
-        console.log(form.values.email)
-        console.log(Object.keys(dummyFromLocal));
 
         switch (checkPass) {
-            case false: console.log("login failed"); break;
-            case true: console.log("login success"); break;
+            case false: console.log("login failed");
+                break;
+            case true: console.log("login success");
+
+            break;
         }
 
     }, [submittedValues]);

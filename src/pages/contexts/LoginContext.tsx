@@ -6,12 +6,12 @@ import {
   useEffect,
 } from "react";
 //declaring the type FormData so we can store it
-interface FormData {
-  name: string;
-  email: string;
-  age: string;
-  occupation: string;
-}
+// interface FormData {
+//   name: string;
+//   email: string;
+//   age: string;
+//   occupation: string;
+// }
 
 //this sets the data that we will be giving out and accepting from other places
 // type loginContextType = {
@@ -52,7 +52,9 @@ export function LoginProvider({ children }: LoginProviderProps) {
     </loginContext.Provider>
   );
 }
-
+//todo write and expose update functions that can be used to change the values in this context
+//todo use those methods in login on the successful login case
+//todo the context provider should use local storage to read in the user info
 //this makes it so we can call useLOginContext from other pages instead of doing context = useContext(loginContext) its just a way to save time
 export function useLoginContext() {
   const context = useContext(loginContext);
