@@ -8,7 +8,7 @@ import { Course } from "../interfaces/interfaces"
 import { DetailValues } from "../interfaces/interfaces"
 
 export default function Home() {
-  const occupation = useLoginContext();
+  const currentUser = useLoginContext();
   let defaultCourses: Course[] = [
       
         {name: "Sigma 101", courseCode: "COSC1048", semester: "Semester 1", applicants: []}
@@ -33,14 +33,14 @@ export default function Home() {
   return (
     <>
       <p>welcome to home page</p>
-      { occupation == "signedOut" ? (
+      { currentUser.user.User_Type == "default" ? (
         <p>Please sign in</p>
-      ) : occupation.user.User_Type == "lecturer" ? (
+      ) : currentUser.user.User_Type == "lecturer" ? (
         <>
           <p>You are a lecturer</p>
           <LecturerHomePage courses={courses} setCourses={setCourses} />
         </>
-      ) : occupation.user.User_Type === "tutor" ? (
+      ) : currentUser.user.User_Type === "tutor" ? (
         <>
           <p>You are a tutor</p>
           <TutorHomePage courses={courses} setCourses={setCourses} />

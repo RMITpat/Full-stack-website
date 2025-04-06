@@ -5,12 +5,7 @@ import {
   useContext,
 } from "react";
 
-type User = {
-  User_Name: string;
-  User_Email: string;
-  User_Type: "default" | "tutor" | "lecturer" | "admin";
-  User_Img_Url: string;
-}
+import { User } from "../../types/types"
 type LoginContextType = {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
