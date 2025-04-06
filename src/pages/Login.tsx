@@ -70,7 +70,7 @@ export default function Login() {
         placeholder="Password"
       />
 
-      <Button type="submit" mt="md" component={Link} href="/">
+      <Button type="submit" mt="md">
         Submit
       </Button>
     </form>
