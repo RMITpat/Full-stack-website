@@ -33,14 +33,14 @@ export default function Home() {
   return (
     <>
       <p>welcome to home page</p>
-      {occupation == "signedOut" ? (
+      { occupation == "signedOut" ? (
         <p>Please sign in</p>
-      ) : occupation == "lecturer" ? (
+      ) : occupation.user.User_Type == "lecturer" ? (
         <>
           <p>You are a lecturer</p>
           <LecturerHomePage courses={courses} setCourses={setCourses} />
         </>
-      ) : occupation === "tutor" ? (
+      ) : occupation.user.User_Type === "tutor" ? (
         <>
           <p>You are a tutor</p>
           <TutorHomePage courses={courses} setCourses={setCourses} />
