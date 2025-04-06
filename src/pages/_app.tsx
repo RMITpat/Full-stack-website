@@ -7,8 +7,10 @@ import { createTheme, MantineProvider, AppShell, Burger} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import NavBar from "@/components/NavBar";
+import GreetUser from "@/components/GreetUser";
 import DummyLocalStore from "@/pages/api/DummyLocalStore";
-import { LoginProvider } from './contexts/LoginContext';
+import {LoginProvider} from './contexts/LoginContext';
+
 
 const theme = createTheme({
     fontFamily: 'Open Sans, Sans-Serif',
@@ -40,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
                       hiddenFrom="sm"
                       size="sm"
                   />
-                  <div>Logo</div>
+                  <div><GreetUser/></div>
               </AppShell.Header>
 
               <AppShell.Navbar p="md">

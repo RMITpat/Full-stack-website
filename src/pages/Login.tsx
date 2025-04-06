@@ -5,12 +5,7 @@ import {useEffect, useState} from "react";
 import {useLoginContext} from "@/pages/contexts/LoginContext";
 
 export default function Login() {
-    interface user {
-        email: string;
-        name: string;
-        type: string;
-    }
-
+    const { setUser } = useLoginContext();
 
     const form = useForm({
         mode: 'controlled',
@@ -22,26 +17,37 @@ export default function Login() {
             email: (value) => (/^\S+@\S+$/.test(value)) ? null : 'Invalid email'
         },
     });
+
     const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null);
 
     //this authenticates a user signing in with the password accociated with the email they entered in the login form
     useEffect(() => {
-        // @ts-ignore
 
+        //gets sample user data, or is false
         const dummyFromLocal= JSON.parse(localStorage.getItem('DummyData'))
-            // @ts-ignore
             ? JSON.parse(localStorage.getItem('DummyData')) : false;
 
+        //gets valid user password for entered email from sample data, or is false
         const checkPass = dummyFromLocal && dummyFromLocal[form.values.email]
             ? dummyFromLocal[form.values.email].password === form.values.password
             : false;
 
-        switch (checkPass) {
-            case false: console.log("login failed");
-                break;
-            case true: console.log("login success");
+        if (checkPass) {
+            const loggedInUser = dummyFromLocal[form.values.email];
+            //this makes sure the stored user type is compatible with login context
+            const handled_user_type = loggedInUser.type === "tutor" || loggedInUser.type === "lecturer"
+                ? loggedInUser.type
+                : "default";
+            setUser({
+                User_Name: loggedInUser.name,
+                User_Email: form.values.email,
+                User_Type: handled_user_type,
+                User_Img_Url: loggedInUser.img_url || "",
+            });
 
-            break;
+            console.log("login success");
+        } else {
+            console.log("login failed");
         }
 
     }, [submittedValues]);
