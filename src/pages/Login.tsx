@@ -3,10 +3,11 @@ import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const { setUser } = useLoginContext();
-
+  const router = useRouter();
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -48,7 +49,7 @@ export default function Login() {
         User_Type: handled_user_type,
         User_Img_Url: loggedInUser.img_url || "",
       });
-
+      router.push("/");
       console.log("login success");
     } else {
       console.log("login failed");
@@ -69,7 +70,6 @@ export default function Login() {
         label="Password"
         placeholder="Password"
       />
-
       <Button type="submit" mt="md">
         Submit
       </Button>
