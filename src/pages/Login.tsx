@@ -2,7 +2,7 @@ import { TextInput, Button, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-
+import router, { useRouter } from "next/router";
 
 export default function Login() {
   const { setUser } = useLoginContext();
@@ -49,7 +49,7 @@ export default function Login() {
         User_Type: handled_user_type,
         User_Img_Url: loggedInUser.img_url || "",
       });
-
+      router.push("/");
       console.log("login success");
     } else {
       console.log("login failed");
