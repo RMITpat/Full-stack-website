@@ -2,7 +2,7 @@ import { TextInput, Button, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-import Link from "next/link";
+
 
 export default function Login() {
   const { setUser } = useLoginContext();
@@ -22,7 +22,7 @@ export default function Login() {
     typeof form.values | null
   >(null);
 
-  //this authenticates a user signing in with the password accociated with the email they entered in the login form
+  //this authenticates a user signing in with the password associated with the email they entered in the login form
   useEffect(() => {
     //gets sample user data, or is false
     const dummyFromLocal = JSON.parse(localStorage.getItem("DummyData"))
@@ -42,6 +42,7 @@ export default function Login() {
         loggedInUser.type === "tutor" || loggedInUser.type === "lecturer"
           ? loggedInUser.type
           : "default";
+
       setUser({
         User_Name: loggedInUser.name,
         User_Email: form.values.email,

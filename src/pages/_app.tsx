@@ -1,5 +1,4 @@
 import '@mantine/core/styles.css';
-import '@mantine/core/styles.css';
 import type { AppProps } from 'next/app';
 import {useEffect} from 'react';
 
@@ -10,6 +9,7 @@ import NavBar from "@/components/NavBar";
 import GreetUser from "@/components/GreetUser";
 import DummyLocalStore from "@/pages/api/DummyLocalStore";
 import {LoginProvider} from './contexts/LoginContext';
+import DummyApplications from "@/pages/api/DummyApplications";
 
 
 const theme = createTheme({
@@ -22,7 +22,7 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
     const [opened, { toggle }] = useDisclosure();
     useEffect (()=> {DummyLocalStore();}, []); //populates local storage with sample user data on 1st load
-
+    useEffect(() => {DummyApplications();}, [DummyLocalStore]);
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">
         <LoginProvider>
