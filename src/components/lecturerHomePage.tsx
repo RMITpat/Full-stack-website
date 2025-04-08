@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react"
-import { Course } from "../interfaces/interfaces"
-import { DetailValues } from "../interfaces/interfaces"
+import { Course } from "../interfaces/Types"
+import { Application } from "../interfaces/Types"
 
 interface tutorHomePageProps {
   courses: Course[]

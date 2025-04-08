@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { Stack, Button } from "@mantine/core";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-import { User } from "../types/types";
+import { User } from "../../types/types";
 
 export default function NavBar() {
   const currentUser = useLoginContext();
