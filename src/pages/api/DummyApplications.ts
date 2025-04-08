@@ -1,4 +1,6 @@
-const hardcodedApplications: DetailValues[] = [
+import { Tutor, Application, ApplicationsMap } from '@/interfaces/Types'
+
+const hardcodedApplications: Application[] = [
     {
         course: "compsci",
         name: "",
@@ -81,32 +83,11 @@ const hardcodedApplications: DetailValues[] = [
     },
 ];
 
-type Tutor = {
-    email: string;
-    name: string;
-};
-
-
-type DetailValues = {
-    course: string;
-    name: string;
-    previousRoles: string;
-    availability: string;
-    skills: string;
-    credentials: string;
-};
-
-type EnrichedApplicationsMap = {
-    [key: string]: DetailValues;
-};
-
-
-
 function createEnrichedApplications(
     tutors: Tutor[],
-    applications: DetailValues[]
-): EnrichedApplicationsMap {
-    const enriched: EnrichedApplicationsMap = {};
+    applications: Application[]
+): ApplicationsMap {
+    const enriched: ApplicationsMap = {};
 
     tutors.slice(0, applications.length).forEach((tutor, index) => {
         const application = { ...applications[index] };

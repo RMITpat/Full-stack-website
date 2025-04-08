@@ -51,6 +51,7 @@ const DummyLocalStore = () =>{
             "type": "tutor"
         }
     }
+
     localStorage.setItem("DummyData", JSON.stringify(Dummy));
 
     const dummyFromLocal = localStorage.getItem("DummyData");

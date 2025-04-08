@@ -4,8 +4,9 @@ import TutorHomePage from "../components/tutorHomePage";
 import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
-import { Course } from "../interfaces/interfaces"
-import { DetailValues } from "../interfaces/interfaces"
+import { Course } from "../interfaces/Types"
+import { Application } from "../interfaces/Types"
+import CourseApplications from "@/components/CourseApplications";
 
 export default function Home() {
   const currentUser = useLoginContext();
@@ -34,7 +35,7 @@ export default function Home() {
     <>
       <p>welcome to home page</p>
       { currentUser.user.User_Type == "default" ? (
-        <p>Please sign in</p>
+        <CourseApplications/>
       ) : currentUser.user.User_Type == "lecturer" ? (
         <>
           <p>You are a lecturer</p>

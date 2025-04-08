@@ -22,8 +22,8 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { Course } from "../interfaces/interfaces"
-import { DetailValues } from "../interfaces/interfaces"
+import { Course } from "../interfaces/Types"
+import { Application } from "../interfaces/Types"
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
@@ -36,7 +36,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
   const [opened, { open, close }] = useDisclosure(false);
 
   const [submittedValues, setSubmittedValues] = useState<
-    DetailValues | undefined
+    Application | undefined
   >(undefined);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
   }, []);
   
 
-  let detailArray: [string, keyof DetailValues][] = [
+  let detailArray: [string, keyof Application][] = [
     ["Name", "name"],
     ["Previous Roles", "previousRoles"],
     ["Availability", "availability"],
@@ -60,7 +60,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
   
   
 
-  const form = useForm<DetailValues>({
+  const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
       name: "",
@@ -80,7 +80,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
     const tutorDetails = localStorage.getItem("tutorDetails")
 
     if (tutorDetails) {
-      const tutorDetailsParsed: DetailValues = JSON.parse(tutorDetails)
+      const tutorDetailsParsed: Application = JSON.parse(tutorDetails)
 
       course.applicants.push(tutorDetailsParsed)
       localStorage.setItem("courseDetails", JSON.stringify(courses))

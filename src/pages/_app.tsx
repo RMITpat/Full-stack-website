@@ -5,8 +5,8 @@ import {useEffect} from 'react';
 import { createTheme, MantineProvider, AppShell, Burger} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import NavBar from "@/components/NavBar";
-import GreetUser from "@/components/GreetUser";
+import NavBar from "@/components/Nav/NavBar";
+import GreetUser from "@/components/Nav/GreetUser";
 import DummyLocalStore from "@/pages/api/DummyLocalStore";
 import {LoginProvider} from './contexts/LoginContext';
 import DummyApplications from "@/pages/api/DummyApplications";
