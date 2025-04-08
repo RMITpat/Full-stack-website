@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { Course } from "../interfaces/Types"
-import { Application } from "../interfaces/Types"
+import { Course } from "../interfaces/Interfaces"
 
 interface tutorHomePageProps {
   courses: Course[]

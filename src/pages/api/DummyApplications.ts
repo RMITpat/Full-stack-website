@@ -1,4 +1,4 @@
-import { Tutor, Application, ApplicationsMap } from '@/interfaces/Types'
+import { Tutor, Application, ApplicationMap } from '@/interfaces/Types'
 
 const hardcodedApplications: Application[] = [
     {
@@ -86,8 +86,8 @@ const hardcodedApplications: Application[] = [
 function createEnrichedApplications(
     tutors: Tutor[],
     applications: Application[]
-): ApplicationsMap {
-    const enriched: ApplicationsMap = {};
+): ApplicationMap {
+    const enriched: ApplicationMap = {};
 
     tutors.slice(0, applications.length).forEach((tutor, index) => {
         const application = { ...applications[index] };

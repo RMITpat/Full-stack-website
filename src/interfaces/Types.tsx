@@ -15,3 +15,4 @@ export type Application = {
 export type ApplicationMap = {
   [key: string]: Application;
 };
+
