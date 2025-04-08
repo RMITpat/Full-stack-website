@@ -1,4 +1,92 @@
-// this whole file is chatgpt'd
+const hardcodedApplications: DetailValues[] = [
+    {
+        course: "compsci",
+        name: "",
+        previousRoles: "Teaching Assistant",
+        availability: "Part-time",
+        skills: "Python, Algorithms",
+        credentials: "BSc in CS",
+    },
+    {
+        course: "datasci",
+        name: "",
+        previousRoles: "Lab Supervisor",
+        availability: "Full-time",
+        skills: "R, Data Analysis",
+        credentials: "MSc in Data Science",
+    },
+    {
+        course: "softwareeng",
+        name: "",
+        previousRoles: "Course Coordinator",
+        availability: "Full-time",
+        skills: "Java, UML",
+        credentials: "PhD in SE",
+    },
+    {
+        course: "cybersec",
+        name: "",
+        previousRoles: "Security Intern",
+        availability: "Part-time",
+        skills: "Network Security, Python",
+        credentials: "BSc in Cyber Security",
+    },
+    {
+        course: "ai",
+        name: "",
+        previousRoles: "AI Research Assistant",
+        availability: "Full-time",
+        skills: "TensorFlow, NLP",
+        credentials: "MSc in AI",
+    },
+    {
+        course: "webdev",
+        name: "",
+        previousRoles: "Frontend Developer",
+        availability: "Part-time",
+        skills: "React, HTML/CSS",
+        credentials: "Diploma in Web Dev",
+    },
+    {
+        course: "networks",
+        name: "",
+        previousRoles: "Lab Technician",
+        availability: "Full-time",
+        skills: "Cisco, TCP/IP",
+        credentials: "BEng in Networking",
+    },
+    {
+        course: "mobileapps",
+        name: "",
+        previousRoles: "iOS Dev Intern",
+        availability: "Part-time",
+        skills: "Swift, UI/UX",
+        credentials: "BSc in Mobile Computing",
+    },
+    {
+        course: "database",
+        name: "",
+        previousRoles: "DB Admin",
+        availability: "Full-time",
+        skills: "SQL, PostgreSQL",
+        credentials: "MSc in DB Systems",
+    },
+    {
+        course: "gamedev",
+        name: "",
+        previousRoles: "Unity Developer",
+        availability: "Part-time",
+        skills: "Unity, C#",
+        credentials: "BSc in Game Design",
+    },
+];
+
+type Tutor = {
+    email: string;
+    name: string;
+};
+
+
 type DetailValues = {
     course: string;
     name: string;
@@ -8,39 +96,51 @@ type DetailValues = {
     credentials: string;
 };
 
-export default function DummyApplications() {
-    const dummyFromLocal = localStorage.getItem("DummyData");
-    const parsedData = dummyFromLocal ? JSON.parse(dummyFromLocal) : null;
+type EnrichedApplicationsMap = {
+    [key: string]: DetailValues;
+};
 
-    if (parsedData) {
-        const tutors = Object.entries(parsedData)
-            .filter(([_, user]) => user.type === "tutor")
-            .map(([email, user]) => ({ email, ...user }));
 
-        console.log("Tutors found:", tutors);
 
-        const dummyApplications: Record<string, DetailValues> = {};
+function createEnrichedApplications(
+    tutors: Tutor[],
+    applications: DetailValues[]
+): EnrichedApplicationsMap {
+    const enriched: EnrichedApplicationsMap = {};
 
-        tutors.forEach((tutor) => {
-            const course = "compsci";
+    tutors.slice(0, applications.length).forEach((tutor, index) => {
+        const application = { ...applications[index] };
+        const fullName = `${tutor.name ?? ""}`.trim();
+        const key = `${tutor.email}_${application.course}`;
 
-            const application: DetailValues = {
-                course,
-                name: `${tutor.firstName ?? ""} ${tutor.lastName ?? ""}`.trim(),
-                previousRoles: "Tutor Assistant at XYZ Uni",
-                availability: "Mon-Wed 9am-1pm",
-                skills: "JavaScript, React, Node.js",
-                credentials: "Bachelor in Computer Science",
-            };
+        application.name = fullName;
 
-            const key = `${tutor.email}_${course}`;
-            dummyApplications[key] = application;
-        });
+        enriched[key] = application;
+    });
 
-        localStorage.setItem("dummyApplications", JSON.stringify(dummyApplications));
-        console.log("Dummy applications saved:", dummyApplications);
-    } else {
-        console.log("Dummy data insert doesn't seem to have worked :(");
-    }
-    return null;
+    return enriched;
 }
+
+function getTutorsFromDummyData(dummy: Record<string, any>): Tutor[] {
+    return Object.entries(dummy)
+        .filter(([_, user]) => user.type === "tutor")
+        .map(([email, user]) => ({
+            email,
+            name: user.name,
+        }));
+}
+
+export default function DummyApplications() {
+    const dummyData = localStorage.getItem("DummyData");
+
+    if (!dummyData) {
+        console.error("No dummy data found in localStorage.");
+        return;
+    }
+
+    const parsedDummy = JSON.parse(dummyData);
+    const tutors = getTutorsFromDummyData(parsedDummy);
+    const enrichedApps = createEnrichedApplications(tutors, hardcodedApplications);
+    localStorage.setItem("DummyApplications", JSON.stringify(enrichedApps));
+}
+
