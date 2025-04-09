@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useLoginContext } from "../pages/contexts/LoginContext";
 import {
   AccordionControl,
@@ -27,11 +33,14 @@ import { Application } from "../interfaces/Types"
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
-  courses: Course[]
-  setCourses: Dispatch<SetStateAction<Course[]>>
+  courses: Course[];
+  setCourses: Dispatch<SetStateAction<Course[]>>;
 }
 
-const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) => {
+const tutorHomePage: React.FC<tutorHomePageProps> = ({
+  courses,
+  setCourses,
+}) => {
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -65,7 +74,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
     initialValues: {
       name: "",
       previousRoles: "",
-      availability: "",
+      availability: "Part time",
       skills: "",
       credentials: "",
     },
@@ -77,39 +86,37 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
     localStorage.setItem("tutorDetails", JSON.stringify(values));
   };
   const applyForCourse = (course: Course) => {
-    const tutorDetails = localStorage.getItem("tutorDetails")
+    const tutorDetails = localStorage.getItem("tutorDetails");
 
     if (tutorDetails) {
       const tutorDetailsParsed: Application = JSON.parse(tutorDetails)
 
-      course.applicants.push(tutorDetailsParsed)
-      localStorage.setItem("courseDetails", JSON.stringify(courses))
-      console.log(course.applicants)
-      console.log(courses)
+      course.applicants.push(tutorDetailsParsed);
+      localStorage.setItem("courseDetails", JSON.stringify(courses));
+      console.log(course.applicants);
+      console.log(courses);
     }
-    
   };
   return (
     <>
-    
       <Group justify="flex-start" grow gap="xl" align="flex-start">
         <Stack>
           <Title>Courses</Title>
           <Accordion>
             {courses.map((course, index) => (
               <>
-              <AccordionItem value={course.name}>
-                <AccordionControl>{course.name}</AccordionControl>
-                <AccordionPanel>
-                  <Stack>
-                    {" "}
-                    {course.courseCode} {course.semester}
-                    <Button onClick={() => applyForCourse(course)} >Apply</Button>
-                    
-                  </Stack>
-                </AccordionPanel>
-              </AccordionItem>
-              
+                <AccordionItem value={course.name}>
+                  <AccordionControl>{course.name}</AccordionControl>
+                  <AccordionPanel>
+                    <Stack>
+                      {" "}
+                      {course.courseCode} {course.semester}
+                      <Button onClick={() => applyForCourse(course)}>
+                        Apply
+                      </Button>
+                    </Stack>
+                  </AccordionPanel>
+                </AccordionItem>
               </>
             ))}
           </Accordion>
@@ -151,12 +158,14 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
               mt="md"
               label="Name"
               placeholder="Name"
+              required
             />
             <TextInput
               {...form.getInputProps("previousRoles")}
               mt="md"
               label="Previous Roles"
               placeholder="Previous Roles"
+              required
             />
             <Text size="sm" style={{ marginBottom: "3px", marginTop: "16px" }}>
               Availability
@@ -172,12 +181,14 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
               mt="md"
               label="Skills"
               placeholder="Skills"
+              required
             />
             <TextInput
               {...form.getInputProps("credentials")}
               mt="md"
               label="Credentials"
               placeholder="Credentials"
+              required
             />
             <Group justify="center" mt="md">
               <Button type="submit">Update</Button>
@@ -187,6 +198,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({ courses, setCourses }) =>
       </Group>
     </>
   );
-}
+};
 
-export default tutorHomePage
+export default tutorHomePage;
