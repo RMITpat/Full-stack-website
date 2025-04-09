@@ -7,11 +7,11 @@ import { useDisclosure } from '@mantine/hooks';
 
 import NavBar from "@/components/Nav/NavBar";
 import GreetUser from "@/components/Nav/GreetUser";
-import DummyLocalStore from "@/pages/api/DummyLocalStore";
+import DummyLocalStore from "@/api/DummyLocalStore";
 import {LoginProvider} from './contexts/LoginContext';
-import DummyApplications from "@/pages/api/DummyApplications";
-import InsertUsers from "@/pages/api/InsertUsers";
-import InsertUserCreds from "@/pages/api/InsertUserCreds";
+import DummyApplications from "@/api/DummyApplications";
+import InsertUsers from "@/api/InsertUsers";
+import InsertUserCreds from "@/api/InsertUserCreds";
 
 const theme = createTheme({
     fontFamily: 'Open Sans, Sans-Serif',

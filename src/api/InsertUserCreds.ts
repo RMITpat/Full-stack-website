@@ -19,12 +19,14 @@ export default function InsertUserCreds(){
             skills: "",
             credentials: "",
         }
-        const all_user_creds: Record<string, UserCredential> = ConstructBlankCredentials(users, blank_Cred);
+        const all_user_creds: Record<string, UserCredential> = ConstructCredentials(users, blank_Cred);
         localStorage.setItem("Credentials", JSON.stringify(all_user_creds))
     }
 
 }
-function ConstructBlankCredentials
+//todo make something like this that can be used to set the credential of a passed user
+//set user creds method should do this
+function ConstructCredentials
 (users: User[], user_Cred: UserCredential):Record<string, UserCredential> {
 
     const all_user_Creds: Record<string, UserCredential> = users.reduce(
