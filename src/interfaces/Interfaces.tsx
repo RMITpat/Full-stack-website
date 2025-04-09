@@ -1,7 +1,10 @@
-import { ApplicationMap} from "@/interfaces/Types";
+import {Tutor} from "@/interfaces/Types";
 export interface Course {
     name: string;
     courseCode: string;
     semester: string;
-    applicants: ApplicationMap;
+    applicants: Tutor[];
 }
+// for (Tutor tute : currentCourse.applicants) {
+//      <appliCard>
+// }

@@ -92,7 +92,7 @@ function createEnrichedApplications(
     tutors.slice(0, applications.length).forEach((tutor, index) => {
         const application = { ...applications[index] };
         const fullName = `${tutor.name ?? ""}`.trim();
-        const key = `${tutor.email}_${application.course}`;
+        const key = `${tutor.email}`;
 
         application.name = fullName;
 
@@ -121,7 +121,7 @@ export default function DummyApplications() {
 
     const parsedDummy = JSON.parse(dummyData);
     const tutors = getTutorsFromDummyData(parsedDummy);
-    const enrichedApps = createEnrichedApplications(tutors, hardcodedApplications);
-    localStorage.setItem("DummyApplications", JSON.stringify(enrichedApps));
+    return createEnrichedApplications(tutors, hardcodedApplications);
+    //localStorage.setItem("DummyApplications", JSON.stringify(enrichedApps));
 }
 

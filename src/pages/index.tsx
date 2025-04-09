@@ -5,33 +5,45 @@ import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
 import { Course } from "@/interfaces/Interfaces"
-import { Application } from "../interfaces/Types"
+import {Application, Tutor} from "../interfaces/Types"
 import CourseApplications from "@/components/CourseApplications";
 
+function getTutorsFromDummyData(dummy: Record<string, any>): Tutor[] {
+  return Object.entries(dummy)
+      .filter(([_, user]) => user.type === "tutor")
+      .map(([email, user]) => ({
+        email,
+        name: user.name,
+      }));
+}
 export default function Home() {
   const currentUser = useLoginContext();
+
   let defaultCourses: Course[] = [
     {
       name: "Sigma 101",
       courseCode: "COSC1048",
       semester: "Semester 1",
-      applicants: [],
+      applicants: [
+        { email: "linda.brown@example.com", name: "Linda Brown" },
+      ],
     },
     {
       name: "Competitive Eating",
       courseCode: "COSC4839",
       semester: "Semester 2",
-      applicants: [],
+      applicants: [{email: "alice.johnson@example.com", name: "Alice Johnson"}],
     },
     {
       name: "Introduction to Lebron",
       courseCode: "COSC4830",
       semester: "Semester 1",
-      applicants: [],
+      applicants: [{email: "emma.Wilson@example.com", name: "Emma Wilson"}],
     },
   ];
 
   const [courses, setCourses] = useState<Course[]>(defaultCourses);
+
   useEffect(() => {
     const lastCourseState = localStorage.getItem("courseDetails");
     if (lastCourseState) {
@@ -41,12 +53,10 @@ export default function Home() {
   }, []);
   return (
     <>
-      <>
-        <LecturerHomePage courses={courses} setCourses={setCourses} />
-      </>
-      {/* <p>welcome to home page</p>
+      <p>welcome to home page</p>
       { currentUser.user.User_Type == "default" ? (
-        <CourseApplications/>
+        //<p>signed out</p>
+        <LecturerHomePage courses={courses} setCourses={setCourses} />
       ) : currentUser.user.User_Type == "lecturer" ? (
         <>
           <p>You are a lecturer</p>
@@ -59,7 +69,7 @@ export default function Home() {
         </>
       ) : (
         <p>Unknown status</p>
-      )} */}
+      )}
     </>
   );
 }

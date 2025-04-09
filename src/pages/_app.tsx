@@ -22,7 +22,10 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
     const [opened, { toggle }] = useDisclosure();
     useEffect (()=> {DummyLocalStore();}, []); //populates local storage with sample user data on 1st load
-    useEffect(() => {DummyApplications();}, [DummyLocalStore]);
+    useEffect(() => {
+        const apps = DummyApplications();
+        localStorage.setItem("Credentials", JSON.stringify(apps));
+        }, [DummyLocalStore]);
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">
         <LoginProvider>

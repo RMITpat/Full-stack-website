@@ -1,9 +1,13 @@
 import AppliCard from "@/components/AppliCard";
-import { ApplicationMap } from "@/interfaces/Types";
+import { ApplicationMap, Tutor} from "@/interfaces/Types";
 import {Flex} from "@mantine/core"
 import { useEffect, useState } from "react";
 
-export default function CourseApplications() {
+
+type CourseApplicationProps = {
+    tutes: Tutor[]
+}
+export default function CourseApplications({tutes}: CourseApplicationProps) {
     const [allApps, setAllApps] = useState<ApplicationMap | null>(null);
 
     useEffect(() => {
@@ -17,7 +21,6 @@ export default function CourseApplications() {
         return <div>No applications found.</div>;
     }
 
-    const keys = Object.keys(allApps);
     return (
         <Flex
             mih={50}
@@ -26,8 +29,8 @@ export default function CourseApplications() {
             align="flex-start"
             direction="row"
             wrap="wrap">
-            {keys.map((key) => (
-                <AppliCard key={key} app={allApps[key]} />
+            {tutes.map((tute, index) => (
+                <AppliCard key={index} app={allApps[tute.email]} />
             ))}
         </Flex>
     );
