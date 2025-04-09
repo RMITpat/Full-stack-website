@@ -1,17 +1,23 @@
 import AppliCard from "@/components/AppliCard";
 import { ApplicationMap } from "@/interfaces/Types";
 import {Flex} from "@mantine/core"
+import { useEffect, useState } from "react";
 
 export default function CourseApplications() {
-    const stored = localStorage.getItem("DummyApplications");
+    const [allApps, setAllApps] = useState<ApplicationMap | null>(null);
 
-    if (!stored) {
+    useEffect(() => {
+        const stored = localStorage.getItem("DummyApplications");
+        if (stored) {
+            setAllApps(JSON.parse(stored));
+        }
+    }, []);
+
+    if (!allApps) {
         return <div>No applications found.</div>;
     }
 
-    const allApps: ApplicationMap = JSON.parse(stored);
     const keys = Object.keys(allApps);
-
     return (
         <Flex
             mih={50}
