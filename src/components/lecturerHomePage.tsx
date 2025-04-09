@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { Course } from "../interfaces/interfaces";
-import { DetailValues } from "../interfaces/interfaces";
+import { Course } from "@/interfaces/Interfaces";
+import { Application } from "../interfaces/Types";
 import {
   Box,
   Button,

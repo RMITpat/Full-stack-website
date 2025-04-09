@@ -28,7 +28,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { Course } from "../interfaces/Types"
+import { Course } from "@/interfaces/Interfaces"
 import { Application } from "../interfaces/Types"
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
@@ -72,6 +72,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
+      course: "",
       name: "",
       previousRoles: "",
       availability: "Part time",
@@ -91,7 +92,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     if (tutorDetails) {
       const tutorDetailsParsed: Application = JSON.parse(tutorDetails)
 
-      course.applicants.push(tutorDetailsParsed);
+      //course.applicants.push(tutorDetailsParsed);
       localStorage.setItem("courseDetails", JSON.stringify(courses));
       console.log(course.applicants);
       console.log(courses);
