@@ -4,7 +4,7 @@ import TutorHomePage from "../components/tutorHomePage";
 import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
-import { Course } from "../interfaces/Types"
+import { Course } from "@/interfaces/Interfaces"
 import { Application } from "../interfaces/Types"
 import CourseApplications from "@/components/CourseApplications";
 
