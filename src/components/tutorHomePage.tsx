@@ -13,8 +13,6 @@ import {
   Autocomplete,
   Flex,
   Stack,
-} from "@mantine/core";
-import {
   TextInput,
   Text,
   Title,
@@ -26,10 +24,11 @@ import {
   SegmentedControl,
   Accordion,
 } from "@mantine/core";
+
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { Course } from "@/interfaces/Interfaces"
-import { Application } from "../interfaces/Types"
+import {UserCredential} from "../interfaces/Types"
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
@@ -41,11 +40,12 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   courses,
   setCourses,
 }) => {
+
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
 
   const [submittedValues, setSubmittedValues] = useState<
-    Application | undefined
+    UserCredential | undefined
   >(undefined);
 
   useEffect(() => {
@@ -58,21 +58,17 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   }, []);
   
 
-  let detailArray: [string, keyof Application][] = [
+  let detailArray: [string, keyof UserCredential][] = [
     ["Name", "name"],
     ["Previous Roles", "previousRoles"],
     ["Availability", "availability"],
     ["Skills", "skills"],
     ["Credentials", "credentials"],
   ];
-  
-  
-  
 
-  const form = useForm<Application>({
+  const form = useForm<UserCredential>({
     mode: "uncontrolled",
     initialValues: {
-      course: "",
       name: "",
       previousRoles: "",
       availability: "Part time",
@@ -86,11 +82,12 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     setSubmittedValues(values);
     localStorage.setItem("tutorDetails", JSON.stringify(values));
   };
+
   const applyForCourse = (course: Course) => {
     const tutorDetails = localStorage.getItem("tutorDetails");
 
     if (tutorDetails) {
-      const tutorDetailsParsed: Application = JSON.parse(tutorDetails)
+      const tutorDetailsParsed: UserCredential = JSON.parse(tutorDetails)
 
       //course.applicants.push(tutorDetailsParsed);
       localStorage.setItem("courseDetails", JSON.stringify(courses));

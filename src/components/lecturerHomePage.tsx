@@ -12,8 +12,8 @@ import {
   Title,
 } from "@mantine/core";
 import { map } from "framer-motion/m";
-import AppliCard from "@/components/AppliCard";
-import CourseApplications from "@/components/CourseApplications";
+import AppliCard from "@/components/Applications/AppliCard";
+import CourseApplications from "@/components/Applications/CourseApplications";
 interface tutorHomePageProps {
   courses: Course[];
   setCourses: Dispatch<SetStateAction<Course[]>>;
@@ -65,7 +65,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
           {currentCourse ? (
               <>
             <Title>{currentCourse.name}</Title>
-                <CourseApplications tutes={currentCourse.applicants}/>
+                <CourseApplications tuteEmails={currentCourse.applicants}/>
               </>
           ) : (
             <p>undefined</p>

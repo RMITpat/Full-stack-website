@@ -1,10 +1,6 @@
-import {Tutor} from "@/interfaces/Types";
 export interface Course {
     name: string;
     courseCode: string;
     semester: string;
-    applicants: Tutor[];
+    applicants: string[];
 }
-// for (Tutor tute : currentCourse.applicants) {
-//      <appliCard>
-// }

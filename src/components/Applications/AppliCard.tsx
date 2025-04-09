@@ -1,11 +1,12 @@
 import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
-import {Application} from "@/interfaces/Types";
+import {UserCredential, User} from "@/interfaces/Types";
 
 type AppliCardProps = {
-    app: Application;
+    creds: UserCredential;
+    user: User
 };
 
-export default function AppliCard({ app }: AppliCardProps) {
+export default function AppliCard({ creds, user}: AppliCardProps) {
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Card.Section>
@@ -17,24 +18,20 @@ export default function AppliCard({ app }: AppliCardProps) {
             </Card.Section>
 
             <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500}>{app.name}</Text>
-                <Badge color="pink">{app.availability}</Badge>
+                <Text fw={500}>{user.User_Name}</Text>
+                <Badge color="pink">{creds.availability}</Badge>
             </Group>
 
             <Text size="sm" c="dimmed">
-                {app.course}
+                {creds.skills}
             </Text>
 
             <Text size="sm" c="dimmed">
-                {app.skills}
+                {creds.credentials}
             </Text>
 
             <Text size="sm" c="dimmed">
-                {app.credentials}
-            </Text>
-
-            <Text size="sm" c="dimmed">
-                {app.previousRoles}
+                {creds.previousRoles}
             </Text>
 
             <Button color="blue" fullWidth mt="md" radius="md">

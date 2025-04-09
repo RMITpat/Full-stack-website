@@ -1,4 +1,4 @@
-import { Tutor, Application, ApplicationMap } from '@/interfaces/Types'
+import { Application, ApplicationMap } from '@/interfaces/Types'
 
 const hardcodedApplications: Application[] = [
     {

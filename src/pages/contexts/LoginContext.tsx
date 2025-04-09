@@ -5,7 +5,7 @@ import {
   useContext,
 } from "react";
 
-import { User } from "../../types/types"
+import { User } from "@/interfaces/Types"
 type LoginContextType = {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
@@ -27,6 +27,7 @@ export function LoginProvider({ children }: LoginProviderProps) {
   const [user, setUser] = useState<User>({
     User_Name: "",
     User_Email: "",
+    User_Password: "",
     User_Type: "default",
     User_Img_Url: "",
   });

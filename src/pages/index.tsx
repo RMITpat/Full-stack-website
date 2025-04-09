@@ -6,7 +6,6 @@ import LecturerHomePage from "../components/lecturerHomePage";
 import { SetStateAction, useEffect, useState } from "react";
 import { Course } from "@/interfaces/Interfaces"
 import {Application, Tutor} from "../interfaces/Types"
-import CourseApplications from "@/components/CourseApplications";
 
 function getTutorsFromDummyData(dummy: Record<string, any>): Tutor[] {
   return Object.entries(dummy)
@@ -25,20 +24,20 @@ export default function Home() {
       courseCode: "COSC1048",
       semester: "Semester 1",
       applicants: [
-        { email: "linda.brown@example.com", name: "Linda Brown" },
+        "evelynjackson189@domain.com"
       ],
     },
     {
       name: "Competitive Eating",
       courseCode: "COSC4839",
       semester: "Semester 2",
-      applicants: [{email: "alice.johnson@example.com", name: "Alice Johnson"}],
+      applicants: ["harpertaylor652@domain.com"],
     },
     {
       name: "Introduction to Lebron",
       courseCode: "COSC4830",
       semester: "Semester 1",
-      applicants: [{email: "emma.Wilson@example.com", name: "Emma Wilson"}],
+      applicants: ["henrythomas225@domain.com"],
     },
   ];
 
@@ -51,12 +50,12 @@ export default function Home() {
       setCourses(JSON.parse(lastCourseState));
     }
   }, []);
+
   return (
     <>
       <p>welcome to home page</p>
       { currentUser.user.User_Type == "default" ? (
-        //<p>signed out</p>
-        <LecturerHomePage courses={courses} setCourses={setCourses} />
+          <LecturerHomePage courses={courses} setCourses={setCourses} />
       ) : currentUser.user.User_Type == "lecturer" ? (
         <>
           <p>You are a lecturer</p>
