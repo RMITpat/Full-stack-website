@@ -43,12 +43,12 @@ export default function Login() {
           ? loggedInUser.type
           : "default";
 
-      setUser({
-        User_Name: loggedInUser.name,
-        User_Email: form.values.email,
-        User_Type: handled_user_type,
-        User_Img_Url: loggedInUser.img_url || "",
-      });
+      // setUser({
+      //   User_Name: loggedInUser.name,
+      //   User_Email: form.values.email,
+      //   User_Type: handled_user_type,
+      //   User_Img_Url: loggedInUser.img_url || "",
+      // });
       router.push("/");
       console.log("login success");
     } else {

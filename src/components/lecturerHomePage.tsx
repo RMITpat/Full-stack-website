@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { Course } from "@/interfaces/Interfaces";
-import { Application } from "../interfaces/Types";
+import { IndCourse } from "../interfaces/Interfaces";
+import { DetailValues } from "../interfaces/interfaces";
 import {
   Box,
   Button,
@@ -12,22 +12,22 @@ import {
   Title,
 } from "@mantine/core";
 import { map } from "framer-motion/m";
-import AppliCard from "@/components/Applications/AppliCard";
-import CourseApplications from "@/components/Applications/CourseApplications";
+import { useLoginContext } from "@/pages/contexts/LoginContext";
 interface tutorHomePageProps {
-  courses: Course[];
-  setCourses: Dispatch<SetStateAction<Course[]>>;
+  courses: IndCourse[];
+  setCourses: Dispatch<SetStateAction<IndCourse[]>>;
 }
 
 const lecturerHomePage: React.FC<tutorHomePageProps> = ({
-  courses,
-  setCourses,
-}) => {
+                                                          courses,
+                                                          setCourses,
+                                                        }) => {
+  const currentUser = useLoginContext();
 
   const [lecturerState, setLecturerState] = useState<string>("default");
-  const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
+  const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
 
-  const viewCourse = (course: Course) => {
+  const viewCourse = (course: IndCourse) => {
     setCurrentCourse(course);
 
     setLecturerState("courseView");
@@ -35,46 +35,74 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   };
 
   return (
-    <>
-      {lecturerState == "default" ? (
-        <>
-          <Title mb="sm">Courses</Title>
-          <SimpleGrid spacing="70px" cols={4}>
-            {courses.map((course, index) => (
-              <Card shadow="sm" withBorder>
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Text fw={500}>{course.name}</Text>
-                </Group>
+      <>
+        {lecturerState == "default" ? (
+            <>
+              <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
 
-                <Text size="sm" c="dimmed">
-                  {course.courseCode}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  {course.semester}
-                </Text>
+              <Title mb="sm">Courses</Title>
+              <SimpleGrid spacing="70px" cols={4}>
+                {courses.map((course, index) => (
+                    <Card shadow="sm" withBorder>
+                      <Group justify="space-between" mt="md" mb="xs">
+                        <Text fw={500}>{course.name}</Text>
+                      </Group>
 
-                <Button mt="md" onClick={() => viewCourse(course)}>
-                  Manage Tutors
-                </Button>
-              </Card>
-            ))}
-          </SimpleGrid>
-        </>
-      ) : lecturerState == "courseView" ? (
-        <>
-          {currentCourse ? (
-              <>
-            <Title>{currentCourse.name}</Title>
-                <CourseApplications tuteEmails={currentCourse.applicants}/>
-              </>
-          ) : (
-            <p>undefined</p>
-          )}
-        </>
-      ) : (
-        <p>Unknown status</p>
-      )}
-    </>
+                      <Text size="sm" c="dimmed">
+                        {course.courseCode}
+                      </Text>
+                      <Text size="sm" c="dimmed">
+                        {course.semester}
+                      </Text>
+
+                      <Button mt="md" onClick={() => viewCourse(course)}>
+                        Manage Tutors
+                      </Button>
+                    </Card>
+                ))}
+              </SimpleGrid>
+            </>
+        ) : lecturerState == "courseView" ? (
+            <>
+              {currentCourse ? (
+                  <>
+                    <Button mt="md" onClick={() => setLecturerState("default")}>
+                      Back
+                    </Button>
+                    <Title>{currentCourse.name}</Title>
+                    <SimpleGrid spacing="70px" cols={4}>
+                      {currentCourse.applicants.map((applicant, index) => (
+                          <Card shadow="sm" withBorder>
+                            <Group justify="space-between" mt="md" mb="xs">
+                              <Text fw={500}>{applicant.name}</Text>
+                            </Group>
+
+                            <Text size="sm" c="dimmed">
+                              {applicant.availability}
+                            </Text>
+                            <Text size="sm" c="dimmed">
+                              {applicant.credentials}
+                            </Text>
+                            <Text size="sm" c="dimmed">
+                              {applicant.previousRoles}
+                            </Text>
+                            <Text size="sm" c="dimmed">
+                              {applicant.skills}
+                            </Text>
+
+                            <Button mt="md">Select</Button>
+                          </Card>
+                      ))}
+                    </SimpleGrid>
+                  </>
+              ) : (
+                  <p>undefined</p>
+              )}
+            </>
+        ) : (
+            <p>Unknown status</p>
+        )}
+      </>
   );
 };
 

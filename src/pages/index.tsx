@@ -4,45 +4,104 @@ import TutorHomePage from "../components/tutorHomePage";
 import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
-import { Course } from "@/interfaces/Interfaces"
-import {Application, Tutor} from "../interfaces/Types"
+import { IndCourse } from "../interfaces/Interfaces";
+import { DetailValues } from "../interfaces/interfaces";
+import { Card, Text } from "@mantine/core";
 
-function getTutorsFromDummyData(dummy: Record<string, any>): Tutor[] {
-  return Object.entries(dummy)
-      .filter(([_, user]) => user.type === "tutor")
-      .map(([email, user]) => ({
-        email,
-        name: user.name,
-      }));
-}
 export default function Home() {
   const currentUser = useLoginContext();
-
-  let defaultCourses: Course[] = [
+  let defaultCourses: IndCourse[] = [
     {
       name: "Sigma 101",
       courseCode: "COSC1048",
       semester: "Semester 1",
       applicants: [
-        "evelynjackson189@domain.com"
+        {
+          email: "alice.johnson@google.com",
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "michael.smith@example.com",
+          name: "Michael Smith",
+          previousRoles: "Project Manager, Consultant",
+          availability: "Part-time",
+          skills: "Agile, PMP, Stakeholder Management",
+          credentials: "MBA, PMP Certified",
+        },
+        {
+          email: "emma.brown@example.com",
+          name: "Emma Brown",
+          previousRoles: "UI/UX Designer, Graphic Designer",
+          availability: "Contract",
+          skills: "Adobe XD, Figma, Sketch",
+          credentials: "Bachelor of Design, Adobe Certified Expert",
+        },
       ],
     },
     {
       name: "Competitive Eating",
       courseCode: "COSC4839",
       semester: "Semester 2",
-      applicants: ["harpertaylor652@domain.com"],
+      applicants: [
+        {
+          email: "alice.johnson@google.com",
+
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "michael.smith@example.com",
+          name: "Michael Smith",
+          previousRoles: "Project Manager, Consultant",
+          availability: "Part-time",
+          skills: "Agile, PMP, Stakeholder Management",
+          credentials: "MBA, PMP Certified",
+        },
+      ],
     },
     {
       name: "Introduction to Lebron",
       courseCode: "COSC4830",
       semester: "Semester 1",
-      applicants: ["henrythomas225@domain.com"],
+      applicants: [
+        {
+          email: "alice.johnson@google.com",
+
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "oliver.davis@example.com",
+          name: "Oliver Davis",
+          previousRoles: "Data Analyst, Business Analyst",
+          availability: "Freelance",
+          skills: "SQL, Python, Tableau",
+          credentials:
+              "Bachelor of Economics, Certified Business Analysis Professional",
+        },
+        {
+          email: "emma.brown@example.com",
+          name: "Emma Brown",
+          previousRoles: "UI/UX Designer, Graphic Designer",
+          availability: "Contract",
+          skills: "Adobe XD, Figma, Sketch",
+          credentials: "Bachelor of Design, Adobe Certified Expert",
+        },
+      ],
     },
   ];
 
-  const [courses, setCourses] = useState<Course[]>(defaultCourses);
-
+  const [courses, setCourses] = useState<IndCourse[]>(defaultCourses);
   useEffect(() => {
     const lastCourseState = localStorage.getItem("courseDetails");
     if (lastCourseState) {
@@ -50,25 +109,24 @@ export default function Home() {
       setCourses(JSON.parse(lastCourseState));
     }
   }, []);
-
   return (
-    <>
-      <p>welcome to home page</p>
-      { currentUser.user.User_Type == "default" ? (
-          <LecturerHomePage courses={courses} setCourses={setCourses} />
-      ) : currentUser.user.User_Type == "lecturer" ? (
-        <>
-          <p>You are a lecturer</p>
-          <LecturerHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : currentUser.user.User_Type === "tutor" ? (
-        <>
-          <p>You are a tutor</p>
-          <TutorHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : (
-        <p>Unknown status</p>
-      )}
-    </>
+      <>
+        {/* <>
+        <LecturerHomePage courses={courses} setCourses={setCourses} />
+      </> */}
+        {currentUser.user.User_Type == "default" ? (
+            <TutorHomePage courses={courses} setCourses={setCourses} />
+        ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
+            <>
+              <LecturerHomePage courses={courses} setCourses={setCourses} />
+            </>
+        ) : currentUser.user.User_Type === "logged_in" ? (
+            <>
+              <TutorHomePage courses={courses} setCourses={setCourses} />
+            </>
+        ) : (
+            <p>Unknown status</p>
+        )}
+      </>
   );
 }
