@@ -49,8 +49,10 @@ export default function CourseApplications({tuteEmails}: CourseApplicationProps)
             direction="row"
             wrap="wrap">
             {users.map((user, index) => (
-
-                <AppliCard key={index} creds={allApps[user.User_Email]} user={user} />
+                <AppliCard
+                    key={index}
+                    creds={allApps[user.User_Email]}
+                    user={user} />
             ))}
         </Flex>
     );

@@ -11,6 +11,7 @@ import DummyLocalStore from "@/pages/api/DummyLocalStore";
 import {LoginProvider} from './contexts/LoginContext';
 import DummyApplications from "@/pages/api/DummyApplications";
 import InsertUsers from "@/pages/api/InsertUsers";
+import InsertUserCreds from "@/pages/api/InsertUserCreds";
 
 const theme = createTheme({
     fontFamily: 'Open Sans, Sans-Serif',
@@ -22,10 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
     const [opened, { toggle }] = useDisclosure();
     //useEffect (()=> {DummyLocalStore();}, []); //populates local storage with sample user data on 1st load
     useEffect (()=> {InsertUsers();}, []);
+    useEffect (()=> {InsertUserCreds();}, [InsertUsers]);
     // useEffect(() => {
     //     const apps = DummyApplications();
     //     localStorage.setItem("Credentials", JSON.stringify(apps));
     //     }, [InsertUsers]);
+
 
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">

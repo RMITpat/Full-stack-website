@@ -29,7 +29,7 @@ export default function InsertUsers() {
             '@';
         return passwordBase;
     };
-
+    //capped at 20 users because 1024 was too many for local storage
     for (let i = 0; i < Math.min(20, first_names.length); i++) {
         const firstName = first_names[i];
         const lastName = last_names[i];
