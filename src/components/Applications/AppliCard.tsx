@@ -8,7 +8,7 @@ type AppliCardProps = {
 
 export default function AppliCard({ creds, user}: AppliCardProps) {
     return (
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card shadow="sm" padding="lg" radius="md" withBorder >
             <Card.Section>
                 <Image
                     src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"

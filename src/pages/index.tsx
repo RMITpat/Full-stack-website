@@ -5,7 +5,6 @@ import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
-import { DetailValues } from "../interfaces/interfaces";
 import { Card, Text } from "@mantine/core";
 
 export default function Home() {
@@ -15,6 +14,7 @@ export default function Home() {
       name: "Sigma 101",
       courseCode: "COSC1048",
       semester: "Semester 1",
+      selectedApplicants: [],
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -36,7 +36,7 @@ export default function Home() {
           email: "emma.brown@example.com",
           name: "Emma Brown",
           previousRoles: "UI/UX Designer, Graphic Designer",
-          availability: "Contract",
+          availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
         },
@@ -46,6 +46,7 @@ export default function Home() {
       name: "Competitive Eating",
       courseCode: "COSC4839",
       semester: "Semester 2",
+      selectedApplicants: [],
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -70,6 +71,7 @@ export default function Home() {
       name: "Introduction to Lebron",
       courseCode: "COSC4830",
       semester: "Semester 1",
+      selectedApplicants: [],
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -84,16 +86,16 @@ export default function Home() {
           email: "oliver.davis@example.com",
           name: "Oliver Davis",
           previousRoles: "Data Analyst, Business Analyst",
-          availability: "Freelance",
+          availability: "Part-Time",
           skills: "SQL, Python, Tableau",
           credentials:
-              "Bachelor of Economics, Certified Business Analysis Professional",
+            "Bachelor of Economics, Certified Business Analysis Professional",
         },
         {
           email: "emma.brown@example.com",
           name: "Emma Brown",
           previousRoles: "UI/UX Designer, Graphic Designer",
-          availability: "Contract",
+          availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
         },
@@ -110,11 +112,11 @@ export default function Home() {
     }
   }, []);
   return (
+    <>
       <>
-        {/* <>
         <LecturerHomePage courses={courses} setCourses={setCourses} />
-      </> */}
-        {currentUser.user.User_Type == "default" ? (
+      </>
+      {/* {currentUser.user.User_Type == "default" ? (
             <p>you are not logged in</p>
         ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
             <>
@@ -127,7 +129,7 @@ export default function Home() {
             </>
         ) : (
             <p>Unknown status</p>
-        )}
-      </>
+        )} */}
+    </>
   );
 }
