@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { TextInput } from '@mantine/core';
-import classes from '../styles/FloatingLabelInput.module.css';
+import classes from '../../styles/FloatingLabelInput.module.css';
 
 
 interface EmailFieldProps {

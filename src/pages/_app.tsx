@@ -1,27 +1,25 @@
 import '@mantine/core/styles.css';
-import '@mantine/core/styles.css';
 import type { AppProps } from 'next/app';
 import {useEffect} from 'react';
 
 import { createTheme, MantineProvider, AppShell, Burger} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import NavBar from "@/components/NavBar";
-import GreetUser from "@/components/GreetUser";
-import DummyLocalStore from "@/pages/api/DummyLocalStore";
+import NavBar from "@/components/Nav/NavBar";
+import GreetUser from "@/components/Nav/GreetUser";
 import {LoginProvider} from './contexts/LoginContext';
-
+import InsertUsers from "@/api/InsertUsers";
+import InsertUserCreds from "@/api/InsertUserCreds";
 
 const theme = createTheme({
     fontFamily: 'Open Sans, Sans-Serif',
     primaryColor: 'cyan',
-
 });
-
 
 export default function App({ Component, pageProps }: AppProps) {
     const [opened, { toggle }] = useDisclosure();
-    useEffect (()=> {DummyLocalStore();}, []); //populates local storage with sample user data on 1st load
+    useEffect (()=> {InsertUsers();}, []);
+    useEffect (()=> {InsertUserCreds();}, []);
 
   return (
       <MantineProvider theme={theme} defaultColorScheme="light">
@@ -46,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
               </AppShell.Header>
 
               <AppShell.Navbar p="md">
-                  <NavBar/>
+                <NavBar/>
               </AppShell.Navbar>
 
               <AppShell.Main>

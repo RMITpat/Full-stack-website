@@ -4,50 +4,130 @@ import TutorHomePage from "../components/tutorHomePage";
 import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
-import { Course } from "../interfaces/interfaces"
-import { DetailValues } from "../interfaces/interfaces"
+import { IndCourse } from "../interfaces/Interfaces";
+import { DetailValues } from "../interfaces/interfaces";
+import { Card, Text } from "@mantine/core";
 
 export default function Home() {
   const currentUser = useLoginContext();
-  let defaultCourses: Course[] = [
-      
-        {name: "Sigma 101", courseCode: "COSC1048", semester: "Semester 1", applicants: []}
-      ,
-      
-        {name: "Competitive Eating", courseCode: "COSC4839", semester: "Semester 2", applicants: []}
-      ,
-      
-        {name: "Introduction to Lebron", courseCode: "COSC4830",semester: "Semester 1", applicants:[]}
-      ,
-    ];
-  
-  const [courses, setCourses] = useState<Course[]>(defaultCourses);
+  let defaultCourses: IndCourse[] = [
+    {
+      name: "Sigma 101",
+      courseCode: "COSC1048",
+      semester: "Semester 1",
+      applicants: [
+        {
+          email: "alice.johnson@google.com",
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "michael.smith@example.com",
+          name: "Michael Smith",
+          previousRoles: "Project Manager, Consultant",
+          availability: "Part-time",
+          skills: "Agile, PMP, Stakeholder Management",
+          credentials: "MBA, PMP Certified",
+        },
+        {
+          email: "emma.brown@example.com",
+          name: "Emma Brown",
+          previousRoles: "UI/UX Designer, Graphic Designer",
+          availability: "Contract",
+          skills: "Adobe XD, Figma, Sketch",
+          credentials: "Bachelor of Design, Adobe Certified Expert",
+        },
+      ],
+    },
+    {
+      name: "Competitive Eating",
+      courseCode: "COSC4839",
+      semester: "Semester 2",
+      applicants: [
+        {
+          email: "alice.johnson@google.com",
+
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "michael.smith@example.com",
+          name: "Michael Smith",
+          previousRoles: "Project Manager, Consultant",
+          availability: "Part-time",
+          skills: "Agile, PMP, Stakeholder Management",
+          credentials: "MBA, PMP Certified",
+        },
+      ],
+    },
+    {
+      name: "Introduction to Lebron",
+      courseCode: "COSC4830",
+      semester: "Semester 1",
+      applicants: [
+        {
+          email: "alice.johnson@google.com",
+
+          name: "Alice Johnson",
+          previousRoles: "Software Engineer, Team Lead",
+          availability: "Full-time",
+          skills: "JavaScript, React, TypeScript, Node.js",
+          credentials: "Bachelor of Computer Science, Certified Scrum Master",
+        },
+        {
+          email: "oliver.davis@example.com",
+          name: "Oliver Davis",
+          previousRoles: "Data Analyst, Business Analyst",
+          availability: "Freelance",
+          skills: "SQL, Python, Tableau",
+          credentials:
+              "Bachelor of Economics, Certified Business Analysis Professional",
+        },
+        {
+          email: "emma.brown@example.com",
+          name: "Emma Brown",
+          previousRoles: "UI/UX Designer, Graphic Designer",
+          availability: "Contract",
+          skills: "Adobe XD, Figma, Sketch",
+          credentials: "Bachelor of Design, Adobe Certified Expert",
+        },
+      ],
+    },
+  ];
+
+  const [courses, setCourses] = useState<IndCourse[]>(defaultCourses);
   useEffect(() => {
-      const lastCourseState = localStorage.getItem("courseDetails");
-      if (lastCourseState) {
-        console.log("lastcoursestate was" + JSON.parse(lastCourseState));
-        setCourses(JSON.parse(lastCourseState));
-      }
-      
-    }, []);
+    const lastCourseState = localStorage.getItem("courseDetails");
+    if (lastCourseState) {
+      console.log("lastcoursestate was" + JSON.parse(lastCourseState));
+      setCourses(JSON.parse(lastCourseState));
+    }
+  }, []);
   return (
-    <>
-      <p>welcome to home page</p>
-      { currentUser.user.User_Type == "default" ? (
-        <p>Please sign in</p>
-      ) : currentUser.user.User_Type == "lecturer" ? (
-        <>
-          <p>You are a lecturer</p>
-          <LecturerHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : currentUser.user.User_Type === "tutor" ? (
-        <>
-          <p>You are a tutor</p>
-          <TutorHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : (
-        <p>Unknown status</p>
-      )}
-    </>
+      <>
+        {/* <>
+        <LecturerHomePage courses={courses} setCourses={setCourses} />
+      </> */}
+        {currentUser.user.User_Type == "default" ? (
+            <p>you are not logged in</p>
+        ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
+            <>
+              <LecturerHomePage courses={courses} setCourses={setCourses} />
+            </>
+        ) : currentUser.user.User_Type === "logged_in"
+        || currentUser.user.User_Type === "admin_default"? (
+            <>
+              <TutorHomePage courses={courses} setCourses={setCourses} />
+            </>
+        ) : (
+            <p>Unknown status</p>
+        )}
+      </>
   );
 }

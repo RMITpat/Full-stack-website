@@ -2,9 +2,8 @@ import { TextInput, Button, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-import Link from "next/link";
-import { useRouter } from "next/router";
-
+import router, { useRouter } from "next/router";
+import { User } from "@/interfaces/Types";
 export default function Login() {
   const { setUser } = useLoginContext();
   const router = useRouter();
@@ -23,38 +22,24 @@ export default function Login() {
     typeof form.values | null
   >(null);
 
-  //this authenticates a user signing in with the password accociated with the email they entered in the login form
+  //this authenticates a user signing in with the password
+  // associated with the email they entered in the login form
   useEffect(() => {
-    //gets sample user data, or is false
-    const dummyFromLocal = JSON.parse(localStorage.getItem("DummyData"))
-      ? JSON.parse(localStorage.getItem("DummyData"))
-      : false;
+    const usersJSON = localStorage.getItem("Users") ?? localStorage.getItem("DummyData");
+    const parsed_users: Record<string, User> = usersJSON ? JSON.parse(usersJSON) : {};
+    const user = parsed_users[form.values.email];
 
-    //gets valid user password for entered email from sample data, or is false
-    const checkPass =
-      dummyFromLocal && dummyFromLocal[form.values.email]
-        ? dummyFromLocal[form.values.email].password === form.values.password
-        : false;
+    const checkPass = user?.User_Password === form.values.password;
 
     if (checkPass) {
-      const loggedInUser = dummyFromLocal[form.values.email];
-      //this makes sure the stored user type is compatible with login context
-      const handled_user_type =
-        loggedInUser.type === "tutor" || loggedInUser.type === "lecturer"
-          ? loggedInUser.type
-          : "default";
-      setUser({
-        User_Name: loggedInUser.name,
-        User_Email: form.values.email,
-        User_Type: handled_user_type,
-        User_Img_Url: loggedInUser.img_url || "",
-      });
-      router.push("/");
       console.log("login success");
+      router.push("/");
+      setUser(user)
     } else {
       console.log("login failed");
     }
   }, [submittedValues]);
+
 
   return (
     <form onSubmit={form.onSubmit(setSubmittedValues)}>
