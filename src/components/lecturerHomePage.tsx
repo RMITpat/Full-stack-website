@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import { map } from "framer-motion/m";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
+import OrderApplications from "@/components/Applications/OrderApplications";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -93,7 +94,9 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                             <Button mt="md">Select</Button>
                           </Card>
                       ))}
+                      {OrderApplications(currentCourse.applicants)}
                     </SimpleGrid>
+
                   </>
               ) : (
                   <p>undefined</p>
