@@ -6,7 +6,7 @@ import router, { useRouter } from "next/router";
 import { User } from "@/interfaces/Types";
 export default function Login() {
   const { setUser } = useLoginContext();
-
+  const router = useRouter();
   const form = useForm({
     mode: "controlled",
     initialValues: {
@@ -56,7 +56,6 @@ export default function Login() {
         label="Password"
         placeholder="Password"
       />
-
       <Button type="submit" mt="md">
         Submit
       </Button>
