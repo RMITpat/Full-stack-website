@@ -5,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useLoginContext } from "../pages/contexts/LoginContext";
 import {
   AccordionControl,
   AccordionItem,
@@ -13,8 +12,6 @@ import {
   Autocomplete,
   Flex,
   Stack,
-} from "@mantine/core";
-import {
   TextInput,
   Text,
   Title,
@@ -26,10 +23,12 @@ import {
   SegmentedControl,
   Accordion,
 } from "@mantine/core";
+import { useLoginContext } from "../pages/contexts/LoginContext";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
+import {UserCredential} from "@/interfaces/Types";
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
@@ -42,10 +41,8 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
                                                        setCourses,
                                                      }) => {
   const currentUser = useLoginContext();
-
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
-
   const [currentTutor, setCurrentTutor] = useState<DetailValues | undefined>(
       undefined
   );
@@ -81,13 +78,76 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   });
   const handleSubmit = (values: typeof form.values) => {
     setCurrentTutor(values);
-    localStorage.setItem("tutorDetails", JSON.stringify(values));
+    updateCredentialsWithTutorDetails(values);
   };
-  const applyForCourse = (course: IndCourse) => {
-    const tutorDetails = localStorage.getItem("tutorDetails");
 
-    if (tutorDetails) {
-      const tutorDetailsParsed: DetailValues = JSON.parse(tutorDetails);
+  const isEmptyCred = (details: UserCredential) => {
+    return (
+        details.previousRoles === "" &&
+        details.availability === "" &&
+        details.skills === "" &&
+        details.credentials === ""
+    );
+  };
+
+  const isEmptyDetail = (details: DetailValues) => {
+    return (
+        details.name === "" &&
+        details.email === "" &&
+        details.previousRoles === "" &&
+        details.availability === "" &&
+        details.skills === "" &&
+        details.credentials === ""
+    );
+  };
+
+  function updateCredentialsWithTutorDetails(tutorDetailsParsed: DetailValues) {
+    const allCredentials = localStorage.getItem("Credentials");
+
+    if (allCredentials && !(isEmptyDetail(tutorDetailsParsed))) {
+      //console.log(tutorDetailsParsed.email + "(from updateCredentialsWithTutorDetails)")
+      const AlltutorCredentialsParsed: Record<string, UserCredential> = JSON.parse(allCredentials);
+      AlltutorCredentialsParsed[tutorDetailsParsed.email] = {
+        skills: tutorDetailsParsed.skills,
+        previousRoles: tutorDetailsParsed.previousRoles,
+        availability: tutorDetailsParsed.availability,
+        credentials: tutorDetailsParsed.credentials
+      };
+      console.log(AlltutorCredentialsParsed, "(from updateCredentialsWithTutorDetails)")
+      localStorage.setItem("Credentials", JSON.stringify(AlltutorCredentialsParsed))
+    } else {
+      //console.log(allCredentials+ "(from updateCredentialsWithTutorDetails)")
+      //console.log(tutorDetailsParsed + "(from updateCredentialsWithTutorDetails)")
+    }
+
+  }
+
+  const applyForCourse = (course: IndCourse) => {
+    let All_Credentials: Record<string, UserCredential> = {}
+    let tutorDetails: DetailValues = {
+      email: "",
+      name: "",
+      previousRoles: "",
+      availability: "",
+      skills: "",
+      credentials: "",
+    } //empty
+    try {
+      All_Credentials = JSON.parse(localStorage.getItem("Credentials"));
+      tutorDetails = {
+        email: currentUser.user.User_Email,
+        name: currentUser.user.User_Name,
+        previousRoles: All_Credentials[currentUser.user.User_Email].previousRoles,
+        availability: All_Credentials[currentUser.user.User_Email].availability,
+        skills: All_Credentials[currentUser.user.User_Email].skills,
+        credentials: All_Credentials[currentUser.user.User_Email].credentials,
+      }
+    }
+    catch (e) {console.log(e)}
+
+
+    if (!isEmptyDetail(tutorDetails)) {
+      const tutorDetailsParsed:DetailValues = tutorDetails
       let duplicateFound: boolean = false;
       for (let index = 0; index < course.applicants.length; index++) {
         if (course.applicants[index].email === currentUser.user.User_Email) {

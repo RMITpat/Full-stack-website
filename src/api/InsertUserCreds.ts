@@ -24,8 +24,7 @@ export default function InsertUserCreds(){
     }
 
 }
-//todo make something like this that can be used to set the credential of a passed user
-//set user creds method should do this
+
 function ConstructCredentials
 (users: User[], user_Cred: UserCredential):Record<string, UserCredential> {
 

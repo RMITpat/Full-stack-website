@@ -115,12 +115,13 @@ export default function Home() {
         <LecturerHomePage courses={courses} setCourses={setCourses} />
       </> */}
         {currentUser.user.User_Type == "default" ? (
-            <TutorHomePage courses={courses} setCourses={setCourses} />
+            <p>you are not logged in</p>
         ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
             <>
               <LecturerHomePage courses={courses} setCourses={setCourses} />
             </>
-        ) : currentUser.user.User_Type === "logged_in" ? (
+        ) : currentUser.user.User_Type === "logged_in"
+        || currentUser.user.User_Type === "admin_default"? (
             <>
               <TutorHomePage courses={courses} setCourses={setCourses} />
             </>
