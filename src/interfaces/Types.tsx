@@ -22,3 +22,19 @@ export type ApplicationMap = {
   [key: string]: UserCredential;
 };
 
+export type ApplicationParents = {
+  Users_Credential: UserCredential;
+  Votes: LectureVote[];
+};
+
+export type ApplicationDetails = ApplicationParents & {
+  Avg_Ranking: number;
+  Times_Chosen: number;
+};
+
+export type LectureVote = {
+    Lecturer: User;
+    ranking: number;
+    Chosen: boolean;
+
+  }
