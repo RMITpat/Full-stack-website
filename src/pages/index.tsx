@@ -15,6 +15,7 @@ export default function Home() {
       courseCode: "COSC1048",
       semester: "Semester 1",
       selectedApplicants: [],
+      lecturerRankings: {},
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -47,6 +48,7 @@ export default function Home() {
       courseCode: "COSC4839",
       semester: "Semester 2",
       selectedApplicants: [],
+      lecturerRankings: {},
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -72,6 +74,7 @@ export default function Home() {
       courseCode: "COSC4830",
       semester: "Semester 1",
       selectedApplicants: [],
+      lecturerRankings: {},
       applicants: [
         {
           email: "alice.johnson@google.com",
@@ -109,27 +112,26 @@ export default function Home() {
     if (lastCourseState) {
       console.log("lastcoursestate was" + JSON.parse(lastCourseState));
       setCourses(JSON.parse(lastCourseState));
+    } else {
+      localStorage.setItem("courseDetails", JSON.stringify(defaultCourses));
     }
   }, []);
   return (
     <>
-      <>
-        <LecturerHomePage courses={courses} setCourses={setCourses} />
-      </>
-      {/* {currentUser.user.User_Type == "default" ? (
-            <p>you are not logged in</p>
-        ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
-            <>
-              <LecturerHomePage courses={courses} setCourses={setCourses} />
-            </>
-        ) : currentUser.user.User_Type === "logged_in"
-        || currentUser.user.User_Type === "admin_default"? (
-            <>
-              <TutorHomePage courses={courses} setCourses={setCourses} />
-            </>
-        ) : (
-            <p>Unknown status</p>
-        )} */}
+      {currentUser.user.User_Type == "default" ? (
+        <p>you are not logged in</p>
+      ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
+        <>
+          <LecturerHomePage courses={courses} setCourses={setCourses} />
+        </>
+      ) : currentUser.user.User_Type === "logged_in" ||
+        currentUser.user.User_Type === "admin_default" ? (
+        <>
+          <TutorHomePage courses={courses} setCourses={setCourses} />
+        </>
+      ) : (
+        <p>Unknown status</p>
+      )}
     </>
   );
 }

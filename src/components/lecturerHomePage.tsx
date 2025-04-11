@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Flex,
   Grid,
   Group,
@@ -19,23 +20,47 @@ import {
   Title,
 } from "@mantine/core";
 import { map } from "framer-motion/m";
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
+
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import OrderApplications from "@/components/Applications/OrderApplications";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
 }
+/* 
+course has OverallRanking[]
+it is filled with all the applications from that course that have been voted on by lecturers
 
+to display most voted it just displays applications[] that have more than one timeschosen, sorted by avg ranking
+
+when a lecturer submits a ranking it:
+1. updates the timechosen for that application and its other details like total ranking and avg ranking 
+2. saves their ranking to local storage in their user
+
+*/
 const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   courses,
   setCourses,
 }) => {
   const currentUser = useLoginContext();
-
+  const currentEmail = currentUser.user.User_Email;
   const [lecturerState, setLecturerState] = useState<string>("default");
   const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<DetailValues[]>([]);
 
+  useEffect(() => {
+    console.log("lecturer state changed");
+    if (currentCourse) {
+      const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
+      if (lastChosenApplicants) {
+        setChosenApplicants(lastChosenApplicants);
+      }
+    }
+  }, [lecturerState]);
+  useEffect(() => {
+    console.log("Updated applicants:", chosenApplicants);
+  }, [chosenApplicants]);
   const viewCourse = (course: IndCourse) => {
     setCurrentCourse(course);
 
@@ -46,26 +71,61 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     applicant: DetailValues,
     currentCourse: IndCourse
   ) => {
-    let duplicateSelection: boolean = false;
-    for (
-      let index = 0;
-      index < currentCourse.selectedApplicants.length;
-      index++
-    ) {
-      if (currentCourse.selectedApplicants[index].email == applicant.email) {
-        duplicateSelection = true;
+    if (currentCourse.lecturerRankings[currentEmail]) {
+      let duplicateSelection: boolean = false;
+      for (
+        let index = 0;
+        index < currentCourse.lecturerRankings[currentEmail].length;
+        index++
+      ) {
+        if (
+          currentCourse.lecturerRankings[currentEmail][index].email ==
+          applicant.email
+        ) {
+          duplicateSelection = true;
+        }
       }
+      if (!duplicateSelection) {
+        currentCourse.lecturerRankings[currentEmail] = [
+          ...currentCourse.lecturerRankings[currentEmail],
+          applicant,
+        ];
+      }
+    } else {
+      currentCourse.lecturerRankings = {
+        ...currentCourse.lecturerRankings,
+        [currentEmail]: [applicant],
+      };
     }
-    if (!duplicateSelection) {
-      // setChosenApplicants((prevItems) => [...prevItems, applicant]);
-      currentCourse.selectedApplicants.push(applicant);
+    localStorage.setItem("courseDetails", JSON.stringify(courses));
+    setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
+    console.log(chosenApplicants);
+  };
 
-      setChosenApplicants(currentCourse.selectedApplicants);
+  const moveLeft = (currentCourse: IndCourse, index: number) => {
+    if (index > 0) {
+      let temp = currentCourse.lecturerRankings[currentEmail][index - 1];
+      currentCourse.lecturerRankings[currentEmail][index - 1] =
+        currentCourse.lecturerRankings[currentEmail][index];
+      currentCourse.lecturerRankings[currentEmail][index] = temp;
+      setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
+    }
+  };
+
+  const moveRight = (currentCourse: IndCourse, index: number) => {
+    if (index < currentCourse.lecturerRankings[currentEmail].length - 1) {
+      let temp = currentCourse.lecturerRankings[currentEmail][index + 1];
+      currentCourse.lecturerRankings[currentEmail][index + 1] =
+        currentCourse.lecturerRankings[currentEmail][index];
+      currentCourse.lecturerRankings[currentEmail][index] = temp;
+      setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
     }
   };
   const clearSelection = (currentCourse: IndCourse) => {
-    currentCourse.selectedApplicants = [];
-    setChosenApplicants([]);
+    if (currentCourse.lecturerRankings[currentEmail]) {
+      currentCourse.lecturerRankings[currentEmail] = [];
+      setChosenApplicants([]);
+    }
   };
   return (
     <>
@@ -140,34 +200,72 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
               <Stack mt="30px">
                 <Group justify="space-between">
                   <Title order={3}>Your Chosen Applicants</Title>
-                  <Button
-                    bg="red"
-                    onClick={() => clearSelection(currentCourse)}
-                  >
-                    Reset
-                  </Button>
+                  <Group>
+                    <Button>Submit Ranking</Button>
+                    <Button
+                      bg="red"
+                      onClick={() => clearSelection(currentCourse)}
+                    >
+                      Reset
+                    </Button>
+                  </Group>
                 </Group>
 
-                {currentCourse.selectedApplicants.length == 0 ? (
-                  <p>No applicants chosen.</p>
-                ) : (
+                {chosenApplicants.length > 0 ? (
                   <Flex bg="gray" p="lg">
                     <SimpleGrid bd="black" spacing="40px" cols={6}>
-                      {currentCourse.selectedApplicants.map(
-                        (applicant, index) => (
-                          <>
-                            <ApplicationCard
-                              applicant={applicant}
-                              index={index}
-                              buttonSetting="Rank"
-                              showNumber={true}
-                            />
-                          </>
-                        )
-                      )}
-                      {OrderApplications(currentCourse.applicants)}
+                      {chosenApplicants.map((applicant, index) => (
+                        <>
+                          <Card shadow="sm" withBorder>
+                            <Group justify="space-between">
+                              <Button
+                                leftSection={<IconArrowNarrowLeft />}
+                                onClick={() => moveLeft(currentCourse, index)}
+                              ></Button>
+                              <Title order={3}>{index + 1}</Title>
+
+                              <Button
+                                rightSection={<IconArrowNarrowRight />}
+                                onClick={() => moveRight(currentCourse, index)}
+                              ></Button>
+                            </Group>
+
+                            <Group justify="space-between" mt="md" mb="xs">
+                              <Text fw={500}>{applicant.name}</Text>
+                              <Badge>{applicant.availability}</Badge>
+                            </Group>
+                            <Stack gap="0px">
+                              <Text size="sm">Credentials</Text>
+                              <Text size="sm" c="dimmed">
+                                {applicant.credentials}
+                              </Text>
+
+                              <Text size="sm">Previous Roles</Text>
+
+                              <Text size="sm" c="dimmed">
+                                {applicant.previousRoles}
+                              </Text>
+                              <Text size="sm">Skills</Text>
+
+                              <Text size="sm" c="dimmed">
+                                {applicant.skills}
+                              </Text>
+                            </Stack>
+                            {/* {buttonSetting != "noButton" && <Button mt="md">{buttonSetting}</Button>} */}
+                          </Card>
+                          {/* <ApplicationCard
+                          applicant={applicant}
+                          index={index}
+                          buttonSetting="Rank"
+                          showNumber={true}
+                        /> */}
+                        </>
+                      ))}
+                      {/* {OrderApplications(currentCourse.applicants)} */}
                     </SimpleGrid>
                   </Flex>
+                ) : (
+                  <p>No applicants chosen.</p>
                 )}
               </Stack>
               <Stack mt="30px">
@@ -182,6 +280,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                           buttonSetting="Select"
                           showNumber={false}
                         />
+                        {/* <Checkbox onChan /> */}
                         <Button
                           disabled={false}
                           size="sm"
@@ -197,7 +296,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   </SimpleGrid>
                 </Flex>
               </Stack>
-
             </>
           ) : (
             <p>undefined</p>

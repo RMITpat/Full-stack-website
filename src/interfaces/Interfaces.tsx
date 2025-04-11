@@ -18,4 +18,5 @@ export interface IndCourse {
     semester: string
     applicants: DetailValues[]
     selectedApplicants: DetailValues[]
+    lecturerRankings: Record<string, DetailValues[]>
 }
