@@ -24,6 +24,7 @@ import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import OrderApplications from "@/components/Applications/OrderApplications";
+import updateApplication from "@/api/UpdateApplications";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -46,7 +47,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const currentUser = useLoginContext();
   const currentEmail = currentUser.user.User_Email;
   const [lecturerState, setLecturerState] = useState<string>("default");
-  const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
+    const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<DetailValues[]>([]);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
       if (lastChosenApplicants) {
         setChosenApplicants(lastChosenApplicants);
+
       }
     }
   }, [lecturerState]);
@@ -135,7 +137,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
           <Title mb="sm">Courses</Title>
           <SimpleGrid spacing="70px" cols={4}>
             {courses.map((course, index) => (
-              <Card shadow="sm" withBorder>
+              <Card key={index} shadow="sm" withBorder>
                 <Group justify="space-between" mt="md" mb="xs">
                   <Text fw={500}>{course.name}</Text>
                 </Group>
@@ -172,7 +174,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 </Group>
                 <SimpleGrid bd="sm" spacing="70px" cols={4}>
                   {currentCourse.applicants.map((applicant, index) => (
-                    <ApplicationCard
+                    <ApplicationCard key={index}
                       applicant={applicant}
                       index={index}
                       buttonSetting="noButton"
@@ -200,7 +202,9 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 <Group justify="space-between">
                   <Title order={3}>Your Chosen Applicants</Title>
                   <Group>
-                    <Button>Submit Ranking</Button>
+                    <Button
+                    onClick={() => updateApplication(currentCourse)}
+                    >Submit Ranking</Button>
                     <Button
                       bg="red"
                       onClick={() => clearSelection(currentCourse)}

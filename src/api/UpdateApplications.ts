@@ -1,22 +1,61 @@
-import {ApplicationDetails, ApplicationDetailsWithEmail} from "@/interfaces/Types";
+import {
+    ApplicationDetails,
+    ApplicationDetailsWithEmail,
+    ApplicationParents,
+    LecturerVote,
+    UserCredential
+} from "@/interfaces/Types";
 import {IndCourse} from "@/interfaces/Interfaces";
 import ApplicantToAppStat from "@/api/ApplicantToAppStat";
 import getApplicationStatuses from "@/api/getApplicationStatuses";
+import computeApplication from "@/api/computeApplication";
 
-function courseApplicantsToAppStats(course: IndCourse)
-    : ApplicationDetailsWithEmail[]{
-    const allDetails: ApplicationDetailsWithEmail[] = []
-    for (const applicant of course.applicants){
-        const applicationDetails: ApplicationDetailsWithEmail = ApplicantToAppStat(applicant)
-        allDetails.push(applicationDetails)
+function courseApplicantsToAppStats(
+    course: IndCourse
+
+): ApplicationDetailsWithEmail[] {
+
+    const allDetails: ApplicationDetailsWithEmail[] = [];
+
+    for (const applicant of course.applicants) {
+        const votes: LecturerVote[] = [];
+
+        for (const [lecturerEmail, rankingList] of Object.entries(course.lecturerRankings)) {
+            const index = rankingList.findIndex((a) => a.email === applicant.email);
+            if (index !== -1) {
+                votes.push({
+                    Lecturer_Email: lecturerEmail,
+                    ranking: index,
+                    Chosen: index === 0, // true if first in ranking list
+                });
+            }
+        }
+        const parents: ApplicationParents = {
+            Users_Credential: {
+                previousRoles: applicant.previousRoles,
+                availability: applicant.availability,
+                skills: applicant.skills,
+                credentials: applicant.credentials,
+            },
+            Votes: votes,
+        }
+        const appDetails: ApplicationDetails = computeApplication(parents)
+        const appDetsEmail: ApplicationDetailsWithEmail ={
+            User_Email: applicant.email,
+            ...appDetails
+        }
+        allDetails.push(appDetsEmail);
     }
-    return allDetails
+
+    return allDetails;
 }
+
 
 function mergeAllApps(
     prevApps: Record<string, ApplicationDetails>,
     newAppStats: ApplicationDetailsWithEmail[],
     course: IndCourse
+
 ): Record<string, ApplicationDetails> {
     return newAppStats.reduce(
         (acc, application) => {

@@ -50,9 +50,9 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
 }) => {
   const currentUser = useLoginContext();
   const theme = useMantineTheme();
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, {open, close}] = useDisclosure(false);
   const [currentTutor, setCurrentTutor] = useState<DetailValues | undefined>(
-    undefined
+      undefined
   );
 
   // useEffect(() => {
@@ -85,31 +85,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     validate: {},
   });
 
-  const handleSubmit = (values: typeof form.values) => {
-    setCurrentTutor(values);
-    updateCredentialsWithTutorDetails(values);
-  };
-
-  const isEmptyCred = (details: UserCredential) => {
-    return (
-      details.previousRoles === "" &&
-      details.availability === "" &&
-      details.skills === "" &&
-      details.credentials === ""
-    );
-  };
-
-  const isEmptyDetail = (details: DetailValues) => {
-    return (
-      details.name === "" &&
-      details.email === "" &&
-      details.previousRoles === "" &&
-      details.availability === "" &&
-      details.skills === "" &&
-      details.credentials === ""
-    );
-  };
-
   function updateCredentialsWithTutorDetails(tutorDetailsParsed: DetailValues) {
     //this function is supposed to run tutor details are set in state
     //it saves this state to a Record in local storage
@@ -118,7 +93,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     if (allCredentials && !isEmptyDetail(tutorDetailsParsed)) {
       //console.log(tutorDetailsParsed.email + "(from updateCredentialsWithTutorDetails)")
       const AlltutorCredentialsParsed: Record<string, UserCredential> =
-        JSON.parse(allCredentials);
+          JSON.parse(allCredentials);
       AlltutorCredentialsParsed[tutorDetailsParsed.email] = {
         skills: tutorDetailsParsed.skills,
         previousRoles: tutorDetailsParsed.previousRoles,
@@ -126,12 +101,12 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
         credentials: tutorDetailsParsed.credentials,
       };
       console.log(
-        AlltutorCredentialsParsed,
-        "(from updateCredentialsWithTutorDetails)"
+          AlltutorCredentialsParsed,
+          "(from updateCredentialsWithTutorDetails)"
       );
       localStorage.setItem(
-        "Credentials",
-        JSON.stringify(AlltutorCredentialsParsed)
+          "Credentials",
+          JSON.stringify(AlltutorCredentialsParsed)
       );
     } else {
       //console.log(allCredentials+ "(from updateCredentialsWithTutorDetails)")
@@ -140,30 +115,30 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
 
   }
 
-  function courseApplicantsToAppStats(
-    course: IndCourse
-  ): ApplicationDetailsWithEmail[] {
-    const allDetails: ApplicationDetailsWithEmail[] = [];
-    for (const applicant of course.applicants) {
-      const applicationDetails: ApplicationDetailsWithEmail =
-        ApplicantToAppStat(applicant);
-      allDetails.push(applicationDetails);
-    }
-    return allDetails;
-  }
-  function mergeAllApps(
-    prevApps: Record<string, ApplicationDetails>,
-    newAppStats: ApplicationDetailsWithEmail[],
-    course: IndCourse
-  ): Record<string, ApplicationDetails> {
-    return newAppStats.reduce((acc, application) => {
-      const key = `${application.User_Email}_${course.courseCode}`;
-      // Remove User_Email to fit ApplicationDetails type
-      const { User_Email, ...appDetails } = application;
-      acc[key] = appDetails;
-      return acc;
-    }, {} as Record<string, ApplicationDetails>);
-  }
+  const handleSubmit = (values: typeof form.values) => {
+    setCurrentTutor(values);
+    updateCredentialsWithTutorDetails(values);
+  };
+
+  const isEmptyCred = (details: UserCredential) => {
+    return (
+        details.previousRoles === "" &&
+        details.availability === "" &&
+        details.skills === "" &&
+        details.credentials === ""
+    );
+  };
+
+  const isEmptyDetail = (details: DetailValues) => {
+    return (
+        details.name === "" &&
+        details.email === "" &&
+        details.previousRoles === "" &&
+        details.availability === "" &&
+        details.skills === "" &&
+        details.credentials === ""
+    );
+  };
 
   const applyForCourse = (course: IndCourse) => {
     //this function gets tutorDetails from "Credentials" in local storage,
@@ -186,9 +161,9 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
           email: currentUser.user.User_Email,
           name: currentUser.user.User_Name,
           previousRoles:
-            All_Credentials[currentUser.user.User_Email].previousRoles,
+          All_Credentials[currentUser.user.User_Email].previousRoles,
           availability:
-            All_Credentials[currentUser.user.User_Email].availability,
+          All_Credentials[currentUser.user.User_Email].availability,
           skills: All_Credentials[currentUser.user.User_Email].skills,
           credentials: All_Credentials[currentUser.user.User_Email].credentials,
         };
@@ -199,133 +174,134 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
       if (!isEmptyDetail(tutorDetails)) {
         const tutorDetailsParsed: DetailValues = tutorDetails;
 
-      let duplicateFound: boolean = false;
-      for (let index = 0; index < course.applicants.length; index++) {
-        if (course.applicants[index].email === currentUser.user.User_Email) {
-          console.log("found");
-          course.applicants[index] = tutorDetailsParsed;
-          duplicateFound = true;
+        let duplicateFound: boolean = false;
+        for (let index = 0; index < course.applicants.length; index++) {
+          if (course.applicants[index].email === currentUser.user.User_Email) {
+            console.log("found");
+            course.applicants[index] = tutorDetailsParsed;
+            duplicateFound = true;
+          }
         }
-      }
-      if (!duplicateFound) {
-        console.log("not found");
-        course.applicants.push(tutorDetailsParsed);
-      }
+        if (!duplicateFound) {
+          console.log("not found");
+          course.applicants.push(tutorDetailsParsed);
+        }
 
-      UpdateApplication(course)
-      localStorage.setItem("courseDetails", JSON.stringify(courses));
-      //console.log(course.applicants);
-      //console.log(courses);
+        UpdateApplication(course)
+        localStorage.setItem("courseDetails", JSON.stringify(courses));
+        //console.log(course.applicants);
+        //console.log(courses);
+      }
     }
-  };
+    ;
 
-  return (
-    <>
-      <Group justify="space-between" grow align="flex-start">
-        <Stack>
-          <Title>Courses</Title>
-          <Accordion>
-            {courses.map((course, index) => (
-              <>
-                <AccordionItem value={course.name}>
-                  <AccordionControl>{course.name}</AccordionControl>
-                  <AccordionPanel>
-                    <Stack>
-                      {" "}
-                      {course.courseCode} {course.semester}
-                      <Button onClick={() => applyForCourse(course)}>
-                        Apply
-                      </Button>
-                    </Stack>
-                  </AccordionPanel>
-                </AccordionItem>
-              </>
-            ))}
-          </Accordion>
-        </Stack>
-        <Stack>
-          <Stack
-            justify="center"
-            align="stretch"
-            style={{
-              border: "1px solid black",
-              fontFamily: theme.fontFamily,
-            }}
-          >
-            <Stack p="sm" bg="gray">
-              <Title order={2}>Your Details</Title>
+    return (
+        <>
+          <Group justify="space-between" grow align="flex-start">
+            <Stack>
+              <Title>Courses</Title>
+              <Accordion>
+                {courses.map((course, index) => (
+                    <>
+                      <AccordionItem value={course.name}>
+                        <AccordionControl>{course.name}</AccordionControl>
+                        <AccordionPanel>
+                          <Stack>
+                            {" "}
+                            {course.courseCode} {course.semester}
+                            <Button onClick={() => applyForCourse(course)}>
+                              Apply
+                            </Button>
+                          </Stack>
+                        </AccordionPanel>
+                      </AccordionItem>
+                    </>
+                ))}
+              </Accordion>
             </Stack>
-            <Stack p="md">
-              {detailArray.map((field, index) => (
-                <Stack gap="0px">
-                  <Title order={4} key={index}>
-                    {field[0]}
-                  </Title>
-                  {currentTutor ? (
-                    <Text>{currentTutor[field[1]]}</Text>
-                  ) : (
-                    <Text>Not set</Text>
-                  )}
+            <Stack>
+              <Stack
+                  justify="center"
+                  align="stretch"
+                  style={{
+                    border: "1px solid black",
+                    fontFamily: theme.fontFamily,
+                  }}
+              >
+                <Stack p="sm" bg="gray">
+                  <Title order={2}>Your Details</Title>
                 </Stack>
-              ))}
+                <Stack p="md">
+                  {detailArray.map((field, index) => (
+                      <Stack gap="0px">
+                        <Title order={4} key={index}>
+                          {field[0]}
+                        </Title>
+                        {currentTutor ? (
+                            <Text>{currentTutor[field[1]]}</Text>
+                        ) : (
+                            <Text>Not set</Text>
+                        )}
+                      </Stack>
+                  ))}
+                </Stack>
+              </Stack>
+              <Button
+                  variant="filled"
+                  size="md"
+                  // style={{ width: "30%" }}
+                  onClick={open}
+              >
+                Update Details
+              </Button>
             </Stack>
-          </Stack>
-          <Button
-            variant="filled"
-            size="md"
-            // style={{ width: "30%" }}
-            onClick={open}
-          >
-            Update Details
-          </Button>
-        </Stack>
-        <Modal opened={opened} onClose={close} title="Update Details">
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            {/* <TextInput
+            <Modal opened={opened} onClose={close} title="Update Details">
+              <form onSubmit={form.onSubmit(handleSubmit)}>
+                {/* <TextInput
               {...form.getInputProps("name")}
               mt="md"
               label="Name"
               placeholder="Name"
               required
             /> */}
-            <TextInput
-              {...form.getInputProps("previousRoles")}
-              mt="md"
-              label="Previous Roles"
-              placeholder="Previous Roles"
-              required
-            />
-            <Text size="sm" style={{ marginBottom: "3px", marginTop: "16px" }}>
-              Availability
-            </Text>
-            <SegmentedControl
-              {...form.getInputProps("availability")}
-              data={["Part time", "Full time"]}
-              //value={form.values.availability}
-              //onChange={(value) => form.setFieldValue("availability", value)}
-            ></SegmentedControl>
-            <TextInput
-              {...form.getInputProps("skills")}
-              mt="md"
-              label="Skills"
-              placeholder="Skills"
-              required
-            />
-            <TextInput
-              {...form.getInputProps("credentials")}
-              mt="md"
-              label="Credentials"
-              placeholder="Credentials"
-              required
-            />
-            <Group justify="center" mt="md">
-              <Button type="submit">Update</Button>
-            </Group>
-          </form>
-        </Modal>
-      </Group>
-    </>
-  );
-};
-
+                <TextInput
+                    {...form.getInputProps("previousRoles")}
+                    mt="md"
+                    label="Previous Roles"
+                    placeholder="Previous Roles"
+                    required
+                />
+                <Text size="sm" style={{marginBottom: "3px", marginTop: "16px"}}>
+                  Availability
+                </Text>
+                <SegmentedControl
+                    {...form.getInputProps("availability")}
+                    data={["Part time", "Full time"]}
+                    //value={form.values.availability}
+                    //onChange={(value) => form.setFieldValue("availability", value)}
+                ></SegmentedControl>
+                <TextInput
+                    {...form.getInputProps("skills")}
+                    mt="md"
+                    label="Skills"
+                    placeholder="Skills"
+                    required
+                />
+                <TextInput
+                    {...form.getInputProps("credentials")}
+                    mt="md"
+                    label="Credentials"
+                    placeholder="Credentials"
+                    required
+                />
+                <Group justify="center" mt="md">
+                  <Button type="submit">Update</Button>
+                </Group>
+              </form>
+            </Modal>
+          </Group>
+        </>
+    );
+  };
+}
 export default tutorHomePage;

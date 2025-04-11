@@ -1,9 +1,12 @@
 import {DetailValues} from "@/interfaces/Interfaces";
-import {ApplicationDetailsWithEmail, ApplicationParents} from "@/interfaces/Types";
+import {ApplicationDetailsWithEmail, ApplicationParents, LecturerVote} from "@/interfaces/Types";
 import computeApplication from "@/api/computeApplication";
 
-export default function ApplicantToAppStat
-(applicant: DetailValues): ApplicationDetailsWithEmail {
+export default function ApplicantToAppStat(
+    applicant: DetailValues,
+    votes: LecturerVote[]
+
+    ): ApplicationDetailsWithEmail {
 
     const parents: ApplicationParents = {
         Users_Credential: {
@@ -12,7 +15,7 @@ export default function ApplicantToAppStat
             availability: applicant.availability,
             skills: applicant.skills,
         },
-        Votes: [],
+        Votes: votes,
     }
     const { Avg_Ranking, Times_Chosen } = computeApplication(parents);
 

@@ -6,12 +6,14 @@ import getAllUsers from "@/api/GetAllUsers";
 import AppliCard from "@/components/Applications/AppliCard";
 
 type OrderApplicationsProps = {
+    viewAll: boolean;
     applicants: DetailValues[];
     courseCode: string;
     sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
 };
 
 export default function OrderApplications({
+  viewAll,
   applicants,
   courseCode,
   sortFn,
@@ -19,11 +21,16 @@ export default function OrderApplications({
     const allUsers = getAllUsers()
     const allApps:Record<string, ApplicationDetails> = getApplicationStatuses()
     //console.log("allApps (from OrderApplications)" , allApps)
-    // Creater a Set of valid keys based on applicants + courseCode
+    // Create a Set of valid keys based on applicants + courseCode
     // an example of a key in allApps: alice.johnson@google.com_COSC4839
-    const validKeys = new Set(
-        applicants.map((applicant) => `${applicant.email}_${courseCode}`)
-    );
+    if (!viewAll) {
+        const validKeys = new Set(
+            applicants.map((applicant) => `${applicant.email}_${courseCode}`)
+        );
+    } else {
+        const validKeys = new Set(
+            applicants.map((applicant) => applicant.email)
+        );
     //console.log("validKeys (from OrderApplications)" , validKeys)
 
     const filteredEntries =
