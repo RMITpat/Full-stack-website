@@ -30,7 +30,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
 
   const viewCourse = (course: IndCourse) => {
     setCurrentCourse(course);
-
     setLecturerState("courseView");
     console.log(currentCourse);
   };
@@ -72,29 +71,33 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                     </Button>
                     <Title>{currentCourse.name}</Title>
                     <SimpleGrid spacing="70px" cols={4}>
-                      {currentCourse.applicants.map((applicant, index) => (
-                          <Card shadow="sm" withBorder>
-                            <Group justify="space-between" mt="md" mb="xs">
-                              <Text fw={500}>{applicant.name}</Text>
-                            </Group>
+                      {/*{currentCourse.applicants.map((applicant, index) => (*/}
+                      {/*    <Card shadow="sm" withBorder>*/}
+                      {/*      <Group justify="space-between" mt="md" mb="xs">*/}
+                      {/*        <Text fw={500}>{applicant.name}</Text>*/}
+                      {/*      </Group>*/}
 
-                            <Text size="sm" c="dimmed">
-                              {applicant.availability}
-                            </Text>
-                            <Text size="sm" c="dimmed">
-                              {applicant.credentials}
-                            </Text>
-                            <Text size="sm" c="dimmed">
-                              {applicant.previousRoles}
-                            </Text>
-                            <Text size="sm" c="dimmed">
-                              {applicant.skills}
-                            </Text>
+                      {/*      <Text size="sm" c="dimmed">*/}
+                      {/*        {applicant.availability}*/}
+                      {/*      </Text>*/}
+                      {/*      <Text size="sm" c="dimmed">*/}
+                      {/*        {applicant.credentials}*/}
+                      {/*      </Text>*/}
+                      {/*      <Text size="sm" c="dimmed">*/}
+                      {/*        {applicant.previousRoles}*/}
+                      {/*      </Text>*/}
+                      {/*      <Text size="sm" c="dimmed">*/}
+                      {/*        {applicant.skills}*/}
+                      {/*      </Text>*/}
 
-                            <Button mt="md">Select</Button>
-                          </Card>
-                      ))}
-                      {OrderApplications(currentCourse.applicants)}
+                      {/*      <Button mt="md">Select</Button>*/}
+                      {/*    </Card>*/}
+                      {/*))}*/}
+                      <OrderApplications
+                          applicants={currentCourse.applicants}
+                          courseCode={currentCourse.courseCode}
+                          sortFn={(a, b) => b.Avg_Ranking - a.Avg_Ranking}
+                      />
                     </SimpleGrid>
 
                   </>

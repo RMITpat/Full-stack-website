@@ -33,6 +33,14 @@ export default function InsertUsers() {
         "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White",
         "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young"
     ];
+    const uids: string[] = [
+        "1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008",
+        "1009", "1010", "1011", "1012", "1013", "1014", "1015", "1016",
+        "1017", "1018", "1019", "1020", "1021", "1022", "1023", "1024",
+        "1025", "1026", "1027", "1028", "1029", "1030", "1031", "1032"
+    ];
+
+
 
     const users: Record<string, User> = {}; // Object to store users keyed by email
 
@@ -52,9 +60,9 @@ export default function InsertUsers() {
     for (let i = 0; i < Math.min(20, first_names.length); i++) {
         const firstName = first_names[i];
         const lastName = last_names[i];
-
+        const uid = uids[i]
         // Generate email address using firstName, lastName, and 3 random digits
-        const email = `${firstName.toLowerCase()}${lastName.toLowerCase()}${Math.floor(Math.random() * 900) + 100}@domain.com`;
+        const email = `${firstName.toLowerCase()}${lastName.toLowerCase()}${uid}@domain.com`;
 
         // Create user data
         const user: User = {

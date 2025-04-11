@@ -8,7 +8,7 @@ export default function
 
     if (doesJSONExist != null) {
         AppStats = JSON.parse(doesJSONExist)
-        console.log(AppStats)
+        //console.log(AppStats)
     }
     return AppStats
 }

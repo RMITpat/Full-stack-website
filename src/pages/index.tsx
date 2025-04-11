@@ -7,7 +7,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/interfaces";
 import { Card, Text } from "@mantine/core";
-
+import UpdateApplication from "@/api/UpdateApplications";
+import  updateApplication from "@/api/UpdateApplications"
 export default function Home() {
   const currentUser = useLoginContext();
   let defaultCourses: IndCourse[] = [
@@ -17,26 +18,26 @@ export default function Home() {
       semester: "Semester 1",
       applicants: [
         {
-          email: "alice.johnson@google.com",
-          name: "Alice Johnson",
+          email: "benjaminlopez1012@domain.com",
+          name: "Benjamin Lopez",
           previousRoles: "Software Engineer, Team Lead",
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
         },
         {
-          email: "michael.smith@example.com",
-          name: "Michael Smith",
+          email: "charlottegonzalez1013@domain.com",
+          name: "Charlotte Gonzalez",
           previousRoles: "Project Manager, Consultant",
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
         },
         {
-          email: "emma.brown@example.com",
-          name: "Emma Brown",
+          email: "lucaswilson1014@domain.com",
+          name: "Lucas Wilson",
           previousRoles: "UI/UX Designer, Graphic Designer",
-          availability: "Contract",
+          availability: "Full-time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
         },
@@ -48,17 +49,16 @@ export default function Home() {
       semester: "Semester 2",
       applicants: [
         {
-          email: "alice.johnson@google.com",
-
-          name: "Alice Johnson",
+          email: "ameliaanderson1015@domain.com",
+          name: "Amelia Anderson",
           previousRoles: "Software Engineer, Team Lead",
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
         },
         {
-          email: "michael.smith@example.com",
-          name: "Michael Smith",
+          email: "henrythomas1016@domain.com",
+          name: "Henry Thomas",
           previousRoles: "Project Manager, Consultant",
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
@@ -72,28 +72,26 @@ export default function Home() {
       semester: "Semester 1",
       applicants: [
         {
-          email: "alice.johnson@google.com",
-
-          name: "Alice Johnson",
+          email: "harpertaylor1017@domain.com",
+          name: "Harper Taylor",
           previousRoles: "Software Engineer, Team Lead",
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
         },
         {
-          email: "oliver.davis@example.com",
-          name: "Oliver Davis",
+          email: "alexandermoore1018@domain.com",
+          name: "Alexander Moore",
           previousRoles: "Data Analyst, Business Analyst",
-          availability: "Freelance",
+          availability: "Full-time",
           skills: "SQL, Python, Tableau",
-          credentials:
-              "Bachelor of Economics, Certified Business Analysis Professional",
+          credentials: "Bachelor of Economics, Certified Business Analysis Professional",
         },
         {
-          email: "emma.brown@example.com",
-          name: "Emma Brown",
+          email: "evelynjackson1019@domain.com",
+          name: "Evelyn Jackson",
           previousRoles: "UI/UX Designer, Graphic Designer",
-          availability: "Contract",
+          availability: "Full-time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
         },
@@ -101,12 +99,19 @@ export default function Home() {
     },
   ];
 
+
+
   const [courses, setCourses] = useState<IndCourse[]>(defaultCourses);
   useEffect(() => {
+
     const lastCourseState = localStorage.getItem("courseDetails");
     if (lastCourseState) {
       console.log("lastcoursestate was" + JSON.parse(lastCourseState));
       setCourses(JSON.parse(lastCourseState));
+    }
+    for (const course of defaultCourses){
+      console.log("updateApplication", course.name)
+      updateApplication(course)
     }
   }, []);
   return (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import router, { useRouter } from "next/router";
 import { User } from "@/interfaces/Types";
+import getAllUsers from "@/api/GetAllUsers";
 export default function Login() {
   const { setUser } = useLoginContext();
   const router = useRouter();
@@ -25,8 +26,7 @@ export default function Login() {
   //this authenticates a user signing in with the password
   // associated with the email they entered in the login form
   useEffect(() => {
-    const usersJSON = localStorage.getItem("Users") ?? localStorage.getItem("DummyData");
-    const parsed_users: Record<string, User> = usersJSON ? JSON.parse(usersJSON) : {};
+    const parsed_users = getAllUsers()
     const user = parsed_users[form.values.email];
 
     const checkPass = user?.User_Password === form.values.password;

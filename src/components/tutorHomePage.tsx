@@ -31,6 +31,8 @@ import { DetailValues } from "../interfaces/Interfaces";
 import {ApplicationDetails, ApplicationDetailsWithEmail, UserCredential} from "@/interfaces/Types";
 import ApplicantToAppStat from "@/api/ApplicantToAppStat";
 import getApplicationStatuses from "@/api/getApplicationStatuses";
+import UpdateApplication from "@/api/UpdateApplications";
+import {isEmptyDetail} from "@/api/isEmpty";
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
@@ -84,26 +86,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     updateCredentialsWithTutorDetails(values);
   };
 
-  const isEmptyCred = (details: UserCredential) => {
-    return (
-        details.previousRoles === "" &&
-        details.availability === "" &&
-        details.skills === "" &&
-        details.credentials === ""
-    );
-  };
-
-  const isEmptyDetail = (details: DetailValues) => {
-    return (
-        details.name === "" &&
-        details.email === "" &&
-        details.previousRoles === "" &&
-        details.availability === "" &&
-        details.skills === "" &&
-        details.credentials === ""
-    );
-  };
-
   function updateCredentialsWithTutorDetails(tutorDetailsParsed: DetailValues) {
     //this function is supposed to run tutor details are set in state
     //it saves this state to a Record in local storage
@@ -125,32 +107,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
       //console.log(tutorDetailsParsed + "(from updateCredentialsWithTutorDetails)")
     }
 
-  }
-
-  function courseApplicantsToAppStats(course: IndCourse)
-  : ApplicationDetailsWithEmail[]{
-    const allDetails: ApplicationDetailsWithEmail[] = []
-    for (const applicant of course.applicants){
-      const applicationDetails: ApplicationDetailsWithEmail = ApplicantToAppStat(applicant)
-      allDetails.push(applicationDetails)
-    }
-    return allDetails
-  }
-  function mergeAllApps(
-      prevApps: Record<string, ApplicationDetails>,
-      newAppStats: ApplicationDetailsWithEmail[],
-      course: IndCourse
-  ): Record<string, ApplicationDetails> {
-    return newAppStats.reduce(
-        (acc, application) => {
-          const key = `${application.User_Email}_${course.courseCode}`;
-          // Remove User_Email to fit ApplicationDetails type
-          const { User_Email, ...appDetails } = application;
-          acc[key] = appDetails;
-          return acc;
-        },
-        {} as Record<string, ApplicationDetails>
-    );
   }
 
   const applyForCourse = (course: IndCourse) => {
@@ -196,16 +152,11 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
         console.log("not found");
         course.applicants.push(tutorDetailsParsed);
       }
-      const prevAppStats: Record<string, ApplicationDetails> = getApplicationStatuses()
-      const newAppStats: ApplicationDetailsWithEmail[] = courseApplicantsToAppStats(course)
 
-      const mergedApps: Record<string, ApplicationDetails> = mergeAllApps(
-          prevAppStats, newAppStats, course
-      )
-      localStorage.setItem("ApplicationStatuses", JSON.stringify(mergedApps))
+      UpdateApplication(course)
       localStorage.setItem("courseDetails", JSON.stringify(courses));
-      console.log(course.applicants);
-      console.log(courses);
+      //console.log(course.applicants);
+      //console.log(courses);
     }
   };
 

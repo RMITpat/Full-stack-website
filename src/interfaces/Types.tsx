@@ -37,12 +37,12 @@ export type ApplicationDetails = ApplicationParents & {
   Avg_Ranking: number;
   Times_Chosen: number;
 };
-export type ApplicationDetailsWithEmail = ApplicationDetails & {
-  User_Email: string
-}
 export type LecturerVote = {
     Lecturer: User;
     ranking: number;
     Chosen: boolean;
 
   }
+export type ApplicationDetailsWithEmail = ApplicationDetails & {
+  User_Email: string
+}

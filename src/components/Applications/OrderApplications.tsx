@@ -1,23 +1,53 @@
-// this needs to be able to parse what lecturehomepage uses to write applications into
-// an array of user emails for Course applications
-// it needs to order those emails by the properties of the user
 import {DetailValues} from "@/interfaces/Interfaces";
 import {ReactNode} from "react";
+import getApplicationStatuses from "@/api/getApplicationStatuses";
+import {ApplicationDetails} from "@/interfaces/Types";
+import getAllUsers from "@/api/GetAllUsers";
+import AppliCard from "@/components/Applications/AppliCard";
 
-export default function OrderApplications
-(applicants: DetailValues[]): ReactNode {
+type OrderApplicationsProps = {
+    applicants: DetailValues[];
+    courseCode: string;
+    sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
+};
 
-    const emails: string[] = [];
-    for (let i = 0; i < applicants.length; i++) {
-        emails.push(applicants[i].email);
-    }
-    //next is figure out how the different ways a clone of the Users can be ordered
-    //then just order the emails the same way and then print the apps out the same as normal
-    //but with the new order
+export default function OrderApplications({
+  applicants,
+  courseCode,
+  sortFn,
+}: OrderApplicationsProps): ReactNode {
+    const allUsers = getAllUsers()
+    const allApps:Record<string, ApplicationDetails> = getApplicationStatuses()
+    //console.log("allApps (from OrderApplications)" , allApps)
+    // Creater a Set of valid keys based on applicants + courseCode
+    // an example of a key in allApps: alice.johnson@google.com_COSC4839
+    const validKeys = new Set(
+        applicants.map((applicant) => `${applicant.email}_${courseCode}`)
+    );
+    //console.log("validKeys (from OrderApplications)" , validKeys)
+
+    const filteredEntries =
+        Object.entries(allApps).filter(([key]) =>
+            validKeys.has(key)
+    );
+    //console.log("filteredEntries (from OrderApplications)" , filteredEntries)
+    const sortedEntries = filteredEntries
+        .sort(([, a], [, b]) => sortFn(a, b));
+
+    //console.log("sortedEntries (from OrderApplications)" , sortedEntries)
+    // next make a card that renders these nicely
+    //
     return (
         <>
-            {emails.map((email, index) => (
-                <p key={index}>{email}</p>
+            {sortedEntries.map(([key, app]) => (
+                // <p key={key}>
+                //     {key} | Rank: {app.Avg_Ranking} | Times Chosen: {app.Times_Chosen}
+                // </p>
+                <AppliCard
+                    key={key}
+                    application={app}
+                    username={allUsers[key.split("_")[0]].User_Name}
+                />
             ))}
         </>
     );
