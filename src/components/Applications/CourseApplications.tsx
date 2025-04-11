@@ -48,7 +48,7 @@ export default function CourseApplications({tuteEmails}: CourseApplicationProps)
             align="flex-start"
             direction="row"
             wrap="wrap">
-            {users.map((user, index) => (
+            {users.map((user: User, index: number) => (
                 <AppliCard
                     key={index}
                     creds={allApps[user.User_Email]}

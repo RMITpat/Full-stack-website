@@ -20,6 +20,7 @@ import {
 } from "@mantine/core";
 import { map } from "framer-motion/m";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
+import OrderApplications from "@/components/Applications/OrderApplications";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -164,6 +165,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                           </>
                         )
                       )}
+                      {OrderApplications(currentCourse.applicants)}
                     </SimpleGrid>
                   </Flex>
                 )}
@@ -195,6 +197,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   </SimpleGrid>
                 </Flex>
               </Stack>
+
             </>
           ) : (
             <p>undefined</p>

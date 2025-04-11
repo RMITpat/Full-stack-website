@@ -35,6 +35,7 @@ export default function Login() {
       console.log("login success");
       router.push("/");
       setUser(user)
+      localStorage.setItem("prevUser", JSON.stringify(user))
     } else {
       console.log("login failed");
     }
