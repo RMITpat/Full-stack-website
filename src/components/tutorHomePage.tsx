@@ -28,7 +28,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
-import {UserCredential} from "@/interfaces/Types";
+import {ApplicationDetails, ApplicationDetailsWithEmail, UserCredential} from "@/interfaces/Types";
+import ApplicantToAppStat from "@/api/ApplicantToAppStat";
+import getApplicationStatuses from "@/api/getApplicationStatuses";
 
 //courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
@@ -76,6 +78,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
 
     validate: {},
   });
+
   const handleSubmit = (values: typeof form.values) => {
     setCurrentTutor(values);
     updateCredentialsWithTutorDetails(values);
@@ -102,6 +105,8 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   };
 
   function updateCredentialsWithTutorDetails(tutorDetailsParsed: DetailValues) {
+    //this function is supposed to run tutor details are set in state
+    //it saves this state to a Record in local storage
     const allCredentials = localStorage.getItem("Credentials");
 
     if (allCredentials && !(isEmptyDetail(tutorDetailsParsed))) {
@@ -122,7 +127,37 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
 
   }
 
+  function courseApplicantsToAppStats(course: IndCourse)
+  : ApplicationDetailsWithEmail[]{
+    const allDetails: ApplicationDetailsWithEmail[] = []
+    for (const applicant of course.applicants){
+      const applicationDetails: ApplicationDetailsWithEmail = ApplicantToAppStat(applicant)
+      allDetails.push(applicationDetails)
+    }
+    return allDetails
+  }
+  function mergeAllApps(
+      prevApps: Record<string, ApplicationDetails>,
+      newAppStats: ApplicationDetailsWithEmail[],
+      course: IndCourse
+  ): Record<string, ApplicationDetails> {
+    return newAppStats.reduce(
+        (acc, application) => {
+          const key = `${application.User_Email}_${course.courseCode}`;
+          // Remove User_Email to fit ApplicationDetails type
+          const { User_Email, ...appDetails } = application;
+          acc[key] = appDetails;
+          return acc;
+        },
+        {} as Record<string, ApplicationDetails>
+    );
+  }
+
   const applyForCourse = (course: IndCourse) => {
+    //this function gets tutorDetails from "Credentials" in local storage,
+    //and sets "course details" in local storage
+    //and pushes the applicant to the array of
+    //applicants that IndCourses have
     let All_Credentials: Record<string, UserCredential> = {}
     let tutorDetails: DetailValues = {
       email: "",
@@ -148,6 +183,7 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
 
     if (!isEmptyDetail(tutorDetails)) {
       const tutorDetailsParsed:DetailValues = tutorDetails
+
       let duplicateFound: boolean = false;
       for (let index = 0; index < course.applicants.length; index++) {
         if (course.applicants[index].email === currentUser.user.User_Email) {
@@ -160,11 +196,19 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
         console.log("not found");
         course.applicants.push(tutorDetailsParsed);
       }
+      const prevAppStats: Record<string, ApplicationDetails> = getApplicationStatuses()
+      const newAppStats: ApplicationDetailsWithEmail[] = courseApplicantsToAppStats(course)
+
+      const mergedApps: Record<string, ApplicationDetails> = mergeAllApps(
+          prevAppStats, newAppStats, course
+      )
+      localStorage.setItem("ApplicationStatuses", JSON.stringify(mergedApps))
       localStorage.setItem("courseDetails", JSON.stringify(courses));
       console.log(course.applicants);
       console.log(courses);
     }
   };
+
   return (
       <>
         <Group justify="flex-start" grow gap="xl" align="flex-start">

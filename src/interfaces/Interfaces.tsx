@@ -1,9 +1,3 @@
-export interface Course {
-    name: string;
-    courseCode: string;
-    semester: string;
-    applicants: string[];
-}
 export interface DetailValues {
     email: string;
     name: string;
