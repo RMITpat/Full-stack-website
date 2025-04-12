@@ -4,46 +4,39 @@ import getApplicationStatuses from "@/api/getApplicationStatuses";
 import {ApplicationDetails} from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import AppliCard from "@/components/Applications/AppliCard";
-
+//needs to take lecturer state too
 type OrderApplicationsProps = {
-    viewAll: boolean;
     applicants: DetailValues[];
-    courseCode: string;
+    courseCode?: string;
     sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
 };
 
 export default function OrderApplications({
-  viewAll,
   applicants,
   courseCode,
   sortFn,
 }: OrderApplicationsProps): ReactNode {
     const allUsers = getAllUsers()
     const allApps:Record<string, ApplicationDetails> = getApplicationStatuses()
+    let wantedApps = Object.entries(allApps)
     //console.log("allApps (from OrderApplications)" , allApps)
-    // Create a Set of valid keys based on applicants + courseCode
-    // an example of a key in allApps: alice.johnson@google.com_COSC4839
-    if (!viewAll) {
+
+    //Creates a Set of valid keys based on applicants + courseCode
+    //not needed to filter allApps if view all true
+    //an example of a key in allApps: alice.johnson@google.com_COSC4839
+    if (courseCode) {
         const validKeys = new Set(
             applicants.map((applicant) => `${applicant.email}_${courseCode}`)
         );
-    } else {
-        const validKeys = new Set(
-            applicants.map((applicant) => applicant.email)
-        );
+        wantedApps = wantedApps.filter(([key]) => validKeys.has(key));
+    }
     //console.log("validKeys (from OrderApplications)" , validKeys)
-
-    const filteredEntries =
-        Object.entries(allApps).filter(([key]) =>
-            validKeys.has(key)
-    );
-    //console.log("filteredEntries (from OrderApplications)" , filteredEntries)
-    const sortedEntries = filteredEntries
+    console.log("wantedApps (from OrderApplications)" , wantedApps)
+    const sortedEntries = wantedApps
         .sort(([, a], [, b]) => sortFn(a, b));
+    //console.log("wantedApps (from OrderApplications)" , wantedApps)
 
-    //console.log("sortedEntries (from OrderApplications)" , sortedEntries)
-    // next make a card that renders these nicely
-    //
+
     return (
         <>
             {sortedEntries.map(([key, app]) => (
@@ -54,6 +47,7 @@ export default function OrderApplications({
                     key={key}
                     application={app}
                     username={allUsers[key.split("_")[0]].User_Name}
+                    // onSelect={}
                 />
             ))}
         </>

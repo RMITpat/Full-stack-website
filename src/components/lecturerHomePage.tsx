@@ -28,6 +28,7 @@ import { useLoginContext } from "@/pages/contexts/LoginContext";
 import OrderApplications from "@/components/Applications/OrderApplications";
 import updateApplication from "@/api/UpdateApplications";
 import { ApplicationDetails } from "@/interfaces/Types";
+import {useLecturerState} from "@/pages/contexts/LecturerState";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -49,9 +50,9 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
 }) => {
   const currentUser = useLoginContext();
   const currentEmail = currentUser.user.User_Email;
-  const [lecturerState, setLecturerState] = useState<string>("default");
-  const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
-  const [chosenApplicants, setChosenApplicants] = useState<DetailValues[]>([]);
+    const { lecturerState, setLecturerState } = useLecturerState();
+    const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
+    const [chosenApplicants, setChosenApplicants] = useState<DetailValues[]>([]);
 
   useEffect(() => {
     console.log("lecturer state changed");
@@ -248,18 +249,25 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   </Button>
                 </Group>
                 <SimpleGrid bd="sm" spacing="70px" cols={4}>
-                  {currentCourse.applicants.map((applicant, index) => (
-                    <ApplicationCard
-                      key={index}
-                      applicant={applicant}
-                      index={index}
-                      buttonSetting="noButton"
-                      showNumber={"numberOnly"}
-                      moveLeft={moveLeft}
-                      moveRight={moveRight}
-                      currentCourse={currentCourse}
-                    />
-                  ))}
+                    {currentCourse.applicants.map((applicant, index) => (
+                        <ApplicationCard
+                            key={index}
+                            applicant={applicant}
+                            index={index}
+                            buttonSetting="noButton"
+                            showNumber={"numberOnly"}
+                            moveLeft={moveLeft}
+                            moveRight={moveRight}
+                            currentCourse={currentCourse}
+                        />
+                    ))}
+
+                  {/*<OrderApplications*/}
+                  {/*    applicants={currentCourse.applicants}*/}
+                  {/*    courseCode={currentCourse.courseCode}*/}
+                  {/*    sortFn={(a, b) =>*/}
+                  {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
+                  {/*  />*/}
                 </SimpleGrid>
                 <p>most chosen data visualisation</p>
                 <p>{JSON.stringify(graphData(currentCourse, "most"))}</p>
@@ -372,6 +380,12 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                         </Button>
                       </Flex>
                     ))}
+                  {/*<OrderApplications*/}
+                  {/*    applicants={currentCourse.applicants}*/}
+                  {/*    courseCode={currentCourse.courseCode}*/}
+                  {/*    sortFn={(a, b) =>*/}
+                  {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
+                  {/*/>*/}
                   </SimpleGrid>
                 </Flex>
               </Stack>
