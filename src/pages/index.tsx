@@ -15,7 +15,6 @@ export default function Home() {
       name: "Sigma 101",
       courseCode: "COSC1048",
       semester: "Semester 1",
-      selectedApplicants: [],
       lecturerRankings: {},
       applicants: [
         {
@@ -48,7 +47,6 @@ export default function Home() {
       name: "Competitive Eating",
       courseCode: "COSC4839",
       semester: "Semester 2",
-      selectedApplicants: [],
       lecturerRankings: {},
       applicants: [
         {
@@ -73,7 +71,6 @@ export default function Home() {
       name: "Introduction to Lebron",
       courseCode: "COSC4830",
       semester: "Semester 1",
-      selectedApplicants: [],
       lecturerRankings: {},
       applicants: [
         {
@@ -119,9 +116,9 @@ export default function Home() {
       updateApplication(course);
     }
   }, []);
+  //uses the login context, which provides context to all pages on who is currently logged in, to determine which  home page to show
   return (
     <>
-
       {currentUser.user.User_Type == "default" ? (
         <p>you are not logged in</p>
       ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
