@@ -7,17 +7,17 @@ import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
 import { Card, Text } from "@mantine/core";
 import UpdateApplication from "@/api/UpdateApplications";
-import  updateApplication from "@/api/UpdateApplications"
+import updateApplication from "@/api/UpdateApplications";
 export default function Home() {
   const currentUser = useLoginContext();
   let defaultCourses: IndCourse[] = [
     {
-        name: "Sigma 101",
-        courseCode: "COSC1048",
-        semester: "Semester 1",
-        selectedApplicants: [],
-        lecturerRankings: {},
-        applicants: [
+      name: "Sigma 101",
+      courseCode: "COSC1048",
+      semester: "Semester 1",
+      selectedApplicants: [],
+      lecturerRankings: {},
+      applicants: [
         {
           email: "benjaminlopez1012@domain.com",
           name: "Benjamin Lopez",
@@ -114,13 +114,14 @@ export default function Home() {
     } else {
       localStorage.setItem("courseDetails", JSON.stringify(defaultCourses));
     }
-    for (const course of defaultCourses){
-      console.log("updateApplication", course.name)
-      updateApplication(course)
+    for (const course of defaultCourses) {
+      console.log("updateApplication", course.name);
+      updateApplication(course);
     }
   }, []);
   return (
     <>
+
       {currentUser.user.User_Type == "default" ? (
         <p>you are not logged in</p>
       ) : currentUser.user.User_Type == "logged_in_lecturer" ? (

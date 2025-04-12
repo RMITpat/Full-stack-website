@@ -5,6 +5,8 @@ import { useLoginContext } from "@/pages/contexts/LoginContext";
 import router, { useRouter } from "next/router";
 import { User } from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
+import { ToastContainer, toast } from "react-toastify";
+
 export default function Login() {
   const { setUser } = useLoginContext();
   const router = useRouter();
@@ -26,39 +28,42 @@ export default function Login() {
   //this authenticates a user signing in with the password
   // associated with the email they entered in the login form
   useEffect(() => {
-    const parsed_users = getAllUsers()
+    const parsed_users = getAllUsers();
     const user = parsed_users[form.values.email];
 
     const checkPass = user?.User_Password === form.values.password;
 
     if (checkPass) {
       console.log("login success");
+
       router.push("/");
-      setUser(user)
-      localStorage.setItem("prevUser", JSON.stringify(user))
+      toast.success("Login success!");
+      setUser(user);
+      localStorage.setItem("prevUser", JSON.stringify(user));
     } else {
       console.log("login failed");
     }
   }, [submittedValues]);
 
-
   return (
-    <form onSubmit={form.onSubmit(setSubmittedValues)}>
-      <TextInput
-        {...form.getInputProps("email")}
-        mt="md"
-        label="Email"
-        placeholder="Email"
-      />
-      <PasswordInput
-        {...form.getInputProps("password")}
-        mt="md"
-        label="Password"
-        placeholder="Password"
-      />
-      <Button type="submit" mt="md">
-        Submit
-      </Button>
-    </form>
+    <>
+      <form onSubmit={form.onSubmit(setSubmittedValues)}>
+        <TextInput
+          {...form.getInputProps("email")}
+          mt="md"
+          label="Email"
+          placeholder="Email"
+        />
+        <PasswordInput
+          {...form.getInputProps("password")}
+          mt="md"
+          label="Password"
+          placeholder="Password"
+        />
+        <Button type="submit" mt="md">
+          Submit
+        </Button>
+      </form>
+    </>
   );
 }
