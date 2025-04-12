@@ -11,6 +11,7 @@ import { LoginProvider } from "./contexts/LoginContext";
 import InsertUsers from "@/api/InsertUsers";
 import InsertUserCreds from "@/api/InsertUserCreds";
 import { ToastContainer } from "react-toastify";
+import "@mantine/charts/styles.css";
 
 const theme = createTheme({
   fontFamily: "Open Sans, Sans-Serif",

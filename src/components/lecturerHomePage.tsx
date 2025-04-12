@@ -3,6 +3,7 @@ import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
 import Link from "next/link";
+import { BarChart } from "@mantine/charts";
 
 import {
   Badge,
@@ -21,10 +22,12 @@ import {
 } from "@mantine/core";
 import { map } from "framer-motion/m";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
+import getApplicationStatuses from "@/api/getApplicationStatuses";
 
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import OrderApplications from "@/components/Applications/OrderApplications";
 import updateApplication from "@/api/UpdateApplications";
+import { ApplicationDetails } from "@/interfaces/Types";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -143,8 +146,63 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     if (currentCourse.lecturerRankings[currentEmail]) {
       currentCourse.lecturerRankings[currentEmail] = [];
       setChosenApplicants([]);
+      localStorage.setItem("courseDetails", JSON.stringify(courses));
     }
   };
+  const applicationStatuses = getApplicationStatuses();
+  const allApps: Record<string, ApplicationDetails> = getApplicationStatuses();
+  let wantedApps: [string, ApplicationDetails][] = Object.entries(allApps);
+  const transformedData = Object.entries(applicationStatuses).map(
+    ([key, details]) => ({
+      email: key.split("_")[0], // Extract email for labeling
+      timesChosen: details.Times_Chosen,
+    })
+  );
+  const graphData = (currentCourse: IndCourse, direction: string) => {
+    const applicationStatuses = getApplicationStatuses();
+    const transformedData = Object.entries(applicationStatuses).map(
+      ([key, details]) => ({
+        email: key.split("@")[0],
+        course: key.split("_")[1],
+        timesChosen: details.Times_Chosen,
+      })
+    );
+
+    let courseData: {
+      email: string;
+      course: string;
+      timesChosen: number;
+    }[] = [];
+
+    transformedData.forEach((element) => {
+      if (element.course == currentCourse.courseCode) {
+        courseData.push(element);
+        console.log("graph stuff" + element);
+      }
+    });
+    if (courseData.length > 1) {
+      for (let i = 1; i < courseData.length; ++i) {
+        let curr = courseData[i];
+        let j = i - 1;
+
+        while (j >= 0 && courseData[j].timesChosen > curr.timesChosen) {
+          courseData[j + 1] = courseData[j];
+          j = j - 1;
+        }
+        courseData[j + 1] = curr;
+      }
+    }
+    if (courseData.length > 3) {
+      if (direction == "most") {
+        return courseData.slice(-3);
+      } else {
+        return courseData.slice(0, 3);
+      }
+    } else {
+      return courseData;
+    }
+  };
+
   return (
     <>
       {lecturerState == "default" ? (
@@ -204,7 +262,35 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   ))}
                 </SimpleGrid>
                 <p>most chosen data visualisation</p>
+                <p>{JSON.stringify(graphData(currentCourse, "most"))}</p>
+                <p>{JSON.stringify(graphData(currentCourse, "least"))}</p>
               </Stack>
+              <Group justify="space-around">
+                <Stack align="center" w="30%">
+                  <Title order={4}>Top 3 Most Chosen Tutors</Title>
+                  <BarChart
+                    h={300}
+                    data={graphData(currentCourse, "most")}
+                    dataKey="email"
+                    series={[{ name: "timesChosen", color: "violet.6" }]}
+                    tickLine="y"
+                    xAxisLabel="Tutors"
+                    yAxisLabel="Times Chosen"
+                  />
+                </Stack>
+                <Stack align="center" w="30%">
+                  <Title order={4}>Top 3 Least Chosen Tutors</Title>
+                  <BarChart
+                    h={300}
+                    data={graphData(currentCourse, "least")}
+                    dataKey="email"
+                    series={[{ name: "timesChosen", color: "violet.6" }]}
+                    tickLine="y"
+                    xAxisLabel="Tutors"
+                    yAxisLabel="Times Chosen"
+                  />
+                </Stack>
+              </Group>
             </>
           ) : (
             <p>undefined</p>
