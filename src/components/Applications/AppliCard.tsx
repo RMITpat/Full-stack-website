@@ -1,18 +1,24 @@
 import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
-import {User, ApplicationDetails} from "@/interfaces/Types";
-import {ReactNode} from "react";
+import { User, ApplicationDetails } from "@/interfaces/Types";
+import { useContext } from "react";
+import { useLecturerState } from "@/pages/contexts/LecturerState"; // adjust path as needed
 
 type AppliCardProps = {
     application: ApplicationDetails;
-    username: string
+    username: string;
+    onSelect?: () => void; // optional select callback
 };
 
 export default function AppliCard({
-    application,
-    username,
-    }:AppliCardProps) {
+application,
+username,
+onSelect,
+}: AppliCardProps) {
+
+    const { lecturerState } = useLecturerState();
+
     return (
-        <Card shadow="sm" padding="lg" radius="md" withBorder >
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Card.Section>
                 <Image
                     src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
@@ -38,6 +44,16 @@ export default function AppliCard({
                 {application.Users_Credential.previousRoles}
             </Text>
 
+            {lecturerState === "chooseTutors" && onSelect && (
+                <Button
+                    disabled={false}
+                    size="sm"
+                    mt="15px"
+                    onClick={onSelect}
+                >
+                    Select
+                </Button>
+            )}
         </Card>
     );
 }

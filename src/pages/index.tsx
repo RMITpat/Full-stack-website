@@ -7,7 +7,10 @@ import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
 import { Card, Text } from "@mantine/core";
 import UpdateApplication from "@/api/UpdateApplications";
-import updateApplication from "@/api/UpdateApplications";
+import  updateApplication from "@/api/UpdateApplications"
+import {LecturerStateProvider} from "@/pages/contexts/LecturerState";
+
+
 export default function Home() {
   const currentUser = useLoginContext();
   let defaultCourses: IndCourse[] = [
@@ -116,23 +119,27 @@ export default function Home() {
       updateApplication(course);
     }
   }, []);
+  const renderHomePage = () => {
+    const userType = currentUser.user.User_Type;
+
+    if (userType === "default") {
+      return <p>You are not logged in</p>;
+    }
+
+    if (userType === "logged_in_lecturer") {
+      return <LecturerHomePage courses={courses} setCourses={setCourses} />;
+    }
+
+    if (userType === "logged_in" || userType === "admin_default") {
+      return <TutorHomePage courses={courses} setCourses={setCourses} />;
+    }
+
+    return <p>Unknown status</p>;
+  };
   //uses the login context, which provides context to all pages on who is currently logged in, to determine which  home page to show
   return (
-    <>
-      {currentUser.user.User_Type == "default" ? (
-        <p>you are not logged in</p>
-      ) : currentUser.user.User_Type == "logged_in_lecturer" ? (
-        <>
-          <LecturerHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : currentUser.user.User_Type === "logged_in" ||
-        currentUser.user.User_Type === "admin_default" ? (
-        <>
-          <TutorHomePage courses={courses} setCourses={setCourses} />
-        </>
-      ) : (
-        <p>Unknown status</p>
-      )}
-    </>
+      <LecturerStateProvider>
+        {renderHomePage()}
+      </LecturerStateProvider>
   );
 }
