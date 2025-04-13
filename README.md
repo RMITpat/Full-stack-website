@@ -1,43 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+Group
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
 # s3976017-s4092047-a1
-# s3976017-s4092047-a1
-# s3976017-s4092047-a1
+
+Github: https://github.com/rmit-fsd-2025-s1/s3976017-s4092047-a1
+
+
+Logins:
+Lecturers
+avajones1005@domain.com — 01000001Aj@
+
+elijahgarcia1006@domain.com — 01000101Eg@
+
+isabellarodriguez1009@domain.com — 01001001Ir@
+
+jamesdavis1008@domain.com — 01001010Jd@
+
+liamjohnson1002@domain.com — 01001100Lj@
+
+miahernandez1011@domain.com — 01001101Mh@
+
+noahbrown1004@domain.com — 01001110Nb@
+
+oliviawilliams1003@domain.com — 01001111Ow@
+
+sophiamiller1007@domain.com — 01010011Sm@
+
+williammartinez1010@domain.com — 01010111Wm@
+
+Tutors
+alexandermoore1018@domain.com — 01000001Am@
+
+ameliaanderson1015@domain.com — 01000001Aa@
+
+benjaminlopez1012@domain.com — 01000010Bl@
+
+charlottegonzalez1013@domain.com — 01000011Cg@
+
+evelynjackson1019@domain.com — 01000101Ej@
+
+harpertaylor1017@domain.com — 01001000Ht@
+
+henrythomas1016@domain.com — 01001000Ht@
+
+lucaswilson1014@domain.com — 01001100Lw@
+
+michaelmartin1020@domain.com — 01001101Mm@
+
+There is commenting in lecturerHomePage.tsx, applicationCard.tsx and tutorHomePage.tsx that describe user validation techniques

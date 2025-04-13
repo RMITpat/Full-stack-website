@@ -40,14 +40,21 @@ export default function ApplicationCard({
   avg,
 }: ApplicationProps) {
   const currentUser = useLoginContext();
+  /*
+ user Validation:
 
+ Comment cannot be empty 
+ */
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
       comment: "",
     },
 
-    validate: {},
+    validate: {
+      comment: (value) =>
+        value.trim().length > 0 ? null : "Comment cannot be empty",
+    },
   });
   const [opened, setOpened] = useState(false);
   const [currApplicant, setCurrApplicant] = useState<DetailValues | undefined>(
