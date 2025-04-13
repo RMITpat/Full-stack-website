@@ -36,6 +36,7 @@ import OrderApplications from "@/components/Applications/OrderApplications";
 import updateApplication from "@/api/UpdateApplications";
 import { ApplicationDetails } from "@/interfaces/Types";
 import { useLecturerState } from "@/pages/contexts/LecturerState";
+import { toast } from "react-toastify";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -76,7 +77,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     console.log("lecturer state changed");
 
     if (currentCourse) {
-      updateApplication(currentCourse);
+      //updateApplication(currentCourse);
       const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
       console.log("last chosen applicants: " + lastChosenApplicants);
       if (lastChosenApplicants) {
@@ -184,6 +185,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     updateApplication(currentCourse);
 
     if (currentCourse.lecturerRankings[currentEmail]) {
+      toast.success("Rankings updated!");
       currentCourse.lecturerRankings[currentEmail].forEach((appAndComment) => {
         for (let i = 0; i < currentCourse.applicants.length; ++i) {
           if (
@@ -560,13 +562,13 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 onChange={setCourseFilter}
               >
                 <Group justify="center">
-                  <Chip defaultChecked value="COSC1048">
+                  <Chip  value="COSC1048">
                     COSC1048
                   </Chip>
-                  <Chip defaultChecked value="COSC4839">
+                  <Chip  value="COSC4839">
                     COSC4839
                   </Chip>
-                  <Chip defaultChecked value="COSC4830">
+                  <Chip  value="COSC4830">
                     COSC4830
                   </Chip>
                 </Group>
