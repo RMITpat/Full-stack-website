@@ -1,10 +1,9 @@
-import {DetailValues} from "@/interfaces/Interfaces";
 import {ReactNode} from "react";
 import getApplicationStatuses from "@/api/getApplicationStatuses";
 import {ApplicationDetails} from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import AppliCard from "@/components/Applications/AppliCard";
-import {Flex, SimpleGrid} from "@mantine/core";
+import {SimpleGrid} from "@mantine/core";
 //needs to take lecturer state too
 type OrderApplicationsProps = {
     courseCode?: string[];

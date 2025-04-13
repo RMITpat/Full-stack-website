@@ -3,13 +3,10 @@ import { AppAndComment, IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
 import { BarChart } from "@mantine/charts";
-import { SearchInput } from "@/components/allAppsInputs/SearchInput";
 import {
-  Chip,
   Button,
   Card,
   Flex,
-  Grid,
   Group,
   SimpleGrid,
   Space,
@@ -58,12 +55,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     "COSC4839",
     "COSC4830",
   ]);
-  //this allows you to deselect availability options for applicants
-  const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    if (event.currentTarget.value === availability) {
-      setAvailability(null);
-    }
-  };
 
   const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
   useEffect(() => {
