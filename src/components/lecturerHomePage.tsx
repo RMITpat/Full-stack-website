@@ -56,7 +56,11 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [availability, setAvailability] = useState<string | undefined>(undefined);//for the availability filter
-  const [courseFilter, setCourseFilter] = useState(['react']);//for the availability filter
+  const [courseFilter, setCourseFilter] = useState<string[]>([
+    "COSC1048",
+    "COSC4839",
+    "COSC4830",
+  ]);
 
   const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === availability) {
@@ -552,9 +556,9 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 <Group
                 justify = "center"
                 >
-                  <Chip defaultChecked value="COSC1048">COSC1048</Chip>
-                  <Chip defaultChecked value="COSC4839">COSC4839</Chip>
-                  <Chip defaultChecked value="COSC4830">COSC4830</Chip>
+                  <Chip  value="COSC1048">COSC1048</Chip>
+                  <Chip  value="COSC4839">COSC4839</Chip>
+                  <Chip  value="COSC4830">COSC4830</Chip>
                 </Group>
               </Chip.Group>
 
