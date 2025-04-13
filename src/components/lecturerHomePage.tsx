@@ -61,11 +61,13 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const { lecturerState, setLecturerState } = useLecturerState();
   const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [availability, setAvailability] = useState<string | undefined>(
-    undefined
-  ); //for the availability filter
-  const [courseFilter, setCourseFilter] = useState(["react"]); //for the availability filter
+  const [searchTerm, setSearchTerm] = useState('');
+  const [availability, setAvailability] = useState<string | undefined>(undefined);//for the availability filter
+  const [courseFilter, setCourseFilter] = useState<string[]>([
+    "COSC1048",
+    "COSC4839",
+    "COSC4830",
+  ]);
 
   const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === availability) {
@@ -557,20 +559,15 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             </Grid.Col>
             <Grid.Col span={4}>
               <Chip.Group
-                multiple
-                value={courseFilter}
-                onChange={setCourseFilter}
-              >
-                <Group justify="center">
-                  <Chip  value="COSC1048">
-                    COSC1048
-                  </Chip>
-                  <Chip  value="COSC4839">
-                    COSC4839
-                  </Chip>
-                  <Chip  value="COSC4830">
-                    COSC4830
-                  </Chip>
+                  multiple
+                  value={courseFilter}
+                  onChange={setCourseFilter}>
+                <Group
+                justify = "center"
+                >
+                  <Chip  value="COSC1048">COSC1048</Chip>
+                  <Chip  value="COSC4839">COSC4839</Chip>
+                  <Chip  value="COSC4830">COSC4830</Chip>
                 </Group>
               </Chip.Group>
             </Grid.Col>
