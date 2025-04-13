@@ -5,6 +5,7 @@ import ApplicationCard from "@/components/applicationCard";
 import Link from "next/link";
 import { BarChart } from "@mantine/charts";
 
+
 import {
   Badge,
   Box,

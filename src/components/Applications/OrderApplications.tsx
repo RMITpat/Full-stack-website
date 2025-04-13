@@ -18,7 +18,7 @@ export default function OrderApplications({
 }: OrderApplicationsProps): ReactNode {
     const allUsers = getAllUsers()
     const allApps:Record<string, ApplicationDetails> = getApplicationStatuses()
-    let wantedApps = Object.entries(allApps)
+    let wantedApps: [string, ApplicationDetails][] = Object.entries(allApps)
     //console.log("allApps (from OrderApplications)" , allApps)
 
     //Creates a Set of valid keys based on applicants + courseCode
@@ -47,7 +47,7 @@ export default function OrderApplications({
                     key={key}
                     application={app}
                     username={allUsers[key.split("_")[0]].User_Name}
-                    // onSelect={}
+                    // onSelect={selectApplicant(applicant, currentCourse)}
                 />
             ))}
         </>
