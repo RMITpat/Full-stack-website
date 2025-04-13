@@ -471,13 +471,13 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         </>
       ) : lecturerState == "allApplicants" ?(
           <>
-            <OrderApplications
-                sortFn={sortByTimesChosenDesc}
-                // courseCode=""
-                // availability=""
-                //searchTerm=""
-                //chosen={true}
-            />
+                <OrderApplications
+                    sortFn={sortByTimesChosenDesc}
+                    // courseCode=""
+                    // availability=""
+                    //searchTerm=""
+                    //chosen={true}
+                />
           </>
       ) : (
         <p>Unknown status</p>

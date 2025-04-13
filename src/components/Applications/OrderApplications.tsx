@@ -4,6 +4,7 @@ import getApplicationStatuses from "@/api/getApplicationStatuses";
 import {ApplicationDetails} from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import AppliCard from "@/components/Applications/AppliCard";
+import {Flex} from "@mantine/core";
 //needs to take lecturer state too
 type OrderApplicationsProps = {
     courseCode?: string;
@@ -60,13 +61,21 @@ export default function OrderApplications({
             {sortedApps.length === 0 ? (
                 <p>No results</p>
             ) : (
-                sortedApps.map(([key, app]) => (
+                <Flex
+                    mih={50}
+                    gap="md"
+                    justify="flex-start"
+                    align="flex-start"
+                    direction="row"
+                    wrap="wrap">
+                {sortedApps.map(([key, app]) => (
                     <AppliCard
                         key={key}
                         application={app}
                         username={allUsers[key.split("_")[0]]?.User_Name ?? "Unknown User"}
                     />
-                ))
+                ))}
+                </Flex>
             )}
         </div>
 
