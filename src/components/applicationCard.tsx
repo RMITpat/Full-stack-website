@@ -66,6 +66,5 @@ export default function ApplicationCard({
         </Text>
       </Stack>
     </Card>
-    
   );
 }
