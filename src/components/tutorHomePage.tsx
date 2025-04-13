@@ -35,7 +35,6 @@ import {
 } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import CredentialsModal from "@/components/Tutor/CredentialsModal";
-import CourseAccordion from "@/components/Tutor/CourseAccordion";
 
 import ApplicantToAppStat from "@/api/ApplicantToAppStat";
 import getApplicationStatuses from "@/api/getApplicationStatuses";

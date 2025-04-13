@@ -17,6 +17,28 @@ username,
 
     //const { lecturerState } = useLecturerState();
 
+  return (
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Card.Section>
+        <Group justify="center">
+          {" "}
+          <Image
+            w="50%"
+            radius="md"
+            src={`/images/${username.split(" ")[0]}.jpg`}
+          />
+        </Group>
+      </Card.Section>
+      <Group justify="space-between" mt="md" mb="xs">
+        <Text fw={500}>{username}</Text>
+        <Badge>{application.Users_Credential.availability}</Badge>
+      </Group>
+
+      <Stack gap="0px">
+        <Text size="sm">Credentials</Text>
+        <Text size="sm" c="dimmed">
+          {application.Users_Credential.credentials}
+        </Text>
     return (
 
         <Card shadow="sm"

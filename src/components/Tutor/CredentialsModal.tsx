@@ -16,7 +16,7 @@ interface CredentialProps {
   form: UseFormReturnType<DetailValues, (values: DetailValues) => DetailValues>;
   handleSubmit: (values: DetailValues) => void;
 }
-
+//the modal that is used for entering credentials
 const CredentialsModal: React.FC<CredentialProps> = ({
   opened,
   close,
