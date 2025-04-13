@@ -7,7 +7,7 @@ import AppliCard from "@/components/Applications/AppliCard";
 import {Flex, SimpleGrid} from "@mantine/core";
 //needs to take lecturer state too
 type OrderApplicationsProps = {
-    courseCode?: string;
+    courseCode?: string[];
     sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
     searchTerm?: string;
     availability?: string;
@@ -27,15 +27,17 @@ export default function OrderApplications({
     let wantedApps = Object.entries(allApps);
 
     // Filter by courseCode
-    if (courseCode) {
+    if (courseCode && courseCode.length > 0) {
         const validKeys = new Set(
-            Object.keys(allApps).filter(key => key.endsWith(`_${courseCode}`))
+            Object.keys(allApps).filter(key =>
+                courseCode.some(code => key.endsWith(`_${code}`))
+            )
         );
         wantedApps = wantedApps.filter(([key]) => validKeys.has(key));
     }
 
-  // Apply additional filters
-  wantedApps = wantedApps.filter(([_, app]) => {
+  // Apply filters
+  wantedApps = wantedApps.filter(([key, app]) => {
     const userMatchesSearch =
       !searchTerm ||
       app.Users_Credential.skills
@@ -43,7 +45,17 @@ export default function OrderApplications({
         .includes(searchTerm.toLowerCase()) ||
       app.Users_Credential.previousRoles
         ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
+        .includes(searchTerm.toLowerCase()) ||
+        app.Users_Credential.availability
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+        app.Times_Chosen.toString()
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+        app.Avg_Ranking.toString()
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+      key.toLowerCase().includes(searchTerm.toLowerCase())
 
     const availabilityMatches =
       !availability || app.Users_Credential.availability === availability;

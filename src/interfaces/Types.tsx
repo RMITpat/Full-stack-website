@@ -21,7 +21,11 @@ export type UserCredential = {
 export type ApplicationMap = {
   [key: string]: UserCredential;
 };
-
+export type LecturerVote = {
+  Lecturer_Email: string;
+  ranking: number;
+  Chosen: boolean;
+}
 //this is abstract, don't use it directly, use
 //ApplicationDetails instead
 export type ApplicationParents = {
@@ -36,11 +40,7 @@ export type ApplicationDetails = ApplicationParents & {
   Avg_Ranking: number;
   Times_Chosen: number;
 };
-export type LecturerVote = {
-    Lecturer_Email: string;
-    ranking: number;
-    Chosen: boolean;
-  }
+
 export type ApplicationDetailsWithEmail = ApplicationDetails & {
   User_Email: string
 }

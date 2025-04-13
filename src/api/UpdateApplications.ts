@@ -21,6 +21,7 @@ function courseApplicantsToAppStats(
     for (const [lecturerEmail, rankingList] of Object.entries(
       course.lecturerRankings
     )) {
+
       const index = rankingList.findIndex(
         (a) => a.applicant.email === applicant.email
       );
