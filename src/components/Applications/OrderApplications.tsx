@@ -10,7 +10,7 @@ type OrderApplicationsProps = {
     courseCode?: string[];
     sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
     searchTerm?: string;
-    availability?: string;
+    availability: string;
     chosen?: boolean;
 };
 

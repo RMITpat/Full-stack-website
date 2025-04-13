@@ -37,6 +37,7 @@ import updateApplication from "@/api/UpdateApplications";
 import { ApplicationDetails } from "@/interfaces/Types";
 import { useLecturerState } from "@/pages/contexts/LecturerState";
 import { toast } from "react-toastify";
+import ApplicantFilters from "@/components/Applications/ApplicantFilters";
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -68,13 +69,14 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     "COSC4839",
     "COSC4830",
   ]);
-
+  //this allows you to deselect availability options for applicants
   const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === availability) {
       setAvailability(null);
     }
   };
 
+  const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
   useEffect(() => {
     console.log("lecturer state changed");
 
@@ -326,15 +328,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         courseData[j + 1] = curr;
       }
     }
-    // if (courseData.length > 3) {
-    //   if (direction == "most") {
-    //     return courseData.slice(-3);
-    //   } else {
-    //     return courseData.slice(0, 3);
-    //   }
-    // } else {
-    //   return courseData;
-    // }
+
     return courseData;
   };
   const sortByTimesChosenDesc = (
@@ -342,6 +336,10 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     b: ApplicationDetails
   ) => b.Times_Chosen - a.Times_Chosen;
 
+  const sortByTimesChosenAsc = (
+      a: ApplicationDetails,
+      b: ApplicationDetails
+  ) => a.Times_Chosen - b.Times_Chosen;
   return (
     <>
       {lecturerState == "default" ? (
@@ -489,41 +487,27 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
               </Stack>
               <Stack mt="30px">
                 <Title order={3}>All Applicants</Title>
-                <Flex p="lg">
-                  <SimpleGrid bd="sm" spacing="40px" cols={6}>
-                    {currentCourse.applicants.map((applicant, index) => (
-                      <Flex direction="column">
-                        <ApplicationCard
-                          applicant={applicant}
-                          index={index}
-                          buttonSetting="Select"
-                          showNumber={"false"}
-                          moveLeft={moveLeft}
-                          moveRight={moveRight}
-                          avg={0}
-                          currentCourse={currentCourse}
-                        />
-                        {/* <Checkbox onChan /> */}
-                        <Button
-                          disabled={false}
-                          size="sm"
-                          mt="15px"
-                          onClick={() =>
-                            selectApplicant(applicant, currentCourse)
-                          }
-                        >
-                          Select
-                        </Button>
-                      </Flex>
-                    ))}
-                    {/*<OrderApplications*/}
-                    {/*    applicants={currentCourse.applicants}*/}
-                    {/*    courseCode={currentCourse.courseCode}*/}
-                    {/*    sortFn={(a, b) =>*/}
-                    {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
-                    {/*/>*/}
-                  </SimpleGrid>
-                </Flex>
+                <ApplicantFilters
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    availability={availability}
+                    setAvailability={setAvailability}
+                    courseFilter={courseFilter}
+                    setCourseFilter={setCourseFilter}
+                    order={order}
+                    setOrder={setOrder}
+                    onBack={() => setLecturerState("default")}
+                />
+
+                <OrderApplications
+                    sortFn={order === "Ascending" ?
+                        sortByTimesChosenAsc :
+                        sortByTimesChosenDesc}
+                    courseCode={courseFilter}
+                    availability={availability}
+                    searchTerm={searchTerm}
+                    //chosen={true}
+                />
               </Stack>
             </>
           ) : (
@@ -533,53 +517,26 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       ) : lecturerState == "allApplicants" ? (
         <>
           <Title>All Applicants</Title>
-          {/*//need a group fo search and filters*/}
-          <Grid>
-            <Grid.Col span={1}>
-              <Button onClick={() => setLecturerState("default")}>Back</Button>
-            </Grid.Col>
-            <Grid.Col span={4}>
-              <SearchInput value={searchTerm} onChange={setSearchTerm} />
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Chip.Group
-                value={availability}
-                onChange={setAvailability}
-              >
-                <Group>
-                  <Chip value="Full-Time"
-                        onClick={handleChipClick}>
-                    Full-Time
-                  </Chip>
-                  <Chip value="Part-Time"
-                        onClick={handleChipClick}>
-                    Part-Time
-                  </Chip>
-                </Group>
-              </Chip.Group>
-            </Grid.Col>
-            <Grid.Col span={4}>
-              <Chip.Group
-                  multiple
-                  value={courseFilter}
-                  onChange={setCourseFilter}>
-                <Group
-                justify = "center"
-                >
-                  <Chip  value="COSC1048">COSC1048</Chip>
-                  <Chip  value="COSC4839">COSC4839</Chip>
-                  <Chip  value="COSC4830">COSC4830</Chip>
-                </Group>
-              </Chip.Group>
-            </Grid.Col>
-          </Grid>
+          <ApplicantFilters
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              availability={availability}
+              setAvailability={setAvailability}
+              courseFilter={courseFilter}
+              setCourseFilter={setCourseFilter}
+              order={order}
+              setOrder={setOrder}
+              onBack={() => setLecturerState("default")}
+          />
 
           <OrderApplications
-            sortFn={sortByTimesChosenDesc}
+            sortFn={order === "Ascending" ?
+                sortByTimesChosenAsc :
+                sortByTimesChosenDesc}
             courseCode={courseFilter}
             availability={availability}
             searchTerm={searchTerm}
-            // chosen={true}
+            //chosen={true}
           />
         </>
       ) : (
