@@ -86,7 +86,7 @@ export default function Home() {
           email: "henrythomas1016@domain.com",
           name: "Henry Thomas",
           previousRoles: "Project Manager, Consultant",
-          availability: "Part-time",
+          availability: "Part-Time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
           lecturerComments: [],
