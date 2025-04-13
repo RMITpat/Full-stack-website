@@ -196,6 +196,28 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       localStorage.setItem("courseDetails", JSON.stringify(courses));
     }
   };
+  const getAvgRanking = (currentCourse: IndCourse, applicant: DetailValues) => {
+    const applicationStatuses = getApplicationStatuses();
+    let avgRanking: number = 0;
+    const transformedData = Object.entries(applicationStatuses).map(
+      ([key, details]) => ({
+        email: key.split("_")[0],
+        course: key.split("_")[1],
+        avgRanking: details.Avg_Ranking,
+      })
+    );
+    transformedData.forEach((element) => {
+      if (
+        element.email == applicant.email &&
+        element.course == currentCourse.courseCode
+      ) {
+        console.log("avg rank gotten" + element.avgRanking);
+        avgRanking = element.avgRanking;
+      }
+    });
+    console.log("returned 0");
+    return avgRanking;
+  };
   const highestRankedTutors = (currentCourse: IndCourse) => {
     const applicationStatuses = getApplicationStatuses();
     console.log("highestRankedtutor called" + currentCourse);
@@ -249,7 +271,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     return applicantArray;
   };
 
-  const graphData = (currentCourse: IndCourse, direction: string) => {
+  const graphData = (currentCourse: IndCourse) => {
     const applicationStatuses = getApplicationStatuses();
     const transformedData = Object.entries(applicationStatuses).map(
       ([key, details]) => ({
@@ -266,10 +288,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     }[] = [];
 
     transformedData.forEach((element) => {
-      if (
-        element.course == currentCourse.courseCode &&
-        element.timesChosen > 0
-      ) {
+      if (element.course == currentCourse.courseCode) {
         courseData.push(element);
       }
     });
@@ -285,15 +304,16 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         courseData[j + 1] = curr;
       }
     }
-    if (courseData.length > 3) {
-      if (direction == "most") {
-        return courseData.slice(-3);
-      } else {
-        return courseData.slice(0, 3);
-      }
-    } else {
-      return courseData;
-    }
+    // if (courseData.length > 3) {
+    //   if (direction == "most") {
+    //     return courseData.slice(-3);
+    //   } else {
+    //     return courseData.slice(0, 3);
+    //   }
+    // } else {
+    //   return courseData;
+    // }
+    return courseData;
   };
   const sortByTimesChosenDesc = (
     a: ApplicationDetails,
@@ -361,6 +381,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                           applicant={applicant}
                           index={index}
                           buttonSetting="noButton"
+                          avg={getAvgRanking(currentCourse, applicant)}
                           showNumber={"numberOnly"}
                           moveLeft={moveLeft}
                           moveRight={moveRight}
@@ -372,32 +393,15 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 </SimpleGrid>
               </Stack>
               <Title order={2}>Applicant Data</Title>
-
-              <Group justify="space-around">
-                <Stack w="30%">
-                  <Title order={4}>Top 3 Most Chosen Tutors</Title>
-                  {graphData(currentCourse, "most").length == 0 ? (
+              <Group justify="center" w="100%">
+                <Stack align="center" w="50%">
+                  <Title order={4}>Most Chosen Tutors</Title>
+                  {graphData(currentCourse).length == 0 ? (
                     <Text>No applicants have been ranked. </Text>
                   ) : (
                     <BarChart
                       h={300}
-                      data={graphData(currentCourse, "most")}
-                      dataKey="email"
-                      series={[{ name: "timesChosen", color: "violet.6" }]}
-                      tickLine="y"
-                      xAxisLabel="Tutors"
-                      yAxisLabel="Times Chosen"
-                    />
-                  )}
-                </Stack>
-                <Stack w="30%">
-                  <Title order={4}>Top 3 Least Chosen Tutors</Title>
-                  {graphData(currentCourse, "least").length == 0 ? (
-                    <Text>No applicants have been ranked. </Text>
-                  ) : (
-                    <BarChart
-                      h={300}
-                      data={graphData(currentCourse, "least")}
+                      data={graphData(currentCourse)}
                       dataKey="email"
                       series={[{ name: "timesChosen", color: "violet.6" }]}
                       tickLine="y"
@@ -426,7 +430,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   <Title order={3}>Your Chosen Applicants</Title>
                   <Group>
                     <Button onClick={() => submitRanking(currentCourse)}>
-                      Submit Ranking
+                      Update Your Ranking
                     </Button>
                     <Button
                       bg="red"
@@ -449,6 +453,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                             showNumber={"showButtons"}
                             moveLeft={moveLeft}
                             moveRight={moveRight}
+                            avg={0}
                             currentCourse={currentCourse}
                           />
                         </>
@@ -473,6 +478,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                           showNumber={"false"}
                           moveLeft={moveLeft}
                           moveRight={moveRight}
+                          avg={0}
                           currentCourse={currentCourse}
                         />
                         {/* <Checkbox onChan /> */}
