@@ -4,25 +4,31 @@ import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
 import Link from "next/link";
 import { BarChart } from "@mantine/charts";
-import {SearchInput} from "@/components/allAppsInputs/SearchInput"
+import { SearchInput } from "@/components/allAppsInputs/SearchInput";
 import {
   Badge,
   Box,
-    Chip,
+  Chip,
   Button,
   Card,
   Checkbox,
   Flex,
   Grid,
-  Group, SegmentedControl,
+  Group,
+  SegmentedControl,
   SimpleGrid,
   Space,
   Stack,
-  Text, TextInput,
+  Text,
+  TextInput,
   Title,
 } from "@mantine/core";
 import { map } from "framer-motion/m";
-import {IconArrowNarrowLeft, IconArrowNarrowRight, IconSearch} from "@tabler/icons-react";
+import {
+  IconArrowNarrowLeft,
+  IconArrowNarrowRight,
+  IconSearch,
+} from "@tabler/icons-react";
 import getApplicationStatuses from "@/api/getApplicationStatuses";
 
 import { useLoginContext } from "@/pages/contexts/LoginContext";
@@ -67,7 +73,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       setAvailability(undefined);
     }
   };
-
 
   useEffect(() => {
     console.log("lecturer state changed");
@@ -380,7 +385,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
               <Stack>
                 <Space w="lg"></Space>
                 <Group justify="space-between">
-                  <Title order={2}>Most Chosen Applicants</Title>
+                  <Title order={2}>Highest Ranked Applicants</Title>
                   <Button onClick={() => setLecturerState("chooseTutors")}>
                     Rank Applicants
                   </Button>
@@ -529,14 +534,17 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
           {/*//need a group fo search and filters*/}
           <Grid>
             <Grid.Col span={1}>
-              <Button onClick={() => setLecturerState("default")}>
-              Back</Button>
+              <Button onClick={() => setLecturerState("default")}>Back</Button>
             </Grid.Col>
             <Grid.Col span={4}>
               <SearchInput value={searchTerm} onChange={setSearchTerm} />
             </Grid.Col>
             <Grid.Col span={3}>
-              <Chip.Group multiple={false} value={availability} onChange={setAvailability}>
+              <Chip.Group
+                multiple={false}
+                value={availability}
+                onChange={setAvailability}
+              >
                 <Group>
                   <Chip value="Full-Time" onClick={handleChipClick}>
                     Full-Time
@@ -546,7 +554,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   </Chip>
                 </Group>
               </Chip.Group>
-
             </Grid.Col>
             <Grid.Col span={4}>
               <Chip.Group
@@ -561,8 +568,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   <Chip  value="COSC4830">COSC4830</Chip>
                 </Group>
               </Chip.Group>
-
-
             </Grid.Col>
           </Grid>
 
