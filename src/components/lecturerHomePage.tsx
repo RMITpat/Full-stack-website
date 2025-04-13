@@ -5,7 +5,6 @@ import ApplicationCard from "@/components/applicationCard";
 import Link from "next/link";
 import { BarChart } from "@mantine/charts";
 
-
 import {
   Badge,
   Box,
@@ -296,8 +295,10 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       return courseData;
     }
   };
-  const sortByTimesChosenDesc = (a: ApplicationDetails, b: ApplicationDetails) =>
-      b.Times_Chosen - a.Times_Chosen;
+  const sortByTimesChosenDesc = (
+    a: ApplicationDetails,
+    b: ApplicationDetails
+  ) => b.Times_Chosen - a.Times_Chosen;
 
   return (
     <>
@@ -305,7 +306,13 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         <>
           <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
 
-          <Title mb="sm">Courses</Title>
+          <Group justify="space-between">
+            <Title mb="sm">Courses</Title>
+            <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
+              All Applicants View
+            </Button>
+          </Group>
+
           <SimpleGrid spacing="70px" cols={4}>
             {courses.map((course, index) => (
               <Card key={index} shadow="sm" withBorder>
@@ -325,19 +332,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 </Button>
               </Card>
             ))}
-            <Card  shadow="sm" withBorder>
-              <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500}>View all applicants</Text>
-              </Group>
-              
-              <Text size="sm" c="dimmed">
-                you can search, sort, and filter applicants by course, name, and much more! 
-              </Text>
-
-              <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
-                view
-              </Button>
-            </Card>
           </SimpleGrid>
         </>
       ) : lecturerState == "courseView" ? (
@@ -375,13 +369,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                       )
                     )
                   )}
-
-                  {/*<OrderApplications*/}
-                  {/*    applicants={currentCourse.applicants}*/}
-                  {/*    courseCode={currentCourse.courseCode}*/}
-                  {/*    sortFn={(a, b) =>*/}
-                  {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
-                  {/*  />*/}
                 </SimpleGrid>
               </Stack>
               <Title order={2}>Applicant Data</Title>
@@ -515,16 +502,20 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             <p>undefined</p>
           )}
         </>
-      ) : lecturerState == "allApplicants" ?(
-          <>
-                <OrderApplications
-                    sortFn={sortByTimesChosenDesc}
-                    // courseCode=""
-                    // availability=""
-                    //searchTerm=""
-                    //chosen={true}
-                />
-          </>
+      ) : lecturerState == "allApplicants" ? (
+        <>
+          <Title>All Applicants</Title>
+          <Button mt="md" onClick={() => setLecturerState("default")}>
+            Back
+          </Button>
+          <OrderApplications
+            sortFn={sortByTimesChosenDesc}
+            // courseCode=""
+            // availability=""
+            //searchTerm=""
+            //chosen={true}
+          />
+        </>
       ) : (
         <p>Unknown status</p>
       )}
