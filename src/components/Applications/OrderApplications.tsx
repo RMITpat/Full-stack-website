@@ -15,14 +15,14 @@ type OrderApplicationsProps = {
 };
 
 export default function OrderApplications({
-                                              courseCode,
-                                              sortFn,
-                                              searchTerm,
-                                              availability,
-                                              chosen,
-                                          }: OrderApplicationsProps): ReactNode {
-    const allUsers = getAllUsers();
-    const allApps: Record<string, ApplicationDetails> = getApplicationStatuses();
+  courseCode,
+  sortFn,
+  searchTerm,
+  availability,
+  chosen,
+}: OrderApplicationsProps): ReactNode {
+  const allUsers = getAllUsers();
+  const allApps: Record<string, ApplicationDetails> = getApplicationStatuses();
 
     let wantedApps = Object.entries(allApps);
 
@@ -34,27 +34,27 @@ export default function OrderApplications({
         wantedApps = wantedApps.filter(([key]) => validKeys.has(key));
     }
 
-    // Apply additional filters
-    wantedApps = wantedApps.filter(([_, app]) => {
-        const userMatchesSearch =
-            !searchTerm ||
-            app.Users_Credential.skills?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            app.Users_Credential.previousRoles?.toLowerCase().includes(searchTerm.toLowerCase());
+  // Apply additional filters
+  wantedApps = wantedApps.filter(([_, app]) => {
+    const userMatchesSearch =
+      !searchTerm ||
+      app.Users_Credential.skills
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      app.Users_Credential.previousRoles
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
 
-        const availabilityMatches =
-            !availability || app.Users_Credential.availability === availability;
+    const availabilityMatches =
+      !availability || app.Users_Credential.availability === availability;
 
-        const chosenMatches =
-            chosen === undefined || app.Times_Chosen > 0 === chosen;
+    const chosenMatches =
+      chosen === undefined || app.Times_Chosen > 0 === chosen;
 
-        return userMatchesSearch && availabilityMatches && chosenMatches;
-    });
+    return userMatchesSearch && availabilityMatches && chosenMatches;
+  });
 
-    const sortedApps = wantedApps
-        .sort((
-            [, a],
-            [, b]) => sortFn(a, b));
-
+  const sortedApps = wantedApps.sort(([, a], [, b]) => sortFn(a, b));
 
     return (
         <div>

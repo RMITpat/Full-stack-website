@@ -1,10 +1,9 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { IndCourse } from "../interfaces/Interfaces";
+import { AppAndComment, IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
 import Link from "next/link";
 import { BarChart } from "@mantine/charts";
-
 
 import {
   Badge,
@@ -53,14 +52,19 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const currentEmail = currentUser.user.User_Email;
   const { lecturerState, setLecturerState } = useLecturerState();
   const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
-  const [chosenApplicants, setChosenApplicants] = useState<DetailValues[]>([]);
+  const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
 
   useEffect(() => {
     console.log("lecturer state changed");
+
     if (currentCourse) {
+      updateApplication(currentCourse);
       const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
+      console.log("last chosen applicants: " + lastChosenApplicants);
       if (lastChosenApplicants) {
         setChosenApplicants(lastChosenApplicants);
+      } else {
+        setChosenApplicants([]);
       }
     }
   }, [lecturerState]);
@@ -76,6 +80,10 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     applicant: DetailValues,
     currentCourse: IndCourse
   ) => {
+    const applicantAndComment: AppAndComment = {
+      applicant: applicant,
+      comment: "",
+    };
     //if  a lecturer ranking for the current logged in lecturer exists:
     if (currentCourse.lecturerRankings[currentEmail]) {
       let duplicateSelection: boolean = false;
@@ -87,7 +95,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       ) {
         //if it is found then set duplicateSelection to true and replace that application with the new one, in case a tutor has updated their application
         if (
-          currentCourse.lecturerRankings[currentEmail][index].email ==
+          currentCourse.lecturerRankings[currentEmail][index].applicant.email ==
           applicant.email
         ) {
           duplicateSelection = true;
@@ -97,22 +105,20 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       if (!duplicateSelection) {
         currentCourse.lecturerRankings[currentEmail] = [
           ...currentCourse.lecturerRankings[currentEmail],
-          applicant,
+          applicantAndComment,
         ];
       }
       //if a ranking does NOT exist for the current logged in lecture, create one and initialise it with the selected applicant
     } else {
       currentCourse.lecturerRankings = {
         ...currentCourse.lecturerRankings,
-        [currentEmail]: [applicant],
+        [currentEmail]: [applicantAndComment],
       };
     }
     //update the local store with the new chosen applicant
     localStorage.setItem("courseDetails", JSON.stringify(courses));
-
     //sets the state so that the new selection can be  displayed
     setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-    console.log(chosenApplicants);
   };
 
   //used for ranking. when the left arrow button is chosen, it shifts the applicant to the left (up in ranking).
@@ -148,12 +154,51 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     if (currentCourse.lecturerRankings[currentEmail]) {
       currentCourse.lecturerRankings[currentEmail] = [];
       setChosenApplicants([]);
+      currentCourse.applicants.forEach((applicant) => {
+        applicant.lecturerComments = applicant.lecturerComments.filter(
+          (comment) => comment.email !== currentEmail
+        );
+      });
+      localStorage.setItem("courseDetails", JSON.stringify(courses));
+    }
+  };
+  const submitRanking = (currentCourse: IndCourse) => {
+    updateApplication(currentCourse);
+
+    if (currentCourse.lecturerRankings[currentEmail]) {
+      currentCourse.lecturerRankings[currentEmail].forEach((appAndComment) => {
+        for (let i = 0; i < currentCourse.applicants.length; ++i) {
+          if (
+            appAndComment.applicant.email === currentCourse.applicants[i].email
+          ) {
+            let duplicateFound = false;
+            const comments = currentCourse.applicants[i].lecturerComments;
+
+            for (let j = 0; j < comments.length; ++j) {
+              if (comments[j].email === currentEmail) {
+                console.log("replacing comment", comments[j]);
+                comments[j].comment = appAndComment.comment;
+                duplicateFound = true;
+                break;
+              }
+            }
+
+            if (!duplicateFound) {
+              console.log("pushing comment");
+              comments.push({
+                email: currentEmail,
+                comment: appAndComment.comment,
+              });
+            }
+          }
+        }
+      });
       localStorage.setItem("courseDetails", JSON.stringify(courses));
     }
   };
   const highestRankedTutors = (currentCourse: IndCourse) => {
     const applicationStatuses = getApplicationStatuses();
-
+    console.log("highestRankedtutor called" + currentCourse);
     //splits it so we get the emails for identification, and course for identification,  and avg ranking for sorting
     const transformedData = Object.entries(applicationStatuses).map(
       ([key, details]) => ({
@@ -250,8 +295,10 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       return courseData;
     }
   };
-  const sortByTimesChosenDesc = (a: ApplicationDetails, b: ApplicationDetails) =>
-      b.Times_Chosen - a.Times_Chosen;
+  const sortByTimesChosenDesc = (
+    a: ApplicationDetails,
+    b: ApplicationDetails
+  ) => b.Times_Chosen - a.Times_Chosen;
 
   return (
     <>
@@ -259,7 +306,13 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         <>
           <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
 
-          <Title mb="sm">Courses</Title>
+          <Group justify="space-between">
+            <Title mb="sm">Courses</Title>
+            <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
+              All Applicants View
+            </Button>
+          </Group>
+
           <SimpleGrid spacing="70px" cols={4}>
             {courses.map((course, index) => (
               <Card key={index} shadow="sm" withBorder>
@@ -279,19 +332,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 </Button>
               </Card>
             ))}
-            <Card  shadow="sm" withBorder>
-              <Group justify="space-between" mt="md" mb="xs">
-                <Text fw={500}>View all applicants</Text>
-              </Group>
-              
-              <Text size="sm" c="dimmed">
-                you can search, sort, and filter applicants by course, name, and much more! 
-              </Text>
-
-              <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
-                view
-              </Button>
-            </Card>
           </SimpleGrid>
         </>
       ) : lecturerState == "courseView" ? (
@@ -329,13 +369,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                       )
                     )
                   )}
-
-                  {/*<OrderApplications*/}
-                  {/*    applicants={currentCourse.applicants}*/}
-                  {/*    courseCode={currentCourse.courseCode}*/}
-                  {/*    sortFn={(a, b) =>*/}
-                  {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
-                  {/*  />*/}
                 </SimpleGrid>
               </Stack>
               <Title order={2}>Applicant Data</Title>
@@ -392,7 +425,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 <Group justify="space-between">
                   <Title order={3}>Your Chosen Applicants</Title>
                   <Group>
-                    <Button onClick={() => updateApplication(currentCourse)}>
+                    <Button onClick={() => submitRanking(currentCourse)}>
                       Submit Ranking
                     </Button>
                     <Button
@@ -410,7 +443,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                       {chosenApplicants.map((applicant, index) => (
                         <>
                           <ApplicationCard
-                            applicant={applicant}
+                            applicant={applicant.applicant}
                             index={index}
                             buttonSetting="Rank"
                             showNumber={"showButtons"}
@@ -469,16 +502,20 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             <p>undefined</p>
           )}
         </>
-      ) : lecturerState == "allApplicants" ?(
-          <>
-                <OrderApplications
-                    sortFn={sortByTimesChosenDesc}
-                    // courseCode=""
-                    // availability=""
-                    //searchTerm=""
-                    //chosen={true}
-                />
-          </>
+      ) : lecturerState == "allApplicants" ? (
+        <>
+          <Title>All Applicants</Title>
+          <Button mt="md" onClick={() => setLecturerState("default")}>
+            Back
+          </Button>
+          <OrderApplications
+            sortFn={sortByTimesChosenDesc}
+            // courseCode=""
+            // availability=""
+            //searchTerm=""
+            //chosen={true}
+          />
+        </>
       ) : (
         <p>Unknown status</p>
       )}

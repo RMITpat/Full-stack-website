@@ -1,8 +1,22 @@
 import { DetailValues, IndCourse } from "@/interfaces/Interfaces";
 import { UserCredential, User } from "@/interfaces/Types";
-import { Card, Text, Title, Group, Badge, Stack, Button } from "@mantine/core";
+import { useLoginContext } from "@/pages/contexts/LoginContext";
+import {
+  Card,
+  Text,
+  Title,
+  Group,
+  Badge,
+  Stack,
+  Button,
+  TextInput,
+  Textarea,
+  Modal,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { button } from "framer-motion/m";
+import { useState } from "react";
 
 type ApplicationProps = {
   applicant: DetailValues;
@@ -23,48 +37,127 @@ export default function ApplicationCard({
   moveRight,
   currentCourse,
 }: ApplicationProps) {
+  const currentUser = useLoginContext();
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      comment: "",
+    },
+
+    validate: {},
+  });
+  const [opened, setOpened] = useState(false);
+  const [currApplicant, setCurrApplicant] = useState<DetailValues | undefined>(
+    undefined
+  );
+  const openModal = (applicant: DetailValues) => {
+    setOpened(true);
+    setCurrApplicant(applicant);
+  };
+  const handleSubmit = (values: typeof form.values) => {
+    const appAndCommentArray =
+      currentCourse.lecturerRankings[currentUser.user.User_Email];
+    for (let i = 0; i < appAndCommentArray.length; ++i) {
+      if (appAndCommentArray[i].applicant.email == applicant.email) {
+        appAndCommentArray[i].comment = values.comment;
+      }
+    }
+  };
+
+  const lastComment = (applicant: DetailValues) => {
+    if (currentCourse.lecturerRankings[currentUser.user.User_Email]) {
+      for (
+        let i = 0;
+        i < currentCourse.lecturerRankings[currentUser.user.User_Email].length;
+        ++i
+      ) {
+        if (
+          currentCourse.lecturerRankings[currentUser.user.User_Email][i]
+            .applicant.email == applicant.email
+        ) {
+          return currentCourse.lecturerRankings[currentUser.user.User_Email][i]
+            .comment;
+        }
+      }
+    }
+  };
   return (
-    <Card shadow="sm" withBorder>
-      {showNumber == "numberOnly" ? (
-        <Title order={3}>{index + 1}</Title>
-      ) : showNumber == "showButtons" ? (
-        <Group justify="space-between">
-          <Button
-            leftSection={<IconArrowNarrowLeft />}
-            onClick={() => moveLeft(currentCourse, index)}
-          ></Button>
+    <>
+      <Card shadow="sm" withBorder>
+        {showNumber == "numberOnly" ? (
           <Title order={3}>{index + 1}</Title>
+        ) : showNumber == "showButtons" ? (
+          <Group justify="space-between">
+            <Button
+              leftSection={<IconArrowNarrowLeft />}
+              onClick={() => moveLeft(currentCourse, index)}
+            ></Button>
+            <Title order={3}>{index + 1}</Title>
 
-          <Button
-            rightSection={<IconArrowNarrowRight />}
-            onClick={() => moveRight(currentCourse, index)}
-          ></Button>
+            <Button
+              rightSection={<IconArrowNarrowRight />}
+              onClick={() => moveRight(currentCourse, index)}
+            ></Button>
+          </Group>
+        ) : (
+          <></>
+        )}
+
+        <Group justify="space-between" mt="md" mb="xs">
+          <Text fw={500}>{applicant.name}</Text>
+          <Badge>{applicant.availability}</Badge>
         </Group>
-      ) : (
-        <></>
-      )}
+        <Stack gap="0px">
+          <Text size="sm">Credentials</Text>
+          <Text size="sm" c="dimmed">
+            {applicant.credentials}
+          </Text>
 
-      <Group justify="space-between" mt="md" mb="xs">
-        <Text fw={500}>{applicant.name}</Text>
-        <Badge>{applicant.availability}</Badge>
-      </Group>
-      <Stack gap="0px">
-        <Text size="sm">Credentials</Text>
-        <Text size="sm" c="dimmed">
-          {applicant.credentials}
-        </Text>
+          <Text size="sm">Previous Roles</Text>
 
-        <Text size="sm">Previous Roles</Text>
+          <Text size="sm" c="dimmed">
+            {applicant.previousRoles}
+          </Text>
+          <Text size="sm">Skills</Text>
 
-        <Text size="sm" c="dimmed">
-          {applicant.previousRoles}
-        </Text>
-        <Text size="sm">Skills</Text>
+          <Text size="sm" c="dimmed">
+            {applicant.skills}
+          </Text>
+          {showNumber == "numberOnly" ? (
+            <Button onClick={() => openModal(applicant)}>Comments</Button>
+          ) : showNumber == "showButtons" ? (
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <Textarea
+                {...form.getInputProps("comment")}
+                mt="md"
+                label="Comment"
+                placeholder={lastComment(applicant)}
+                autosize
+              />
 
-        <Text size="sm" c="dimmed">
-          {applicant.skills}
-        </Text>
-      </Stack>
-    </Card>
+              <Group justify="center" mt="md">
+                <Button type="submit">Add Comment</Button>
+              </Group>
+            </form>
+          ) : (
+            <></>
+          )}
+        </Stack>
+      </Card>
+      <Modal
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title="Lecturer Comments"
+        centered
+      >
+        {applicant.lecturerComments.map((comment, index) => (
+          <Stack>
+            <Title order={5}>{comment.email}</Title>
+            <Text>{comment.comment}</Text>
+          </Stack>
+        ))}
+      </Modal>
+    </>
   );
 }

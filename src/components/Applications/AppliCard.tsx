@@ -1,4 +1,4 @@
-import {Card, Image, Text, Badge, Button, Group, Indicator} from '@mantine/core';
+import {Card, Image, Text, Badge, Button, Group, Indicator, Stack} from '@mantine/core';
 import { User, ApplicationDetails } from "@/interfaces/Types";
 import { useContext } from "react";
 import { useLecturerState } from "@/pages/contexts/LecturerState"; // adjust path as needed
@@ -23,7 +23,6 @@ username,
               padding={"lg"}
               radius="md"
               withBorder
-              m
 
         >
             <Text c="dimmed">ranking: {application.Avg_Ranking}</Text>
