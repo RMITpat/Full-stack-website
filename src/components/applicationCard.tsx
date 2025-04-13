@@ -26,6 +26,7 @@ type ApplicationProps = {
   moveLeft: (currentCourse: IndCourse, index: number) => void;
   moveRight: (currentCourse: IndCourse, index: number) => void;
   currentCourse: IndCourse;
+  avg: number;
 };
 
 export default function ApplicationCard({
@@ -36,6 +37,7 @@ export default function ApplicationCard({
   moveLeft,
   moveRight,
   currentCourse,
+  avg,
 }: ApplicationProps) {
   const currentUser = useLoginContext();
 
@@ -86,7 +88,10 @@ export default function ApplicationCard({
     <>
       <Card shadow="sm" withBorder>
         {showNumber == "numberOnly" ? (
-          <Title order={3}>{index + 1}</Title>
+          <>
+            <Title order={3}>{index + 1}</Title>
+            <Title order={3}>Avg Rank: {avg.toFixed(2)}</Title>
+          </>
         ) : showNumber == "showButtons" ? (
           <Group justify="space-between">
             <Button
@@ -154,7 +159,11 @@ export default function ApplicationCard({
         {applicant.lecturerComments.map((comment, index) => (
           <Stack>
             <Title order={5}>{comment.email}</Title>
-            <Text>{comment.comment}</Text>
+            {comment.comment == "" ? (
+              <Text>No Comment</Text>
+            ) : (
+              <Text>{comment.comment}</Text>
+            )}
           </Stack>
         ))}
       </Modal>
