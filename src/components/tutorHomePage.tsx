@@ -33,6 +33,10 @@ import {
   ApplicationDetailsWithEmail,
   UserCredential,
 } from "@/interfaces/Types";
+import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
+import CredentialsModal from "@/components/Tutor/CredentialsModal";
+import CourseAccordion from "@/components/Tutor/CourseAccordion";
+
 import ApplicantToAppStat from "@/api/ApplicantToAppStat";
 import getApplicationStatuses from "@/api/getApplicationStatuses";
 import UpdateApplication from "@/api/UpdateApplications";
@@ -55,12 +59,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
     undefined
   );
 
-  let detailArray: [string, keyof DetailValues][] = [
-    ["Previous Roles", "previousRoles"],
-    ["Availability", "availability"],
-    ["Skills", "skills"],
-    ["Credentials", "credentials"],
-  ];
   /* 
 
 Validation of user inputs:
@@ -128,8 +126,6 @@ If a duplicate is found then it replaces that application to faciliate the updat
     updateCredentialsWithTutorDetails(values);
   };
 
- 
-
   const applyForCourse = (course: IndCourse) => {
     //this function gets tutorDetails from "Credentials" in local storage,
     //and sets "course details" in local storage
@@ -193,100 +189,14 @@ If a duplicate is found then it replaces that application to faciliate the updat
   return (
     <>
       <Group justify="space-between" grow align="flex-start">
-        <Stack>
-          <Title>Courses</Title>
-          <Accordion>
-            {courses.map((course, index) => (
-              <>
-                <AccordionItem value={course.name}>
-                  <AccordionControl>{course.name}</AccordionControl>
-                  <AccordionPanel>
-                    <Stack>
-                      {" "}
-                      {course.courseCode} {course.semester}
-                      <Button onClick={() => applyForCourse(course)}>
-                        Apply
-                      </Button>
-                    </Stack>
-                  </AccordionPanel>
-                </AccordionItem>
-              </>
-            ))}
-          </Accordion>
-        </Stack>
-        <Stack>
-          <Stack
-            justify="center"
-            align="stretch"
-            style={{
-              border: "1px solid black",
-              fontFamily: theme.fontFamily,
-            }}
-          >
-            <Stack p="sm" bg="gray">
-              <Title order={2}>Your Details</Title>
-            </Stack>
-            <Stack p="md">
-              {detailArray.map((field, index) => (
-                <Stack gap="0px">
-                  <Title order={4} key={index}>
-                    {field[0]}
-                  </Title>
-                  {currentTutor ? (
-                    <Text>{currentTutor[field[1]]}</Text>
-                  ) : (
-                    <Text>Not set</Text>
-                  )}
-                </Stack>
-              ))}
-            </Stack>
-          </Stack>
-          <Button
-            variant="filled"
-            size="md"
-            // style={{ width: "30%" }}
-            onClick={open}
-          >
-            Update Details
-          </Button>
-        </Stack>
-        <Modal opened={opened} onClose={close} title="Update Details">
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <TextInput
-              {...form.getInputProps("previousRoles")}
-              mt="md"
-              label="Previous Roles"
-              placeholder="Previous Roles"
-              required
-            />
-            <Text size="sm" style={{ marginBottom: "3px", marginTop: "16px" }}>
-              Availability
-            </Text>
-            <SegmentedControl
-              {...form.getInputProps("availability")}
-              data={["Part time", "Full time"]}
-              //value={form.values.availability}
-              //onChange={(value) => form.setFieldValue("availability", value)}
-            ></SegmentedControl>
-            <TextInput
-              {...form.getInputProps("skills")}
-              mt="md"
-              label="Skills"
-              placeholder="Skills"
-              required
-            />
-            <TextInput
-              {...form.getInputProps("credentials")}
-              mt="md"
-              label="Credentials"
-              placeholder="Credentials"
-              required
-            />
-            <Group justify="center" mt="md">
-              <Button type="submit">Update</Button>
-            </Group>
-          </form>
-        </Modal>
+        <CourseAccordion courses={courses} applyForCourse={applyForCourse} />
+        <CredentialsDisplay currentTutor={currentTutor} open={open} />
+        <CredentialsModal
+          opened={opened}
+          close={close}
+          form={form}
+          handleSubmit={handleSubmit}
+        />{" "}
       </Group>
     </>
   );
