@@ -2,33 +2,22 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AppAndComment, IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
-import Link from "next/link";
 import { BarChart } from "@mantine/charts";
 import { SearchInput } from "@/components/allAppsInputs/SearchInput";
 import {
-  Badge,
-  Box,
   Chip,
   Button,
   Card,
-  Checkbox,
   Flex,
   Grid,
   Group,
-  SegmentedControl,
   SimpleGrid,
   Space,
   Stack,
   Text,
-  TextInput,
   Title,
 } from "@mantine/core";
-import { map } from "framer-motion/m";
-import {
-  IconArrowNarrowLeft,
-  IconArrowNarrowRight,
-  IconSearch,
-} from "@tabler/icons-react";
+
 import getApplicationStatuses from "@/api/getApplicationStatuses";
 
 import { useLoginContext } from "@/pages/contexts/LoginContext";
@@ -61,8 +50,8 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const { lecturerState, setLecturerState } = useLecturerState();
   const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [availability, setAvailability] = useState<string | null>('Full-Time');//for the availability filter
+  const [searchTerm, setSearchTerm] = useState("");
+  const [availability, setAvailability] = useState<string | null>("Full-Time"); //for the availability filter
   const [courseFilter, setCourseFilter] = useState<string[]>([
     "COSC1048",
     "COSC4839",
@@ -326,15 +315,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         courseData[j + 1] = curr;
       }
     }
-    // if (courseData.length > 3) {
-    //   if (direction == "most") {
-    //     return courseData.slice(-3);
-    //   } else {
-    //     return courseData.slice(0, 3);
-    //   }
-    // } else {
-    //   return courseData;
-    // }
+
     return courseData;
   };
   const sortByTimesChosenDesc = (
@@ -345,6 +326,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   return (
     <>
       {lecturerState == "default" ? (
+        // base view which shows all the courses
         <>
           <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
 
@@ -377,10 +359,14 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
           </SimpleGrid>
         </>
       ) : lecturerState == "courseView" ? (
+        //course details view which shows the highest ranked applicants and the most chosen applicants
+
         <>
           {currentCourse ? (
             <>
-              <Title>{currentCourse.name}</Title>
+              <Title>
+                {currentCourse.name + " - " + currentCourse.courseCode}
+              </Title>
               <Button mt="md" onClick={() => setLecturerState("default")}>
                 Back
               </Button>
@@ -392,7 +378,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                     Rank Applicants
                   </Button>
                 </Group>
-                <SimpleGrid bd="sm" spacing="70px" cols={4}>
+                <SimpleGrid bd="sm" spacing="70px" cols={5}>
                   {highestRankedTutors(currentCourse).length == 0 ? (
                     <Text>No tutors have been ranked.</Text>
                   ) : (
@@ -429,7 +415,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                       tickLine="y"
                       xAxisLabel="Tutors"
                       yAxisLabel="Times Chosen"
-                      
                     />
                   )}
                 </Stack>
@@ -443,7 +428,9 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         <>
           {currentCourse ? (
             <>
-              <Title>{currentCourse.name}</Title>
+              <Title>
+                {currentCourse.name + " - " + currentCourse.courseCode}
+              </Title>
               <Button mt="md" onClick={() => setLecturerState("courseView")}>
                 Back
               </Button>
@@ -463,7 +450,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                     </Button>
                   </Group>
                 </Group>
-
+                {/* displays selected tutors and allows you to submit your rankings */}
                 {chosenApplicants.length > 0 ? (
                   <Flex bg="gray" p="lg">
                     <SimpleGrid bd="black" spacing="40px" cols={6}>
@@ -543,17 +530,12 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
               <SearchInput value={searchTerm} onChange={setSearchTerm} />
             </Grid.Col>
             <Grid.Col span={3}>
-              <Chip.Group
-                value={availability}
-                onChange={setAvailability}
-              >
+              <Chip.Group value={availability} onChange={setAvailability}>
                 <Group>
-                  <Chip value="Full-Time"
-                        onClick={handleChipClick}>
+                  <Chip value="Full-Time" onClick={handleChipClick}>
                     Full-Time
                   </Chip>
-                  <Chip value="Part-Time"
-                        onClick={handleChipClick}>
+                  <Chip value="Part-Time" onClick={handleChipClick}>
                     Part-Time
                   </Chip>
                 </Group>
@@ -561,15 +543,14 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             </Grid.Col>
             <Grid.Col span={4}>
               <Chip.Group
-                  multiple
-                  value={courseFilter}
-                  onChange={setCourseFilter}>
-                <Group
-                justify = "center"
-                >
-                  <Chip  value="COSC1048">COSC1048</Chip>
-                  <Chip  value="COSC4839">COSC4839</Chip>
-                  <Chip  value="COSC4830">COSC4830</Chip>
+                multiple
+                value={courseFilter}
+                onChange={setCourseFilter}
+              >
+                <Group justify="center">
+                  <Chip value="COSC1048">COSC1048</Chip>
+                  <Chip value="COSC4839">COSC4839</Chip>
+                  <Chip value="COSC4830">COSC4830</Chip>
                 </Group>
               </Chip.Group>
             </Grid.Col>

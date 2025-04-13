@@ -1,5 +1,4 @@
 import { DetailValues, IndCourse } from "@/interfaces/Interfaces";
-import { UserCredential, User } from "@/interfaces/Types";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import {
   Card,
@@ -16,7 +15,6 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
-import { button } from "framer-motion/m";
 import { useState } from "react";
 
 type ApplicationProps = {

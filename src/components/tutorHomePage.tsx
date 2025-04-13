@@ -1,8 +1,7 @@
 import {
   Dispatch,
   SetStateAction,
-  useContext,
-  useEffect,
+  
   useState,
 } from "react";
 import {
@@ -29,20 +28,17 @@ import { useForm } from "@mantine/form";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import {
-  ApplicationDetails,
-  ApplicationDetailsWithEmail,
+  
   UserCredential,
 } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import CredentialsModal from "@/components/Tutor/CredentialsModal";
 
-import ApplicantToAppStat from "@/api/ApplicantToAppStat";
-import getApplicationStatuses from "@/api/getApplicationStatuses";
+
 import UpdateApplication from "@/api/UpdateApplications";
 import { isEmptyDetail } from "@/api/isEmpty";
 import { toast } from "react-toastify";
 
-//courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
