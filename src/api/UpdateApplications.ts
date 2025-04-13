@@ -21,7 +21,7 @@ function courseApplicantsToAppStats(
         const votes: LecturerVote[] = [];
 
         for (const [lecturerEmail, rankingList] of Object.entries(course.lecturerRankings)) {
-            const index = rankingList.findIndex((a) => a.email === applicant.email);
+            const index = rankingList.findIndex((a) => a.applicant.email === applicant.email);
             if (index !== -1) {
                 votes.push({
                     Lecturer_Email: lecturerEmail,

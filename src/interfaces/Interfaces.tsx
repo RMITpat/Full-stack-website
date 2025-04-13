@@ -8,10 +8,15 @@ export interface DetailValues {
   skills: string;
   credentials: string;
 }
+
+export interface AppAndComment {
+    applicant: DetailValues
+    comment: string
+}
 export interface IndCourse {
   name: string;
   courseCode: string;
   semester: string;
   applicants: DetailValues[];
-  lecturerRankings: Record<string, DetailValues[]>;
+  lecturerRankings: Record<string, AppAndComment[]>;
 }
