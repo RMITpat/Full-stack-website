@@ -17,28 +17,6 @@ username,
 
     //const { lecturerState } = useLecturerState();
 
-  return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <Card.Section>
-        <Group justify="center">
-          {" "}
-          <Image
-            w="50%"
-            radius="md"
-            src={`/images/${username.split(" ")[0]}.jpg`}
-          />
-        </Group>
-      </Card.Section>
-      <Group justify="space-between" mt="md" mb="xs">
-        <Text fw={500}>{username}</Text>
-        <Badge>{application.Users_Credential.availability}</Badge>
-      </Group>
-
-      <Stack gap="0px">
-        <Text size="sm">Credentials</Text>
-        <Text size="sm" c="dimmed">
-          {application.Users_Credential.credentials}
-        </Text>
     return (
 
         <Card shadow="sm"
@@ -52,9 +30,9 @@ username,
             <Card padding="lg" radius="md">
                 <Card.Section>
                     <Image
-                        src="https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png"
-                        height={160}
-                        alt="Norway"
+                        w="50%"
+                        radius="md"
+                        src={`/images/${username.split(" ")[0]}.jpg`}
                     />
                 </Card.Section>
 
@@ -64,19 +42,19 @@ username,
                 </Group>
 
                 <Card.Section inheritPadding>
-                <Text size="sm" c="dimmed">
-                    {application.Users_Credential.skills}
-                </Text>
+                    <Text size="sm" c="dimmed">
+                        {application.Users_Credential.skills}
+                    </Text>
 
-                <Text size="sm" c="dimmed">
-                    {application.Users_Credential.credentials}
-                </Text>
+                    <Text size="sm" c="dimmed">
+                        {application.Users_Credential.credentials}
+                    </Text>
 
-                <Text size="sm" c="dimmed">
-                    {application.Users_Credential.previousRoles}
-                </Text>
+                    <Text size="sm" c="dimmed">
+                        {application.Users_Credential.previousRoles}
+                    </Text>
                 </Card.Section>
             </Card>
-</Card>
+        </Card>
     );
 }
