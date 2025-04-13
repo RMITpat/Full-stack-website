@@ -429,6 +429,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                       tickLine="y"
                       xAxisLabel="Tutors"
                       yAxisLabel="Times Chosen"
+                      
                     />
                   )}
                 </Stack>
