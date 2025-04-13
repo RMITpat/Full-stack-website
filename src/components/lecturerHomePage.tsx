@@ -250,6 +250,8 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       return courseData;
     }
   };
+  const sortByTimesChosenDesc = (a: ApplicationDetails, b: ApplicationDetails) =>
+      b.Times_Chosen - a.Times_Chosen;
 
   return (
     <>
@@ -277,6 +279,19 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                 </Button>
               </Card>
             ))}
+            <Card  shadow="sm" withBorder>
+              <Group justify="space-between" mt="md" mb="xs">
+                <Text fw={500}>View all applicants</Text>
+              </Group>
+              
+              <Text size="sm" c="dimmed">
+                you can search, sort, and filter applicants by course, name, and much more! 
+              </Text>
+
+              <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
+                view
+              </Button>
+            </Card>
           </SimpleGrid>
         </>
       ) : lecturerState == "courseView" ? (
@@ -454,6 +469,16 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             <p>undefined</p>
           )}
         </>
+      ) : lecturerState == "allApplicants" ?(
+          <>
+            <OrderApplications
+                sortFn={sortByTimesChosenDesc}
+                // courseCode=""
+                // availability=""
+                //searchTerm=""
+                //chosen={true}
+            />
+          </>
       ) : (
         <p>Unknown status</p>
       )}
