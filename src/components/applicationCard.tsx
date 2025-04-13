@@ -12,6 +12,7 @@ import {
   TextInput,
   Textarea,
   Modal,
+  Image,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
@@ -28,7 +29,7 @@ type ApplicationProps = {
   currentCourse: IndCourse;
   avg: number;
 };
-
+//the application card that is used for displaying rankings and selected applicants
 export default function ApplicationCard({
   applicant,
   index,
@@ -115,6 +116,14 @@ export default function ApplicationCard({
         ) : (
           <></>
         )}
+        <Group justify="center">
+          {" "}
+          <Image
+            w="50%"
+            radius="md"
+            src={`/images/${applicant.name.split(" ")[0]}.jpg`}
+          />
+        </Group>
 
         <Group justify="space-between" mt="md" mb="xs">
           <Text fw={500}>{applicant.name}</Text>

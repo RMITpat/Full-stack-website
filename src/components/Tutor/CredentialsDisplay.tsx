@@ -1,23 +1,24 @@
 import { DetailValues } from "@/interfaces/Interfaces";
 import { theme } from "@chakra-ui/react";
-import { Stack, Title, Button, Text } from "@mantine/core";
-
+import { Stack, Title, Button, Text, Group, Image } from "@mantine/core";
+import { useLoginContext } from "@/pages/contexts/LoginContext";
 let detailArray: [string, keyof DetailValues][] = [
   ["Previous Roles", "previousRoles"],
   ["Availability", "availability"],
   ["Skills", "skills"],
   ["Credentials", "credentials"],
 ];
-
 interface CredentialProps {
   currentTutor: DetailValues | undefined;
   open: () => void;
 }
-
+///used to display the credentials for a tutor in the tutor homepage
 const CredentialsDisplay: React.FC<CredentialProps> = ({
   currentTutor,
   open,
 }) => {
+  const currentUser = useLoginContext();
+
   return (
     <Stack>
       <Stack
@@ -28,8 +29,17 @@ const CredentialsDisplay: React.FC<CredentialProps> = ({
         }}
       >
         <Stack p="sm" bg="gray">
-          <Title order={2}>Your Details</Title>
+          <Title order={2}>{currentUser.user.User_Name}</Title>
         </Stack>
+        <Group justify="center">
+          {" "}
+          <Image
+            w="50%"
+            radius="md"
+            src={`/images/${currentUser.user.User_Name.split(" ")[0]}.jpg`}
+          />
+          <p>{currentTutor?.name}</p>
+        </Group>
         <Stack p="md">
           <Stack gap="0px">
             <Title order={4}>Previous Roles</Title>
