@@ -1,11 +1,11 @@
 Group
 Lachlan Deck, Patrick Ly
+
 # s3976017-s4092047-a1
 
 Github: https://github.com/rmit-fsd-2025-s1/s3976017-s4092047-a1
 
-
-Logins:
+Logins: (username and password)
 Lecturers
 avajones1005@domain.com — 01000001Aj@
 
