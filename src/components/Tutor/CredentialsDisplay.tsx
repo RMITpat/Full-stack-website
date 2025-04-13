@@ -38,7 +38,6 @@ const CredentialsDisplay: React.FC<CredentialProps> = ({
             radius="md"
             src={`/images/${currentUser.user.User_Name.split(" ")[0]}.jpg`}
           />
-          <p>{currentTutor?.name}</p>
         </Group>
         <Stack p="md">
           <Stack gap="0px">

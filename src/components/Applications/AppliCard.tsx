@@ -42,6 +42,7 @@ AppliCardProps) {
           <Text fw={500}>{username}</Text>
           <Badge color="pink">
             {application.Users_Credential.availability}
+            
           </Badge>
         </Group>
 

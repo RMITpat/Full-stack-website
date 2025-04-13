@@ -1,8 +1,7 @@
 import {
   Dispatch,
   SetStateAction,
-  useContext,
-  useEffect,
+  
   useState,
 } from "react";
 import {
@@ -29,19 +28,17 @@ import { useForm } from "@mantine/form";
 import { IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import {
-  ApplicationDetails,
-  ApplicationDetailsWithEmail,
+  
   UserCredential,
 } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import CredentialsModal from "@/components/Tutor/CredentialsModal";
 
-import ApplicantToAppStat from "@/api/ApplicantToAppStat";
-import getApplicationStatuses from "@/api/getApplicationStatuses";
+
 import UpdateApplication from "@/api/UpdateApplications";
 import { isEmptyDetail } from "@/api/isEmpty";
+import { toast } from "react-toastify";
 
-//courses[name, code, semester applicantsArray[applicantDetails]]
 interface tutorHomePageProps {
   courses: IndCourse[];
   setCourses: Dispatch<SetStateAction<IndCourse[]>>;
@@ -79,7 +76,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
       availability: "Part time",
       skills: "",
       credentials: "",
-      lecturerComments: []
+      lecturerComments: [],
     },
 
     validate: {
@@ -132,6 +129,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
     //and pushes the applicant to the array of
     //applicants that IndCourses have
     if (currentTutor) {
+      toast.success("Applied!");
       let All_Credentials: Record<string, UserCredential> = {};
       let tutorDetails: DetailValues = {
         email: "",
@@ -140,7 +138,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
         availability: "",
         skills: "",
         credentials: "",
-        lecturerComments: []
+        lecturerComments: [],
       }; //empty
       try {
         const storedData = localStorage.getItem("Credentials");
@@ -156,7 +154,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
             skills: All_Credentials[currentUser.user.User_Email].skills,
             credentials:
               All_Credentials[currentUser.user.User_Email].credentials,
-            lecturerComments: []
+            lecturerComments: [],
           };
         }
       } catch (e) {
