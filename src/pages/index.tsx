@@ -7,9 +7,8 @@ import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
 import { Card, Text } from "@mantine/core";
 import UpdateApplication from "@/api/UpdateApplications";
-import  updateApplication from "@/api/UpdateApplications"
-import {LecturerStateProvider} from "@/pages/contexts/LecturerState";
-
+import updateApplication from "@/api/UpdateApplications";
+import { LecturerStateProvider } from "@/pages/contexts/LecturerState";
 
 export default function Home() {
   const currentUser = useLoginContext();
@@ -27,7 +26,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
-          lecturerComments: []
+          lecturerComments: [],
         },
         {
           email: "charlottegonzalez1013@domain.com",
@@ -36,7 +35,7 @@ export default function Home() {
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
-          lecturerComments: []
+          lecturerComments: [],
         },
         {
           email: "lucaswilson1014@domain.com",
@@ -45,7 +44,7 @@ export default function Home() {
           availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
-          lecturerComments: []
+          lecturerComments: [],
         },
       ],
     },
@@ -62,7 +61,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
-          lecturerComments: []
+          lecturerComments: [],
         },
         {
           email: "henrythomas1016@domain.com",
@@ -71,7 +70,7 @@ export default function Home() {
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
-          lecturerComments: []
+          lecturerComments: [],
         },
       ],
     },
@@ -88,7 +87,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
-          lecturerComments: []
+          lecturerComments: [],
         },
         {
           email: "alexandermoore1018@domain.com",
@@ -98,7 +97,7 @@ export default function Home() {
           skills: "SQL, Python, Tableau",
           credentials:
             "Bachelor of Economics, Certified Business Analysis Professional",
-            lecturerComments: []
+          lecturerComments: [],
         },
         {
           email: "evelynjackson1019@domain.com",
@@ -107,7 +106,7 @@ export default function Home() {
           availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
-          lecturerComments: []
+          lecturerComments: [],
         },
       ],
     },
@@ -131,7 +130,7 @@ export default function Home() {
     const userType = currentUser.user.User_Type;
 
     if (userType === "default") {
-      return <p>You are not logged in</p>;
+      return <Text>You are not logged in</Text>;
     }
 
     if (userType === "logged_in_lecturer") {
@@ -145,9 +144,5 @@ export default function Home() {
     return <p>Unknown status</p>;
   };
   //uses the login context, which provides context to all pages on who is currently logged in, to determine which  home page to show
-  return (
-      <LecturerStateProvider>
-        {renderHomePage()}
-      </LecturerStateProvider>
-  );
+  return <LecturerStateProvider>{renderHomePage()}</LecturerStateProvider>;
 }
