@@ -61,7 +61,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [availability, setAvailability] = useState<string | undefined>(undefined);//for the availability filter
+  const [availability, setAvailability] = useState<string | null>('Full-Time');//for the availability filter
   const [courseFilter, setCourseFilter] = useState<string[]>([
     "COSC1048",
     "COSC4839",
@@ -70,7 +70,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
 
   const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === availability) {
-      setAvailability(undefined);
+      setAvailability(null);
     }
   };
 
@@ -541,15 +541,16 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
             </Grid.Col>
             <Grid.Col span={3}>
               <Chip.Group
-                multiple={false}
                 value={availability}
                 onChange={setAvailability}
               >
                 <Group>
-                  <Chip value="Full-Time" onClick={handleChipClick}>
+                  <Chip value="Full-Time"
+                        onClick={handleChipClick}>
                     Full-Time
                   </Chip>
-                  <Chip value="Part-Time" onClick={handleChipClick}>
+                  <Chip value="Part-Time"
+                        onClick={handleChipClick}>
                     Part-Time
                   </Chip>
                 </Group>
