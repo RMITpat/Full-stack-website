@@ -316,10 +316,8 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
     b: ApplicationDetails
   ) => b.Times_Chosen - a.Times_Chosen;
 
-  const sortByTimesChosenAsc = (
-      a: ApplicationDetails,
-      b: ApplicationDetails
-  ) => a.Times_Chosen - b.Times_Chosen;
+  const sortByTimesChosenAsc = (a: ApplicationDetails, b: ApplicationDetails) =>
+    a.Times_Chosen - b.Times_Chosen;
   return (
     <>
       {lecturerState == "default" ? (
@@ -513,21 +511,23 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         <>
           <Title>All Applicants</Title>
           <ApplicantFilters
-              searchTerm={searchTerm}
-              setSearchTerm={setSearchTerm}
-              availability={availability}
-              setAvailability={setAvailability}
-              courseFilter={courseFilter}
-              setCourseFilter={setCourseFilter}
-              order={order}
-              setOrder={setOrder}
-              onBack={() => setLecturerState("default")}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            availability={availability}
+            setAvailability={setAvailability}
+            courseFilter={courseFilter}
+            setCourseFilter={setCourseFilter}
+            order={order}
+            setOrder={setOrder}
+            onBack={() => setLecturerState("default")}
           />
 
           <OrderApplications
-            sortFn={order === "Ascending" ?
-                sortByTimesChosenAsc :
-                sortByTimesChosenDesc}
+            sortFn={
+              order === "Ascending"
+                ? sortByTimesChosenAsc
+                : sortByTimesChosenDesc
+            }
             courseCode={courseFilter}
             availability={availability}
             searchTerm={searchTerm}
