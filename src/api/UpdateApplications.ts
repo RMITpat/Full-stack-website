@@ -29,7 +29,7 @@ function courseApplicantsToAppStats(
         votes.push({
           Lecturer_Email: lecturerEmail,
           ranking: index + 1,
-          Chosen: index === 0, // true if first in ranking list
+          Chosen: true, // true if first in ranking list
         });
       }
     }

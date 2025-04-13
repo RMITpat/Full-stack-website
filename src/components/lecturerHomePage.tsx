@@ -483,27 +483,35 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
               </Stack>
               <Stack mt="30px">
                 <Title order={3}>All Applicants</Title>
-                <ApplicantFilters
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    availability={availability}
-                    setAvailability={setAvailability}
-                    courseFilter={courseFilter}
-                    setCourseFilter={setCourseFilter}
-                    order={order}
-                    setOrder={setOrder}
-                    onBack={() => setLecturerState("default")}
-                />
-
-                <OrderApplications
-                    sortFn={order === "Ascending" ?
-                        sortByTimesChosenAsc :
-                        sortByTimesChosenDesc}
-                    courseCode={courseFilter}
-                    availability={availability}
-                    searchTerm={searchTerm}
-                    //chosen={true}
-                />
+                <Flex p="lg">
+                  <SimpleGrid bd="sm" spacing="40px" cols={6}>
+                    {currentCourse.applicants.map((applicant, index) => (
+                      <Flex direction="column">
+                        <ApplicationCard
+                          applicant={applicant}
+                          index={index}
+                          buttonSetting="Select"
+                          showNumber={"false"}
+                          moveLeft={moveLeft}
+                          moveRight={moveRight}
+                          avg={0}
+                          currentCourse={currentCourse}
+                        />
+                        {/* <Checkbox onChan /> */}
+                        <Button
+                          disabled={false}
+                          size="sm"
+                          mt="15px"
+                          onClick={() =>
+                            selectApplicant(applicant, currentCourse)
+                          }
+                        >
+                          Select
+                        </Button>
+                      </Flex>
+                    ))}
+                  </SimpleGrid>
+                </Flex>
               </Stack>
             </>
           ) : (

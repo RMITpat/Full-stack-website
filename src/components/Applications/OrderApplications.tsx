@@ -79,6 +79,7 @@ export default function OrderApplications({
                         key={key}
                         application={app}
                         username={allUsers[key.split("_")[0]]?.User_Name ?? "Unknown User"}
+                        courseCode={key.split("_")[1]}
                     />
                 ))}
                 </SimpleGrid>
