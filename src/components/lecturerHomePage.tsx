@@ -60,7 +60,7 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
 
   const handleChipClick = (event: React.MouseEvent<HTMLInputElement>) => {
     if (event.currentTarget.value === availability) {
-      setAvailability(null);
+      setAvailability(undefined);
     }
   };
 
