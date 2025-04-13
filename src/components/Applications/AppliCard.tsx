@@ -6,16 +6,16 @@ import { useLecturerState } from "@/pages/contexts/LecturerState"; // adjust pat
 type AppliCardProps = {
     application: ApplicationDetails;
     username: string;
-    onSelect?: () => void; // optional select callback
+    //onSelect?: () => void; // optional select callback
 };
 
 export default function AppliCard({
 application,
 username,
-onSelect,
+//onSelect,
 }: AppliCardProps) {
 
-    const { lecturerState } = useLecturerState();
+    //const { lecturerState } = useLecturerState();
 
     return (
         <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -44,16 +44,6 @@ onSelect,
                 {application.Users_Credential.previousRoles}
             </Text>
 
-            {lecturerState === "chooseTutors" && onSelect && (
-                <Button
-                    disabled={false}
-                    size="sm"
-                    mt="15px"
-                    onClick={onSelect}
-                >
-                    Select
-                </Button>
-            )}
         </Card>
     );
 }

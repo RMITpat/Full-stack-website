@@ -4,52 +4,80 @@ import getApplicationStatuses from "@/api/getApplicationStatuses";
 import {ApplicationDetails} from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import AppliCard from "@/components/Applications/AppliCard";
+import {Flex} from "@mantine/core";
 //needs to take lecturer state too
 type OrderApplicationsProps = {
-    applicants: DetailValues[];
     courseCode?: string;
     sortFn: (a: ApplicationDetails, b: ApplicationDetails) => number;
+    searchTerm?: string;
+    availability?: string;
+    chosen?: boolean;
 };
 
 export default function OrderApplications({
-  applicants,
-  courseCode,
-  sortFn,
-}: OrderApplicationsProps): ReactNode {
-    const allUsers = getAllUsers()
-    const allApps:Record<string, ApplicationDetails> = getApplicationStatuses()
-    let wantedApps = Object.entries(allApps)
-    //console.log("allApps (from OrderApplications)" , allApps)
+                                              courseCode,
+                                              sortFn,
+                                              searchTerm,
+                                              availability,
+                                              chosen,
+                                          }: OrderApplicationsProps): ReactNode {
+    const allUsers = getAllUsers();
+    const allApps: Record<string, ApplicationDetails> = getApplicationStatuses();
 
-    //Creates a Set of valid keys based on applicants + courseCode
-    //not needed to filter allApps if view all true
-    //an example of a key in allApps: alice.johnson@google.com_COSC4839
+    let wantedApps = Object.entries(allApps);
+
+    // Filter by courseCode
     if (courseCode) {
         const validKeys = new Set(
-            applicants.map((applicant) => `${applicant.email}_${courseCode}`)
+            Object.keys(allApps).filter(key => key.endsWith(`_${courseCode}`))
         );
         wantedApps = wantedApps.filter(([key]) => validKeys.has(key));
     }
-    //console.log("validKeys (from OrderApplications)" , validKeys)
-    console.log("wantedApps (from OrderApplications)" , wantedApps)
-    const sortedEntries = wantedApps
-        .sort(([, a], [, b]) => sortFn(a, b));
-    //console.log("wantedApps (from OrderApplications)" , wantedApps)
+
+    // Apply additional filters
+    wantedApps = wantedApps.filter(([_, app]) => {
+        const userMatchesSearch =
+            !searchTerm ||
+            app.Users_Credential.skills?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            app.Users_Credential.previousRoles?.toLowerCase().includes(searchTerm.toLowerCase());
+
+        const availabilityMatches =
+            !availability || app.Users_Credential.availability === availability;
+
+        const chosenMatches =
+            chosen === undefined || app.Times_Chosen > 0 === chosen;
+
+        return userMatchesSearch && availabilityMatches && chosenMatches;
+    });
+
+    const sortedApps = wantedApps
+        .sort((
+            [, a],
+            [, b]) => sortFn(a, b));
 
 
     return (
-        <>
-            {sortedEntries.map(([key, app]) => (
-                // <p key={key}>
-                //     {key} | Rank: {app.Avg_Ranking} | Times Chosen: {app.Times_Chosen}
-                // </p>
-                <AppliCard
-                    key={key}
-                    application={app}
-                    username={allUsers[key.split("_")[0]].User_Name}
-                    // onSelect={}
-                />
-            ))}
-        </>
+        <div>
+            {sortedApps.length === 0 ? (
+                <p>No results</p>
+            ) : (
+                <Flex
+                    mih={50}
+                    gap="md"
+                    justify="flex-start"
+                    align="flex-start"
+                    direction="row"
+                    wrap="wrap">
+                {sortedApps.map(([key, app]) => (
+                    <AppliCard
+                        key={key}
+                        application={app}
+                        username={allUsers[key.split("_")[0]]?.User_Name ?? "Unknown User"}
+                    />
+                ))}
+                </Flex>
+            )}
+        </div>
+
     );
 }
