@@ -1,15 +1,17 @@
 export interface DetailValues {
-    email: string;
-    name: string;
-    previousRoles: string;
-    availability: string;
-    skills: string;
-    credentials: string;
+  email: string;
+  name: string;
+  lecturerComments: Record<string, string>[];
+
+  previousRoles: string;
+  availability: string;
+  skills: string;
+  credentials: string;
 }
 export interface IndCourse {
-    name: string;
-    courseCode: string;
-    semester: string
-    applicants: DetailValues[]
-    lecturerRankings: Record<string, DetailValues[]>
+  name: string;
+  courseCode: string;
+  semester: string;
+  applicants: DetailValues[];
+  lecturerRankings: Record<string, DetailValues[]>;
 }

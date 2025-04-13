@@ -150,15 +150,59 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
       localStorage.setItem("courseDetails", JSON.stringify(courses));
     }
   };
-  const applicationStatuses = getApplicationStatuses();
-  const allApps: Record<string, ApplicationDetails> = getApplicationStatuses();
-  let wantedApps: [string, ApplicationDetails][] = Object.entries(allApps);
-  const transformedData = Object.entries(applicationStatuses).map(
-    ([key, details]) => ({
-      email: key.split("_")[0], // Extract email for labeling
-      timesChosen: details.Times_Chosen,
-    })
-  );
+  const highestRankedTutors = (currentCourse: IndCourse) => {
+    const applicationStatuses = getApplicationStatuses();
+
+    //splits it so we get the emails for identification, and course for identification,  and avg ranking for sorting
+    const transformedData = Object.entries(applicationStatuses).map(
+      ([key, details]) => ({
+        email: key.split("_")[0],
+        course: key.split("_")[1],
+        avgRanking: details.Avg_Ranking,
+      })
+    );
+    //will hold the applicants for the current course
+    let courseData: {
+      email: string;
+      course: string;
+      avgRanking: number;
+    }[] = [];
+
+    transformedData.forEach((element) => {
+      if (
+        element.course == currentCourse.courseCode &&
+        element.avgRanking > 0
+      ) {
+        courseData.push(element);
+      }
+    });
+    //sort the applicants by their ranking
+    if (courseData.length > 1) {
+      for (let i = 1; i < courseData.length; ++i) {
+        let curr = courseData[i];
+        let j = i - 1;
+
+        while (j >= 0 && courseData[j].avgRanking > curr.avgRanking) {
+          courseData[j + 1] = courseData[j];
+          j = j - 1;
+        }
+        courseData[j + 1] = curr;
+      }
+    }
+    //holds the same applicants but in form detailValues so they can be displayed using applicationCard
+    const applicantArray: DetailValues[] = [];
+    for (let i = 0; i < courseData.length; ++i) {
+      let currTutor = courseData[i];
+      for (let j = 0; j < currentCourse.applicants.length; ++j) {
+        if (currTutor.email == currentCourse.applicants[j].email) {
+          applicantArray.push(currentCourse.applicants[j]);
+          break;
+        }
+      }
+    }
+    return applicantArray;
+  };
+
   const graphData = (currentCourse: IndCourse, direction: string) => {
     const applicationStatuses = getApplicationStatuses();
     const transformedData = Object.entries(applicationStatuses).map(
@@ -181,7 +225,6 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
         element.timesChosen > 0
       ) {
         courseData.push(element);
-        console.log("graph stuff" + element);
       }
     });
     if (courseData.length > 1) {
@@ -252,18 +295,24 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   </Button>
                 </Group>
                 <SimpleGrid bd="sm" spacing="70px" cols={4}>
-                  {currentCourse.applicants.map((applicant, index) => (
-                    <ApplicationCard
-                      key={index}
-                      applicant={applicant}
-                      index={index}
-                      buttonSetting="noButton"
-                      showNumber={"numberOnly"}
-                      moveLeft={moveLeft}
-                      moveRight={moveRight}
-                      currentCourse={currentCourse}
-                    />
-                  ))}
+                  {highestRankedTutors(currentCourse).length == 0 ? (
+                    <Text>No tutors have been ranked.</Text>
+                  ) : (
+                    highestRankedTutors(currentCourse).map(
+                      (applicant, index) => (
+                        <ApplicationCard
+                          key={index}
+                          applicant={applicant}
+                          index={index}
+                          buttonSetting="noButton"
+                          showNumber={"numberOnly"}
+                          moveLeft={moveLeft}
+                          moveRight={moveRight}
+                          currentCourse={currentCourse}
+                        />
+                      )
+                    )
+                  )}
 
                   {/*<OrderApplications*/}
                   {/*    applicants={currentCourse.applicants}*/}
@@ -272,34 +321,41 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
                   {/*        b.Avg_Ranking - a.Avg_Ranking} //desceding order*/}
                   {/*  />*/}
                 </SimpleGrid>
-                <p>most chosen data visualisation</p>
-                <p>{JSON.stringify(graphData(currentCourse, "most"))}</p>
-                <p>{JSON.stringify(graphData(currentCourse, "least"))}</p>
               </Stack>
+              <Title order={2}>Applicant Data</Title>
+
               <Group justify="space-around">
-                <Stack align="center" w="30%">
+                <Stack w="30%">
                   <Title order={4}>Top 3 Most Chosen Tutors</Title>
-                  <BarChart
-                    h={300}
-                    data={graphData(currentCourse, "most")}
-                    dataKey="email"
-                    series={[{ name: "timesChosen", color: "violet.6" }]}
-                    tickLine="y"
-                    xAxisLabel="Tutors"
-                    yAxisLabel="Times Chosen"
-                  />
+                  {graphData(currentCourse, "most").length == 0 ? (
+                    <Text>No applicants have been ranked. </Text>
+                  ) : (
+                    <BarChart
+                      h={300}
+                      data={graphData(currentCourse, "most")}
+                      dataKey="email"
+                      series={[{ name: "timesChosen", color: "violet.6" }]}
+                      tickLine="y"
+                      xAxisLabel="Tutors"
+                      yAxisLabel="Times Chosen"
+                    />
+                  )}
                 </Stack>
-                <Stack align="center" w="30%">
+                <Stack w="30%">
                   <Title order={4}>Top 3 Least Chosen Tutors</Title>
-                  <BarChart
-                    h={300}
-                    data={graphData(currentCourse, "least")}
-                    dataKey="email"
-                    series={[{ name: "timesChosen", color: "violet.6" }]}
-                    tickLine="y"
-                    xAxisLabel="Tutors"
-                    yAxisLabel="Times Chosen"
-                  />
+                  {graphData(currentCourse, "least").length == 0 ? (
+                    <Text>No applicants have been ranked. </Text>
+                  ) : (
+                    <BarChart
+                      h={300}
+                      data={graphData(currentCourse, "least")}
+                      dataKey="email"
+                      series={[{ name: "timesChosen", color: "violet.6" }]}
+                      tickLine="y"
+                      xAxisLabel="Tutors"
+                      yAxisLabel="Times Chosen"
+                    />
+                  )}
                 </Stack>
               </Group>
             </>

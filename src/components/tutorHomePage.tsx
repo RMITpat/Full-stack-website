@@ -80,6 +80,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
       availability: "Part time",
       skills: "",
       credentials: "",
+      lecturerComments: []
     },
 
     validate: {
@@ -140,6 +141,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
         availability: "",
         skills: "",
         credentials: "",
+        lecturerComments: []
       }; //empty
       try {
         const storedData = localStorage.getItem("Credentials");
@@ -155,6 +157,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
             skills: All_Credentials[currentUser.user.User_Email].skills,
             credentials:
               All_Credentials[currentUser.user.User_Email].credentials,
+            lecturerComments: []
           };
         }
       } catch (e) {
@@ -189,7 +192,26 @@ If a duplicate is found then it replaces that application to faciliate the updat
   return (
     <>
       <Group justify="space-between" grow align="flex-start">
-        <CourseAccordion courses={courses} applyForCourse={applyForCourse} />
+        <Stack>
+          <Title>Courses</Title>
+          <Accordion>
+            {courses.map((course, index) => (
+              <>
+                <AccordionItem value={course.name}>
+                  <AccordionControl>{course.name}</AccordionControl>
+                  <AccordionPanel>
+                    <Stack>
+                      {course.courseCode} {course.semester}
+                      <Button onClick={() => applyForCourse(course)}>
+                        Apply
+                      </Button>
+                    </Stack>
+                  </AccordionPanel>
+                </AccordionItem>
+              </>
+            ))}
+          </Accordion>
+        </Stack>
         <CredentialsDisplay currentTutor={currentTutor} open={open} />
         <CredentialsModal
           opened={opened}

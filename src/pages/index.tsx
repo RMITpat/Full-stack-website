@@ -27,6 +27,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
+          lecturerComments: []
         },
         {
           email: "charlottegonzalez1013@domain.com",
@@ -35,6 +36,7 @@ export default function Home() {
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
+          lecturerComments: []
         },
         {
           email: "lucaswilson1014@domain.com",
@@ -43,6 +45,7 @@ export default function Home() {
           availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
+          lecturerComments: []
         },
       ],
     },
@@ -59,6 +62,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
+          lecturerComments: []
         },
         {
           email: "henrythomas1016@domain.com",
@@ -67,6 +71,7 @@ export default function Home() {
           availability: "Part-time",
           skills: "Agile, PMP, Stakeholder Management",
           credentials: "MBA, PMP Certified",
+          lecturerComments: []
         },
       ],
     },
@@ -83,6 +88,7 @@ export default function Home() {
           availability: "Full-time",
           skills: "JavaScript, React, TypeScript, Node.js",
           credentials: "Bachelor of Computer Science, Certified Scrum Master",
+          lecturerComments: []
         },
         {
           email: "alexandermoore1018@domain.com",
@@ -92,6 +98,7 @@ export default function Home() {
           skills: "SQL, Python, Tableau",
           credentials:
             "Bachelor of Economics, Certified Business Analysis Professional",
+            lecturerComments: []
         },
         {
           email: "evelynjackson1019@domain.com",
@@ -100,6 +107,7 @@ export default function Home() {
           availability: "Full-Time",
           skills: "Adobe XD, Figma, Sketch",
           credentials: "Bachelor of Design, Adobe Certified Expert",
+          lecturerComments: []
         },
       ],
     },

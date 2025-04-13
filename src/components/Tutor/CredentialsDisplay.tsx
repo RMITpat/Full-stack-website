@@ -31,18 +31,38 @@ const CredentialsDisplay: React.FC<CredentialProps> = ({
           <Title order={2}>Your Details</Title>
         </Stack>
         <Stack p="md">
-          {detailArray.map((field, index) => (
-            <Stack gap="0px">
-              <Title order={4} key={index}>
-                {field[0]}
-              </Title>
-              {currentTutor ? (
-                <Text>{currentTutor[field[1]]}</Text>
-              ) : (
-                <Text>Not set</Text>
-              )}
-            </Stack>
-          ))}
+          <Stack gap="0px">
+            <Title order={4}>Previous Roles</Title>
+            {currentTutor ? (
+              <Text>{currentTutor.previousRoles}</Text>
+            ) : (
+              <Text>Not set</Text>
+            )}
+          </Stack>
+          <Stack gap="0px">
+            <Title order={4}>Availability</Title>
+            {currentTutor ? (
+              <Text>{currentTutor.availability}</Text>
+            ) : (
+              <Text>Not set</Text>
+            )}
+          </Stack>
+          <Stack gap="0px">
+            <Title order={4}>Skills</Title>
+            {currentTutor ? (
+              <Text>{currentTutor.skills}</Text>
+            ) : (
+              <Text>Not set</Text>
+            )}
+          </Stack>
+          <Stack gap="0px">
+            <Title order={4}>Credentials</Title>
+            {currentTutor ? (
+              <Text>{currentTutor.credentials}</Text>
+            ) : (
+              <Text>Not set</Text>
+            )}
+          </Stack>
         </Stack>
       </Stack>
       <Button
