@@ -39,7 +39,7 @@ A lecturer cannot choose an applicant twice as each time the select button is pr
 if that applicant is already present. If it is, they are not added. This can be seen in the selectApplicant function below.
 
 */
-const lecturerHomePage: React.FC<tutorHomePageProps> = ({
+const LecturerHomePage: React.FC<tutorHomePageProps> = ({
   courses,
   setCourses,
 }) => {
@@ -541,4 +541,4 @@ const lecturerHomePage: React.FC<tutorHomePageProps> = ({
   );
 };
 
-export default lecturerHomePage;
+export default LecturerHomePage;
