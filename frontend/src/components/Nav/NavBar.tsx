@@ -21,30 +21,33 @@ export default function NavBar() {
   };
 
   return (
-      <Stack
-          bg="var(--mantine-color-body)"
-          align="stretch"
-          justify="center"
-          gap="md"
-      >
-        {currentUser.user.User_Type == "default" ? (
-            <Button mt={"sm"} component={Link} href="/Login">
-              Login
-            </Button>
-        ) : (
-            <Button
-                onClick={() => signOut()}
-                mt={"sm"}
-                component={Link}
-                href="/Login"
-            >
-              Sign out
-            </Button>
-        )}
-
-        <Button mt={"sm"} component={Link} href="/">
-          TeachTeam
+    <Stack
+      bg="var(--mantine-color-body)"
+      align="stretch"
+      justify="center"
+      gap="md"
+    >
+      <Button mt={"sm"} component={Link} href="/signUp">
+        Sign Up
+      </Button>
+      {currentUser.user.User_Type == "default" ? (
+        <Button mt={"sm"} component={Link} href="/Login">
+          Login
         </Button>
-      </Stack>
+      ) : (
+        <Button
+          onClick={() => signOut()}
+          mt={"sm"}
+          component={Link}
+          href="/Login"
+        >
+          Sign out
+        </Button>
+      )}
+
+      <Button mt={"sm"} component={Link} href="/">
+        TeachTeam
+      </Button>
+    </Stack>
   );
 }
