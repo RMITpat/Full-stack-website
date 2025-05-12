@@ -1,8 +1,11 @@
 import {
   Entity,
   Column,
-  PrimaryColumn
+  PrimaryColumn,
+  ManyToOne,
+  OneToMany,
 } from "typeorm";
+import { Vote } from "./Vote";
 
 export enum ApplicationType {
   LAB_ASSISTANT = "lab_assistant",
@@ -21,4 +24,9 @@ export class Application {
     default: ApplicationType.TUTOR,
   })
   type: ApplicationType 
+
+  // an application has many different lectures 
+  // who make 1 vote on each on an application
+  @OneToMany(() => Vote, (vote) => (vote.voteedOnId, vote.lecturer))
+  votes: Vote[]
 }
