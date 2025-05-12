@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Applicant } from "./Applicant";
+import { Lecturer } from "./Lecturer";
 
 @Entity()
 export class Course {
@@ -26,7 +27,9 @@ export class Course {
   updatedAt: Date;
   
   @ManyToMany(() => Applicant, (app) => app.courses_applied_to)
-  appliedUsers: Applicant[];
+  applied_users: Applicant[];
 
+  @ManyToMany(() => Lecturer, (lecturer) => lecturer.course_assigned_to)
+  assigned_lecturers: Lecturer[];
   }
 
