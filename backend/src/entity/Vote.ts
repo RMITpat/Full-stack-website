@@ -25,7 +25,7 @@ export class Vote {
 
   @ManyToOne((type) => Lecturer, (lecturer) => lecturer.votes)
   lecturer: Vote
-  
-  @OneToMany(() => Application, (application) => application.votes)
-  applications: Application[]  
+
+  @ManyToOne(() => Application, (app) => app.votes)
+  application: Application; 
 }
