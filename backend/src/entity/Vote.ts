@@ -8,8 +8,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Lecturer } from "./Lecturer";
-import { Applicant } from "./Applicant";
-
+import { Application } from "./Application";
 @Entity()
 export class Vote {
   @PrimaryColumn()
@@ -26,7 +25,7 @@ export class Vote {
 
   @ManyToOne((type) => Lecturer, (lecturer) => lecturer.votes)
   lecturer: Vote
-
-  @OneToMany(() => Applicant, (applicant) => applicant.votes)
-  applicants: Applicant[]  
+  
+  @OneToMany(() => Application, (application) => application.votes)
+  applications: Application[]  
 }
