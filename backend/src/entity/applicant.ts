@@ -1,5 +1,6 @@
 import {
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   Column,
   OneToOne,
@@ -8,6 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { App_Credential } from "./App_Credential";
+import { Course } from "./Course";
 
 export enum user_type {
    LOGGEDOUT        = "default", 
@@ -18,7 +20,6 @@ export enum user_type {
    ADMINLECTURER    = "admin_lecturer"
 
 }
-
 
 @Entity()
 export class User {
@@ -47,4 +48,9 @@ export class User {
   @OneToOne(() => App_Credential)
   @JoinColumn()
   cred: App_Credential;
+  
+  @ManyToOne(() => Course, (course) => course.appliedUsers)
+  appliedCourse: Course;
+
+
 }
