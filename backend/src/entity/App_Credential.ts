@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { User } from "./User";
+import { Applicant } from "./Applicant";
 
 @Entity()
 export class App_Credential {
@@ -27,8 +27,8 @@ export class App_Credential {
   @Column()
   credentials: string;
 
-  @OneToOne(() => User, (user) => user.cred)
-  user: User;
+  @OneToOne(() => Applicant, (app) => app.id)
+  user: Applicant
 
   @CreateDateColumn()
   
