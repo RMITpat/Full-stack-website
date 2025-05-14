@@ -44,7 +44,37 @@ export class CourseController {
     return response.json(course);
   }
 
+
+/* ┌─┐┌┬┐┌┬┐  ┌─┐┬  ┬   */
+/* ├─┤ ││ ││  ├─┤│  │   */
+/* ┴ ┴─┴┘─┴┘  ┴ ┴┴─┘┴─┘ */
+/** add all --extremally dangerous it irreversably overwrites the data,
+   * should only be used on launch to set the initial state
+   * @param request - Expresss request object containing all the courses to be put in
+   * @param response - Express response object
+   * @returns JSON response containing all the courses put into the database
+   */
+
   async addAll(req: Request, res: Response) {
-    const 
+    const courses = req.body;
+    
+    // Expecting an array of courses
+    if (!Array.isArray(courses)) {
+      return res.status(400).json({ message: "Expected an array of courses" });
+    } 
+    try {
+      for (const course of courses) {
+        await this.courseRepository.save({
+          code: course.code,
+          name: course.name,
+          semester: course.Semester,
+        })
+      }
+      return res.status(201).json({ message: "Courses added successfully" })
+    
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ message: "server error"})
+    }
   }
 }
