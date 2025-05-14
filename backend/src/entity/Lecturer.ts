@@ -3,27 +3,27 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
+  OneToMany,
   JoinTable,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { App_Credential } from "./App_Credential";
 import { Course } from "./Course";
-
+import { Vote } from "./Vote";
 
 @Entity()
-export class Applicant {
+export class Lecturer {
+  
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
-
+  
   @CreateDateColumn()
   createdAt: Date;
 
@@ -32,6 +32,8 @@ export class Applicant {
 
   @ManyToMany(() => Course)
   @JoinTable()
-  courses_applied_to: Course
-
+  course_assigned_to: Course
+  
+  @OneToMany((type) => Vote, (vote) => vote.lecturer)
+  votes: Vote[]
 }

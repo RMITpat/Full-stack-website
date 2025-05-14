@@ -1,27 +1,27 @@
 import { Router } from "express";
-import { UserController } from "../controller/UserController";
+import { ApplicantController } from "../controller/ApplicantController"
 
 const router = Router();
-const userController = new UserController();
+const applicantController = new ApplicantController();
 
-router.get("/users", async (req, res) => {
-  await userController.all(req, res);
+router.get("/applicants", async (req, res) => {
+  await applicantController.all(req, res);
 });
 
-router.get("/users/:id", async (req, res) => {
-  await userController.one(req, res);
+router.get("/applicants/:id", async (req, res) => {
+  await applicantController.one(req, res);
 });
 
-router.post("/users", async (req, res) => {
-  await userController.save(req, res);
+router.post("/applicants", async (req, res) => {
+  await applicantController.save(req, res);
 });
 
-router.put("/users/:id", async (req, res) => {
-  await userController.update(req, res);
+router.put("/applicants/:id", async (req, res) => {
+  await applicantController.update(req, res);
 });
 
-router.delete("/users/:id", async (req, res) => {
-  await userController.remove(req, res);
+router.delete("/applicants/:id", async (req, res) => {
+  await applicantController.remove(req, res);
 });
 
 export default router;
