@@ -1,3 +1,25 @@
+
+/*  ██████╗ ██████╗ ██████╗ ██╗███████╗██████╗                                */
+/* ██╔════╝██╔═══██╗██╔══██╗██║██╔════╝██╔══██╗                               */
+/* ██║     ██║   ██║██████╔╝██║█████╗  ██║  ██║                               */
+/* ██║     ██║   ██║██╔═══╝ ██║██╔══╝  ██║  ██║                               */
+/* ╚██████╗╚██████╔╝██║     ██║███████╗██████╔╝                               */
+/*  ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝╚═════╝                                */
+/*                                                                            */
+/* ███████╗██████╗  ██████╗ ███╗   ███╗    ██╗    ██╗███████╗███████╗██╗  ██╗ */
+/* ██╔════╝██╔══██╗██╔═══██╗████╗ ████║    ██║    ██║██╔════╝██╔════╝██║ ██╔╝ */
+/* █████╗  ██████╔╝██║   ██║██╔████╔██║    ██║ █╗ ██║█████╗  █████╗  █████╔╝  */
+/* ██╔══╝  ██╔══██╗██║   ██║██║╚██╔╝██║    ██║███╗██║██╔══╝  ██╔══╝  ██╔═██╗  */
+/* ██║     ██║  ██║╚██████╔╝██║ ╚═╝ ██║    ╚███╔███╔╝███████╗███████╗██║  ██╗ */
+/* ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝     ╚══╝╚══╝ ╚══════╝╚══════╝╚═╝  ╚═╝ */
+/*                                                                            */
+/*  █████╗     ██╗      █████╗ ██████╗ ███████╗                               */
+/* ██╔══██╗    ██║     ██╔══██╗██╔══██╗██╔════╝                               */
+/* ╚█████╔╝    ██║     ███████║██████╔╝███████╗                               */
+/* ██╔══██╗    ██║     ██╔══██║██╔══██╗╚════██║                               */
+/* ╚█████╔╝    ███████╗██║  ██║██████╔╝███████║                               */
+/*  ╚════╝     ╚══════╝╚═╝  ╚═╝╚═════╝ ╚══════╝                               */
+
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Applicant } from "../entity/Applicant";
@@ -5,7 +27,10 @@ import { Applicant } from "../entity/Applicant";
 export class ApplicantController {
   private applicantRepository = AppDataSource.getRepository(Applicant);
 
-  /**
+/* ┌─┐┌─┐┌┬┐  ┌─┐┬  ┬   */
+/* │ ┬├┤  │   ├─┤│  │   */
+/* └─┘└─┘ ┴   ┴ ┴┴─┘┴─┘ */
+  /** get all
    * Retrieves all applicants from the database
    * @param request - Express request object
    * @param response - Express response object
@@ -17,7 +42,11 @@ export class ApplicantController {
     return response.json(applicants);
   }
 
-  /**
+
+/* ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐ */
+/* │ ┬├┤  │   │ ││││├┤  */
+/* └─┘└─┘ ┴   └─┘┘└┘└─┘ */
+  /** get one
    * Retrieves a single applicant by their ID
    * @param request - Express request object containing the applicant ID in params
    * @param response - Express response object
@@ -35,7 +64,11 @@ export class ApplicantController {
     return response.json(applicant);
   }
 
-  /**
+
+/* ┌─┐┌─┐┬  ┬┌─┐  ┌─┐┌┐┌┌─┐ */
+/* └─┐├─┤└┐┌┘├┤   │ ││││├┤  */
+/* └─┘┴ ┴ └┘ └─┘  └─┘┘└┘└─┘ */
+  /** save one
    * Creates a new applicant in the database
    * @param request - Express request object containing applicant details in body
    * @param response - Express response object
@@ -61,7 +94,11 @@ export class ApplicantController {
     }
   }
 
-  /**
+
+/* ┌┬┐┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
+/*  ││├┤ │  ├┤  │ ├┤   │ ││││├┤  */
+/* ─┴┘└─┘┴─┘└─┘ ┴ └─┘  └─┘┘└┘└─┘ */
+  /** delete one
    * Deletes a applicant from the database by their ID
    * @param request - Express request object containing the applicant ID in params
    * @param response - Express response object
@@ -81,7 +118,11 @@ export class ApplicantController {
     return response.json({ message: "Applicant removed successfully" });
   }
 
-  /**
+
+/* ┬ ┬┌─┐┌┬┐┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
+/* │ │├─┘ ││├─┤ │ ├┤   │ ││││├┤  */
+/* └─┘┴  ─┴┘┴ ┴ ┴ └─┘  └─┘┘└┘└─┘ */
+  /** update one
    * Updates an existing applicant's information
    * @param request - Express request object containing applicant ID in params and updated details in body
    * @param response - Express response object
