@@ -27,6 +27,6 @@ export class Application {
 
   // an application has many different lectures 
   // who make 1 vote on each on an application
-  @OneToMany(() => Vote, (vote) => (vote.voteedOnId, vote.lecturer))
+  @OneToMany(() => Vote, (vote) => (vote.votedOnId, vote.lecturer))
   votes: Vote[]
 }

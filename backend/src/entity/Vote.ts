@@ -5,17 +5,22 @@ import {
   OneToMany, 
   CreateDateColumn,
   UpdateDateColumn,
+  Column,
   JoinColumn,
+  PrimaryGeneratedColumn,
 } from "typeorm";
 import { Lecturer } from "./Lecturer";
 import { Application } from "./Application";
 @Entity()
 export class Vote {
-  @PrimaryColumn()
-  voterId: number;
+  @PrimaryGeneratedColumn()
+  voteId: number;
 
-  @PrimaryColumn()
-  voteedOnId: number;
+  // @PrimaryColumn()
+  // votedOnId: number;
+
+  @Column()
+  ranking: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -23,9 +28,9 @@ export class Vote {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne((type) => Lecturer, (lecturer) => lecturer.votes)
-  lecturer: Vote
-
+  @ManyToOne(() => Lecturer, (lecturer) => lecturer.votes)
+  lecturer: Lecturer
+  
   @ManyToOne(() => Application, (app) => app.votes)
   application: Application; 
 }
