@@ -32,7 +32,7 @@ export class Lecturer {
 
   @ManyToMany(() => Course)
   @JoinTable()
-  course_assigned_to: Course
+  courses_assigned_to: Course[]
   
   @OneToMany((type) => Vote, (vote) => vote.lecturer)
   votes: Vote[]

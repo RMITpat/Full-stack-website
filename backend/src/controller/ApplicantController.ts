@@ -81,7 +81,7 @@ export class ApplicantController {
       firstName,
       lastName,
       email,
-      age,
+      
     });
 
     try {
@@ -130,7 +130,7 @@ export class ApplicantController {
    */
   async update(request: Request, response: Response) {
     const id = parseInt(request.params.id);
-    const { firstName, lastName, email, age } = request.body;
+    const { firstName, lastName, email } = request.body;
 
     let applicantToUpdate = await this.applicantRepository.findOne({
       where: { id },
@@ -143,8 +143,8 @@ export class ApplicantController {
     applicantToUpdate = Object.assign(applicantToUpdate, {
       firstName,
       lastName,
-      email,
-      age,
+      email
+      
     });
 
     try {

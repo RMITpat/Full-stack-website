@@ -54,22 +54,23 @@ export class LecturerController {
      * @returns JSON response containing the created applicant or error message
      */
     async save(request: Request, response: Response) {
-      const { firstName, lastName, email, age } = request.body;
+      const { name, email, age, courses_assigned_to, votes } = request.body;
   
-      const applicant = Object.assign(new Applicant(), {
-        firstName,
-        lastName,
+      const lecturer = Object.assign(new Lecturer(), {
+        name,
         email,
         age,
+        courses_assigned_to,
+        votes
       });
   
       try {
-        const savedApplicant = await this.applicantRepository.save(applicant);
-        return response.status(201).json(savedApplicant);
+        const savedLecturer = await this.lecturerRepository.save(lecturer);
+        return response.status(201).json(savedLecturer);
       } catch (error) {
         return response
           .status(400)
-          .json({ message: "Error creating applicant", error });
+          .json({ message: "Error creating lecturer", error });
       }
     }
   
@@ -85,16 +86,16 @@ export class LecturerController {
      */
     async remove(request: Request, response: Response) {
       const id = parseInt(request.params.id);
-      const applicantToRemove = await this.applicantRepository.findOne({
+      const lecturerToRemove = await this.lecturerRepository.findOne({
         where: { id },
       });
   
-      if (!applicantToRemove) {
-        return response.status(404).json({ message: "Applicant not found" });
+      if (!lecturerToRemove) {
+        return response.status(404).json({ message: "Lecturer not found" });
       }
   
-      await this.applicantRepository.remove(applicantToRemove);
-      return response.json({ message: "Applicant removed successfully" });
+      await this.lecturerRepository.remove(lecturerToRemove);
+      return response.json({ message: "Lecturer removed successfully" });
     }
   
   
@@ -109,30 +110,34 @@ export class LecturerController {
      */
     async update(request: Request, response: Response) {
       const id = parseInt(request.params.id);
-      const { firstName, lastName, email, age } = request.body;
+      const { name, email, courses_assigned_to, votes } = request.body;
   
-      let applicantToUpdate = await this.applicantRepository.findOne({
+      let lecturerToUpdate = await this.lecturerRepository.findOne({
         where: { id },
       });
   
-      if (!applicantToUpdate) {
-        return response.status(404).json({ message: "Applicant not found" });
+      if (!lecturerToUpdate) {
+        return response.status(404).json({ message: "Lecturer not found" });
       }
-  
-      applicantToUpdate = Object.assign(applicantToUpdate, {
-        firstName,
-        lastName,
-        email,
-        age,
-      });
+      
+      //can update specific fields only now
+      const updates: Partial<Lecturer> = {};
+      if (name !== undefined) updates.name = name;
+      if (email !== undefined) updates.email = email;
+      if (courses_assigned_to !== undefined) updates.courses_assigned_to = courses_assigned_to;
+      if (votes !== undefined) updates.votes = votes;
+
+      Object.assign(lecturerToUpdate, updates);
   
       try {
-        const updatedApplicant = await this.applicantRepository.save(applicantToUpdate);
-        return response.json(updatedApplicant);
+        const updatedLecturer = await this.lecturerRepository.save(lecturerToUpdate);
+        return response.json(updatedLecturer);
       } catch (error) {
         return response
           .status(400)
-          .json({ message: "Error updating applicant", error });
+          .json({ message: "Error updating lecturer", error });
       }
     }
+
+   
   }
