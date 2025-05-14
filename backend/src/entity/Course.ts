@@ -29,7 +29,7 @@ export class Course {
   @ManyToMany(() => Applicant, (app) => app.courses_applied_to)
   applied_users: Applicant[];
 
-  @ManyToMany(() => Lecturer, (lecturer) => lecturer.course_assigned_to)
+  @ManyToMany(() => Lecturer, (lecturer) => lecturer.courses_assigned_to)
   assigned_lecturers: Lecturer[];
   }
 
