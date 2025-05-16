@@ -5,9 +5,12 @@ import {
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  ManyToOne,
 } from "typeorm";
 import { Applicant } from "./Applicant";
 import { Lecturer } from "./Lecturer";
+import { Application } from "./Application";
 
 @Entity()
 export class Course {
@@ -26,8 +29,10 @@ export class Course {
   @UpdateDateColumn()
   updatedAt: Date;
   
-  @ManyToMany(() => Applicant, (app) => app.courses_applied_to)
-  applied_users: Applicant[];
+  @ManyToOne(() => Application, (application) => application.course)
+  applications: Application[]
+  // @ManyToMany(() => Applicant, (app) => app.courses_applied_to)
+  // applied_users: Applicant[];
 
   @ManyToMany(() => Lecturer, (lecturer) => lecturer.courses_assigned_to)
   assigned_lecturers: Lecturer[];
