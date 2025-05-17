@@ -2,7 +2,7 @@ import { TextInput, Button, PasswordInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { User } from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,7 +17,7 @@ export default function Login() {
       password: "",
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
   });
 

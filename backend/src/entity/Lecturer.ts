@@ -19,10 +19,16 @@ export class Lecturer {
   id: number;
 
   @Column()
-  name: string;
+  firstName: string;
 
   @Column()
+  lastName: string;
+  
+  @Column()
   email: string;
+  
+  @Column()
+  password: string
   
   @CreateDateColumn()
   createdAt: Date;

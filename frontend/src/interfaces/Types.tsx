@@ -11,6 +11,8 @@ export type User = {
   User_Password: string;
   User_Img_Url: string;
 }
+
+
 export type UserCredential = {
   previousRoles: string;
   availability: string;

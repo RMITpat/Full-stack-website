@@ -75,12 +75,14 @@ export class ApplicantController {
    * @returns JSON response containing the created applicant or error message
    */
   async save(request: Request, response: Response) {
-    const { firstName, lastName, email, age } = request.body;
+    const { firstName, lastName, email, applications, password } = request.body;
 
     const applicant = Object.assign(new Applicant(), {
       firstName,
       lastName,
       email,
+      applications,
+      password
       
     });
 
@@ -130,7 +132,7 @@ export class ApplicantController {
    */
   async update(request: Request, response: Response) {
     const id = parseInt(request.params.id);
-    const { firstName, lastName, email } = request.body;
+    const { firstName, lastName, email, applications, password } = request.body;
 
     let applicantToUpdate = await this.applicantRepository.findOne({
       where: { id },
@@ -139,14 +141,17 @@ export class ApplicantController {
     if (!applicantToUpdate) {
       return response.status(404).json({ message: "Applicant not found" });
     }
+    const updates: Partial<Applicant> = {};
+      if (firstName !== undefined) updates.firstName = firstName;
+      if (lastName !== undefined) updates.lastName = lastName;
+      if (email !== undefined) updates.email = email;
+      if (password !== undefined) updates.password = password;
 
-    applicantToUpdate = Object.assign(applicantToUpdate, {
-      firstName,
-      lastName,
-      email
-      
-    });
+      if (applications !== undefined) updates.applications = applications;
 
+      Object.assign(applicantToUpdate, updates);
+  
+    
     try {
       const updatedApplicant = await this.applicantRepository.save(applicantToUpdate);
       return response.json(updatedApplicant);

@@ -54,14 +54,15 @@ export class LecturerController {
      * @returns JSON response containing the created applicant or error message
      */
     async save(request: Request, response: Response) {
-      const { name, email, age, courses_assigned_to, votes } = request.body;
+      const { firstName, lastName, email, courses_assigned_to, votes, password } = request.body;
   
       const lecturer = Object.assign(new Lecturer(), {
-        name,
+        firstName,
+        lastName,
         email,
-        age,
         courses_assigned_to,
-        votes
+        votes,
+        password
       });
   
       try {
@@ -110,7 +111,7 @@ export class LecturerController {
      */
     async update(request: Request, response: Response) {
       const id = parseInt(request.params.id);
-      const { name, email, courses_assigned_to, votes } = request.body;
+      const { firstName, lastName, email, courses_assigned_to, votes, password } = request.body;
   
       let lecturerToUpdate = await this.lecturerRepository.findOne({
         where: { id },
@@ -122,10 +123,12 @@ export class LecturerController {
       
       //can update specific fields only now
       const updates: Partial<Lecturer> = {};
-      if (name !== undefined) updates.name = name;
+      if (firstName !== undefined) updates.firstName = firstName;
+      if (lastName !== undefined) updates.lastName = lastName;
       if (email !== undefined) updates.email = email;
       if (courses_assigned_to !== undefined) updates.courses_assigned_to = courses_assigned_to;
       if (votes !== undefined) updates.votes = votes;
+      if (password !== undefined) updates.password = password;
 
       Object.assign(lecturerToUpdate, updates);
   

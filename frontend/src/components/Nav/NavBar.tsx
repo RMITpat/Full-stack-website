@@ -41,6 +41,9 @@ export default function NavBar() {
               Sign out
             </Button>
         )}
+        <Button mt={"sm"} component={Link} href="/SignUp">
+              Sign Up
+            </Button>
 
         <Button mt={"sm"} component={Link} href="/">
           TeachTeam

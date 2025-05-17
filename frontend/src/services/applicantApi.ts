@@ -1,0 +1,34 @@
+import axios from "axios";
+import { Applicant } from "@/interfaces/Interfaces";
+export const api = axios.create({
+  baseURL: "http://localhost:3001/api", // Adjust this to match your backend URL
+});
+
+
+
+export const applicantApi = {
+  getAllApplicants: async () => {
+    const response = await api.get("/applicants");
+    return response.data;
+  },
+
+  getApplicantById: async (id: number) => {
+    const response = await api.get(`/applicants/${id}`);
+    return response.data;
+  },
+
+  createApplicant: async (applicant: Partial<Applicant>) => {
+    const response = await api.post("/applicants", applicant);
+    return response.data;
+  },
+
+  updateApplicant: async (id: number, applicant: Partial<Applicant>) => {
+    const response = await api.put(`/applicants/${id}`, applicant);
+    return response.data;
+  },
+
+  deleteApplicant: async (id: number) => {
+    const response = await api.delete(`/applicants/${id}`);
+    return response.data;
+  },
+};
