@@ -2,13 +2,14 @@ import "reflect-metadata";
 import express from "express";
 import { AppDataSource } from "./data-source";
 import userRoutes from "./routes/applicant.routes";
+import lecturerRoutes from "./routes/lecturer.routes";
 import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoutes);
+app.use("/api", userRoutes, lecturerRoutes);
 
 AppDataSource.initialize()
   .then(() => {

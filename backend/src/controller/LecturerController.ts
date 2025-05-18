@@ -1,4 +1,4 @@
-import { Lecturer } from "src/entity/Lecturer";
+import { Lecturer } from "../entity/Lecturer";
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 
