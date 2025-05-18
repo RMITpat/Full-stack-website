@@ -26,9 +26,10 @@ const mockResponse = (): Partial<Response> => {
   return res;
 };
 
+//next add same but for applicants
 
 export async function runPopulateCourse(controller: CourseController) {
-  const req = manualRequest(courseData) as Request;
+  const req = manualRequest(courseData) as Request
   const res = mockResponse() as Response;
 
   await controller.addAll(req, res);
