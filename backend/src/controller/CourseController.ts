@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Course } from "../entity/Course";
-import { IndCourse } from "../interfaces/Interfaces";
 
 export class CourseController {
   private courseRepository = AppDataSource.getRepository(Course);
@@ -52,7 +51,7 @@ export class CourseController {
    * should only be used on launch to set the initial state
    * @param request - Expresss request object containing all the courses to be put in
    * @param response - Express response object
-   * @returns JSON response containing all the courses put into the database
+   * @returns 
    */
 
   async addAll(req: Request, res: Response) {
@@ -67,7 +66,7 @@ export class CourseController {
         await this.courseRepository.save({
           code: course.code,
           name: course.name,
-          semester: course.Semester,
+          semester: course.semester,
         })
       }
       return res.status(201).json({ message: "Courses added successfully" })

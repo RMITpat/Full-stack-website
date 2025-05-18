@@ -1,12 +1,14 @@
 import { AppDataSource }  from "../data-source";
 import { CourseController } from "./CourseController";
+import { runPopulateCourse } from "./data/AddAllCourses";
 
-async function populate() {
-  await AppDataSource.initialize();
 
+export async function populate() {
   const courseController = new CourseController();
-  const addAllResult = courseController.addAll()
-  
 
+  //courses
+  await runPopulateCourse(courseController);
+
+  //
 
 }
