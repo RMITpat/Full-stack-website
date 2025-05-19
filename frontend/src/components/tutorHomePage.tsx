@@ -71,7 +71,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
     mode: "uncontrolled",
     initialValues: {
       email: currentUser.user.User_Email,
-      name: currentUser.user.User_Name,
+      name: currentUser.user.User_FirstName,
       previousRoles: "",
       availability: "Part time",
       skills: "",
@@ -146,7 +146,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
           All_Credentials = JSON.parse(storedData);
           tutorDetails = {
             email: currentUser.user.User_Email,
-            name: currentUser.user.User_Name,
+            name: currentUser.user.User_FirstName,
             previousRoles:
               All_Credentials[currentUser.user.User_Email].previousRoles,
             availability:

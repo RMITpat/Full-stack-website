@@ -147,7 +147,8 @@ export default function InsertUsers() {
 
     // Create user data
     const user: User = {
-      User_Name: `${firstName} ${lastName}`,
+      User_FirstName: `${firstName}`,
+      User_LastName: `${lastName}`,
       User_Email: email,
       User_Type:
         i === 0 ? "admin_default" : i < 11 ? "logged_in_lecturer" : "logged_in", // First user is admin, others are logged_in or logged_in_lecturer

@@ -29,14 +29,14 @@ const CredentialsDisplay: React.FC<CredentialProps> = ({
         }}
       >
         <Stack p="sm" bg="gray">
-          <Title order={2}>{currentUser.user.User_Name}</Title>
+          <Title order={2}>{currentUser.user.User_FirstName}</Title>
         </Stack>
         <Group justify="center">
           {" "}
           <Image
             w="50%"
             radius="md"
-            src={`/images/${currentUser.user.User_Name.split(" ")[0]}.jpg`}
+            src={`/images/${currentUser.user.User_FirstName.split(" ")[0]}.jpg`}
           />
         </Group>
         <Stack p="md">

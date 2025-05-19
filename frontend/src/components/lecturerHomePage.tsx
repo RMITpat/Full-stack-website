@@ -323,7 +323,7 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
       {lecturerState == "default" ? (
         // base view which shows all the courses
         <>
-          <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
+          <Text size="lg">Hi, {currentUser.user.User_FirstName}!</Text>
 
           <Group justify="space-between">
             <Title mb="sm">Courses</Title>

@@ -29,6 +29,7 @@ export interface Application {
   credentials: string;
 }
 export interface Applicant {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -42,6 +43,7 @@ export interface Course {
   assigned_lecturers: Lecturer[]
 }
 export interface Lecturer {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
