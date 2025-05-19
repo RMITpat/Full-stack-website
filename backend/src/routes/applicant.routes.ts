@@ -12,6 +12,10 @@ router.get("/applicants/:id", async (req, res) => {
   await applicantController.one(req, res);
 });
 
+router.post("/applicants/authenticate", async (req, res) => {
+  await applicantController.authenticate(req, res);
+});
+
 router.post("/applicants", async (req, res) => {
   await applicantController.save(req, res);
 });

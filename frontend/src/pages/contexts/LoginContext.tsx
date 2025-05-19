@@ -7,10 +7,10 @@ import {
 } from "react";
 
 import { User } from "@/interfaces/Types"
-
+import { Applicant, Lecturer } from "@/interfaces/Interfaces";
 type LoginContextType = {
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  user:Applicant | Lecturer;
+  setUser: React.Dispatch<React.SetStateAction<Applicant | Lecturer>>;
 };
 
 type LoginProviderProps = {
@@ -19,32 +19,33 @@ type LoginProviderProps = {
 
 const loginContext = createContext<LoginContextType | undefined>(undefined);
 
-const defaultUser: User = {
-  User_Name: "",
-  User_Email: "",
-  User_Password: "",
-  User_Type: "default",
-  User_Img_Url: "",
+const defaultUser: Applicant = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  applications: []
+
 };
 
 export function LoginProvider({ children }: LoginProviderProps) {
-  const [user, setUser] = useState<User>(defaultUser);
+  const [user, setUser] = useState<Applicant | Lecturer>(defaultUser);
 
-  useEffect(() => {
-    const rawPrevUser = localStorage.getItem("prevUser");
-    if (rawPrevUser) {
-      try {
-        const parsedUser = JSON.parse(rawPrevUser);
-        setUser((prev) => ({ ...prev, ...parsedUser }));
-      } catch (error) {
-        console.warn("Failed to parse prevUser from localStorage", error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const rawPrevUser = localStorage.getItem("prevUser");
+  //   if (rawPrevUser) {
+  //     try {
+  //       const parsedUser = JSON.parse(rawPrevUser);
+  //       setUser((prev) => ({ ...prev, ...parsedUser }));
+  //     } catch (error) {
+  //       console.warn("Failed to parse prevUser from localStorage", error);
+  //     }
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem("prevUser", JSON.stringify(user));
-  }, [user]);
+  // useEffect(() => {
+  //   localStorage.setItem("prevUser", JSON.stringify(user));
+  // }, [user]);
 
   return (
       <loginContext.Provider value={{ user, setUser }}>

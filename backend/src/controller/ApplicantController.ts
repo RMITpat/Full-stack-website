@@ -1,4 +1,3 @@
-
 /*  ██████╗ ██████╗ ██████╗ ██╗███████╗██████╗                                */
 /* ██╔════╝██╔═══██╗██╔══██╗██║██╔════╝██╔══██╗                               */
 /* ██║     ██║   ██║██████╔╝██║█████╗  ██║  ██║                               */
@@ -27,9 +26,9 @@ import { Applicant } from "../entity/Applicant";
 export class ApplicantController {
   private applicantRepository = AppDataSource.getRepository(Applicant);
 
-/* ┌─┐┌─┐┌┬┐  ┌─┐┬  ┬   */
-/* │ ┬├┤  │   ├─┤│  │   */
-/* └─┘└─┘ ┴   ┴ ┴┴─┘┴─┘ */
+  /* ┌─┐┌─┐┌┬┐  ┌─┐┬  ┬   */
+  /* │ ┬├┤  │   ├─┤│  │   */
+  /* └─┘└─┘ ┴   ┴ ┴┴─┘┴─┘ */
   /** get all
    * Retrieves all applicants from the database
    * @param request - Express request object
@@ -42,10 +41,9 @@ export class ApplicantController {
     return response.json(applicants);
   }
 
-
-/* ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐ */
-/* │ ┬├┤  │   │ ││││├┤  */
-/* └─┘└─┘ ┴   └─┘┘└┘└─┘ */
+  /* ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐ */
+  /* │ ┬├┤  │   │ ││││├┤  */
+  /* └─┘└─┘ ┴   └─┘┘└┘└─┘ */
   /** get one
    * Retrieves a single applicant by their ID
    * @param request - Express request object containing the applicant ID in params
@@ -64,10 +62,22 @@ export class ApplicantController {
     return response.json(applicant);
   }
 
+  async authenticate(request: Request, response: Response) {
+    const email = request.body.email;
+    const password = request.body.password;
+    const applicant = await this.applicantRepository.findOne({
+      where: { email: email, password: password },
+    });
 
-/* ┌─┐┌─┐┬  ┬┌─┐  ┌─┐┌┐┌┌─┐ */
-/* └─┐├─┤└┐┌┘├┤   │ ││││├┤  */
-/* └─┘┴ ┴ └┘ └─┘  └─┘┘└┘└─┘ */
+    if (!applicant) {
+      return response.status(404).json({ message: "Applicant not found" });
+    }
+    return response.json(applicant);
+  }
+
+  /* ┌─┐┌─┐┬  ┬┌─┐  ┌─┐┌┐┌┌─┐ */
+  /* └─┐├─┤└┐┌┘├┤   │ ││││├┤  */
+  /* └─┘┴ ┴ └┘ └─┘  └─┘┘└┘└─┘ */
   /** save one
    * Creates a new applicant in the database
    * @param request - Express request object containing applicant details in body
@@ -82,8 +92,7 @@ export class ApplicantController {
       lastName,
       email,
       applications,
-      password
-      
+      password,
     });
 
     try {
@@ -96,10 +105,9 @@ export class ApplicantController {
     }
   }
 
-
-/* ┌┬┐┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
-/*  ││├┤ │  ├┤  │ ├┤   │ ││││├┤  */
-/* ─┴┘└─┘┴─┘└─┘ ┴ └─┘  └─┘┘└┘└─┘ */
+  /* ┌┬┐┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
+  /*  ││├┤ │  ├┤  │ ├┤   │ ││││├┤  */
+  /* ─┴┘└─┘┴─┘└─┘ ┴ └─┘  └─┘┘└┘└─┘ */
   /** delete one
    * Deletes a applicant from the database by their ID
    * @param request - Express request object containing the applicant ID in params
@@ -120,10 +128,9 @@ export class ApplicantController {
     return response.json({ message: "Applicant removed successfully" });
   }
 
-
-/* ┬ ┬┌─┐┌┬┐┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
-/* │ │├─┘ ││├─┤ │ ├┤   │ ││││├┤  */
-/* └─┘┴  ─┴┘┴ ┴ ┴ └─┘  └─┘┘└┘└─┘ */
+  /* ┬ ┬┌─┐┌┬┐┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
+  /* │ │├─┘ ││├─┤ │ ├┤   │ ││││├┤  */
+  /* └─┘┴  ─┴┘┴ ┴ ┴ └─┘  └─┘┘└┘└─┘ */
   /** update one
    * Updates an existing applicant's information
    * @param request - Express request object containing applicant ID in params and updated details in body
@@ -142,18 +149,19 @@ export class ApplicantController {
       return response.status(404).json({ message: "Applicant not found" });
     }
     const updates: Partial<Applicant> = {};
-      if (firstName !== undefined) updates.firstName = firstName;
-      if (lastName !== undefined) updates.lastName = lastName;
-      if (email !== undefined) updates.email = email;
-      if (password !== undefined) updates.password = password;
+    if (firstName !== undefined) updates.firstName = firstName;
+    if (lastName !== undefined) updates.lastName = lastName;
+    if (email !== undefined) updates.email = email;
+    if (password !== undefined) updates.password = password;
 
-      if (applications !== undefined) updates.applications = applications;
+    if (applications !== undefined) updates.applications = applications;
 
-      Object.assign(applicantToUpdate, updates);
-  
-    
+    Object.assign(applicantToUpdate, updates);
+
     try {
-      const updatedApplicant = await this.applicantRepository.save(applicantToUpdate);
+      const updatedApplicant = await this.applicantRepository.save(
+        applicantToUpdate
+      );
       return response.json(updatedApplicant);
     } catch (error) {
       return response

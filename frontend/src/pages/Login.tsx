@@ -1,4 +1,13 @@
-import { TextInput, Button, PasswordInput } from "@mantine/core";
+import {
+  TextInput,
+  Button,
+  PasswordInput,
+  Group,
+  Flex,
+  Stack,
+  Tabs,
+  Title,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
@@ -6,11 +15,15 @@ import { useRouter } from "next/router";
 import { User } from "@/interfaces/Types";
 import getAllUsers from "@/api/GetAllUsers";
 import { ToastContainer, toast } from "react-toastify";
+import { lecturerApi } from "@/services/lecturerApi";
+import { applicantApi } from "@/services/applicantApi";
 
 export default function Login() {
   const { setUser } = useLoginContext();
+  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
-  const form = useForm({
+  const lecturerForm = useForm({
     mode: "controlled",
     initialValues: {
       email: "",
@@ -21,49 +34,124 @@ export default function Login() {
     },
   });
 
-  const [submittedValues, setSubmittedValues] = useState<
-    typeof form.values | null
-  >(null);
+  const applicantForm = useForm({
+    mode: "controlled",
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validate: {
+      //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
+  });
 
   //this authenticates a user signing in with the password
   // associated with the email they entered in the login form
-  useEffect(() => {
-    const parsed_users = getAllUsers();
-    const user = parsed_users[form.values.email];
 
-    const checkPass = user?.User_Password === form.values.password;
-
-    if (checkPass) {
-      console.log("login success");
-
-      router.push("/");
-      toast.success("Login success!");
+  const printLecturerTable = () => {
+    const lecturers = lecturerApi.getAllLecturers();
+    console.log(lecturers);
+  };
+  const printTable = () => {
+    const applicants = applicantApi.getAllApplicants();
+    console.log(applicants);
+  };
+  const [activeTab, setActiveTab] = useState<string | null>("applicant");
+  const handleLogInApplicant = async (values: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const user = await applicantApi.logInApplicant(values);
       setUser(user);
-      localStorage.setItem("prevUser", JSON.stringify(user));
-    } else {
-      console.log("login failed");
+      router.push("/");
+    } catch (err) {
+      setError("Failed to log in applicant");
     }
-  }, [submittedValues]);
+  };
+
+  const handleLogInLecturer = async (values: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const user = await lecturerApi.logInLecturer(values);
+      setUser(user);
+      router.push("/");
+    } catch (err) {
+      setError("Failed to log in lecturer");
+    }
+  };
 
   return (
     <>
-      <form onSubmit={form.onSubmit(setSubmittedValues)}>
-        <TextInput
-          {...form.getInputProps("email")}
-          mt="md"
-          label="Email"
-          placeholder="Email"
-        />
-        <PasswordInput
-          {...form.getInputProps("password")}
-          mt="md"
-          label="Password"
-          placeholder="Password"
-        />
-        <Button type="submit" mt="md">
-          Submit
+      <>
+        <div className="text-red-500">{error}</div>
+        <Button onClick={() => printTable()}>log applicants table</Button>
+        <Button onClick={() => printLecturerTable()}>
+          log lecturers table
         </Button>
-      </form>
+
+        <Group justify="center">
+          <Flex justify="stretch" align="stretch" direction="column" p="md">
+            <Tabs value={activeTab} onChange={setActiveTab}>
+              <Stack justify="space-between" p="md">
+                <Tabs.List justify="center">
+                  <Tabs.Tab value="applicant">Applicant</Tabs.Tab>
+                  <Tabs.Tab value="lecturer">Lecturer</Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel value="applicant">
+                  <Title>Applicant Log In</Title>
+
+                  <form onSubmit={applicantForm.onSubmit(handleLogInApplicant)}>
+                    <Stack>
+                      <TextInput
+                        {...applicantForm.getInputProps("email")}
+                        mt="md"
+                        label="Email"
+                        placeholder="Email"
+                      />
+                      <PasswordInput
+                        {...applicantForm.getInputProps("password")}
+                        mt="md"
+                        label="Password"
+                        placeholder="Password"
+                      />
+                      <Button type="submit" mt="md">
+                        Log in
+                      </Button>
+                    </Stack>
+                  </form>
+                </Tabs.Panel>
+
+                <Tabs.Panel value="lecturer">
+                  <Title>Lecturer Log In</Title>
+                  <form onSubmit={lecturerForm.onSubmit(handleLogInLecturer)}>
+                    <Stack>
+                      <TextInput
+                        {...lecturerForm.getInputProps("email")}
+                        mt="md"
+                        label="Email"
+                        placeholder="Email"
+                      />
+                      <PasswordInput
+                        {...lecturerForm.getInputProps("password")}
+                        mt="md"
+                        label="Password"
+                        placeholder="Password"
+                      />
+                      <Button type="submit" mt="md">
+                        Log in
+                      </Button>
+                    </Stack>
+                  </form>
+                </Tabs.Panel>
+              </Stack>
+            </Tabs>
+          </Flex>
+        </Group>
+      </>
     </>
   );
 }

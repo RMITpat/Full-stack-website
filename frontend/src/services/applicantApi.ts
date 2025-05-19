@@ -17,6 +17,11 @@ export const applicantApi = {
     return response.data;
   },
 
+  logInApplicant: async (values: {email: string, password: string}) => {
+    const response = await api.post("/applicants/authenticate", values);
+    return response.data;
+  },
+
   createApplicant: async (applicant: Partial<Applicant>) => {
     const response = await api.post("/applicants", applicant);
     return response.data;

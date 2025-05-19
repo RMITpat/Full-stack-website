@@ -25,6 +25,11 @@ export const lecturerApi = {
     return response.data;
   },
 
+  logInLecturer: async (values: {email: string, password: string}) => {
+    const response = await api.post("/lecturer/authenticate", values);
+    return response.data;
+  },
+
   deleteLecturer: async (id: number) => {
     const response = await api.delete(`/lecturer/${id}`);
     return response.data;
