@@ -4,6 +4,7 @@ import { AppDataSource } from "./data-source";
 import userRoutes from "./routes/applicant.routes";
 import lecturerRoutes from "./routes/lecturer.routes";
 import cors from "cors";
+import { populate } from "./controller/populateDatabase"
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -12,8 +13,13 @@ app.use(express.json());
 app.use("/api", userRoutes, lecturerRoutes);
 
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     console.log("Data Source has been initialized!");
+    
+    console.log("populating database...")
+    await populate();
+    console.log("population done!!!")
+    
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
     });
