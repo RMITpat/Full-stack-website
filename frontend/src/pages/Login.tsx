@@ -7,16 +7,15 @@ import {
   Stack,
   Tabs,
   Title,
+  Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import { useRouter } from "next/router";
-import { User } from "@/interfaces/Types";
-import getAllUsers from "@/api/GetAllUsers";
-import { ToastContainer, toast } from "react-toastify";
 import { lecturerApi } from "@/services/lecturerApi";
 import { applicantApi } from "@/services/applicantApi";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { setUser } = useLoginContext();
@@ -65,8 +64,9 @@ export default function Login() {
       const user = await applicantApi.logInApplicant(values);
       setUser(user);
       router.push("/");
+      toast.success("Applicant log in successful!");
     } catch (err) {
-      setError("Failed to log in applicant");
+      setError("Applicant username or password is incorrect");
     }
   };
 
@@ -78,22 +78,22 @@ export default function Login() {
       const user = await lecturerApi.logInLecturer(values);
       setUser(user);
       router.push("/");
+      toast.success("Lecturer log in successful!");
     } catch (err) {
-      setError("Failed to log in lecturer");
+      setError("Lecturer username or password is incorrect");
     }
   };
 
   return (
     <>
       <>
-        <div className="text-red-500">{error}</div>
         <Button onClick={() => printTable()}>log applicants table</Button>
         <Button onClick={() => printLecturerTable()}>
           log lecturers table
         </Button>
 
         <Group justify="center">
-          <Flex justify="stretch" align="stretch" direction="column" p="md">
+          <Flex justify="stretch" align="center" direction="column" p="md">
             <Tabs value={activeTab} onChange={setActiveTab}>
               <Stack justify="space-between" p="md">
                 <Tabs.List justify="center">
@@ -149,6 +149,7 @@ export default function Login() {
                 </Tabs.Panel>
               </Stack>
             </Tabs>
+            <Text color="red">{error}</Text>
           </Flex>
         </Group>
       </>

@@ -10,11 +10,15 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { applicantApi } from "@/services/applicantApi";
 import { Applicant, Lecturer } from "@/interfaces/Interfaces";
 import { lecturerApi } from "@/services/lecturerApi";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
 export default function SignUp() {
+  const router = useRouter();
   const { setUser } = useLoginContext();
   //const router1 = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +56,10 @@ export default function SignUp() {
 
   const handleCreateApplicant = async (values: Applicant) => {
     try {
-      await applicantApi.createApplicant(values);
+      const user = await applicantApi.createApplicant(values);
+      setUser(user);
+      router.push("/");
+      toast.success("Applicant account successfully created!");
     } catch (err) {
       setError("Failed to create applicant");
     }
@@ -63,9 +70,11 @@ export default function SignUp() {
   };
 
   const handleCreateLecturer = async (values: Lecturer) => {
-    
     try {
-      await lecturerApi.createLecturer(values);
+      const user = await lecturerApi.createLecturer(values);
+      setUser(user);
+      router.push("/");
+      toast.success("Lecturer account successfully created!");
     } catch (err) {
       setError("Failed to create lecturer");
     }

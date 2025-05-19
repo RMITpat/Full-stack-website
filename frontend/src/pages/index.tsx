@@ -5,7 +5,7 @@ import LecturerHomePage from "../components/lecturerHomePage";
 
 import { SetStateAction, useEffect, useState } from "react";
 import { IndCourse } from "../interfaces/Interfaces";
-import { Card, Text } from "@mantine/core";
+import { Card, Flex, Group, Stack, Text, Title } from "@mantine/core";
 import UpdateApplication from "@/api/UpdateApplications";
 import updateApplication from "@/api/UpdateApplications";
 import { LecturerStateProvider } from "@/pages/contexts/LecturerState";
@@ -185,7 +185,18 @@ export default function Home() {
     const userType = currentUser.user.User_Type;
 
     if (userType === "default") {
-      return <Text>You are not logged in</Text>;
+      return (
+        <Flex direction="column" align="center">
+          <Stack>
+            <Title>Welcome to TeachTeam!</Title>
+          </Stack>
+          <Text size="xl">
+            Lead courses as a lecturer, help students as a tutor or aid staff as
+            a lab assistant.
+          </Text>
+          <Text size="xl">Apply today!</Text>
+        </Flex>
+      );
     }
 
     if (userType === "logged_in_lecturer") {

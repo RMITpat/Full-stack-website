@@ -62,6 +62,15 @@ export class ApplicantController {
     return response.json(applicant);
   }
 
+  /*                           */
+  /*        authenticate       */
+  /*             :D            */
+  /** 
+   * Finds user in the repository that matches email and password
+   * @param request - Express request object containing applicant details in body
+   * @param response - Express response object
+   * @returns JSON response containing the created applicant or error message
+   */
   async authenticate(request: Request, response: Response) {
     const email = request.body.email;
     const password = request.body.password;
