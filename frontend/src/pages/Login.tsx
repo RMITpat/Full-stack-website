@@ -73,8 +73,10 @@ export default function Login() {
         User_FirstName: user.firstName,
         User_Type: "logged_in",
         User_Password: user.password,
-        User_Img_Url: "",
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
       };
+
       setUser(userObject);
       router.push("/");
       toast.success("Applicant log in successful!");
@@ -99,7 +101,8 @@ export default function Login() {
         User_FirstName: user.firstName,
         User_Type: "logged_in",
         User_Password: user.password,
-        User_Img_Url: "",
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
       };
       setUser(userObject);
       router.push("/");

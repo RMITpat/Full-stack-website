@@ -34,6 +34,8 @@ export default function SignUp() {
       password: "",
       courses_assigned_to: [],
       votes: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     validate: {
       //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -49,6 +51,8 @@ export default function SignUp() {
       email: "",
       password: "",
       applications: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     validate: {
       //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -70,7 +74,8 @@ export default function SignUp() {
         User_FirstName: user.firstName,
         User_Type: "logged_in",
         User_Password: user.password,
-        User_Img_Url: "",
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
       };
       setUser(userObject);
       router.push("/");
@@ -97,7 +102,8 @@ export default function SignUp() {
         User_FirstName: user.firstName,
         User_Type: "logged_in_lecturer",
         User_Password: user.password,
-        User_Img_Url: "",
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
       };
       setUser(userObject);
       router.push("/");

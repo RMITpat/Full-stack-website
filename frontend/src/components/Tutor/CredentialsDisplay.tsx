@@ -2,6 +2,7 @@ import { DetailValues } from "@/interfaces/Interfaces";
 import { theme } from "@chakra-ui/react";
 import { Stack, Title, Button, Text, Group, Image } from "@mantine/core";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
+import { User } from "@/interfaces/Types";
 let detailArray: [string, keyof DetailValues][] = [
   ["Previous Roles", "previousRoles"],
   ["Availability", "availability"],
@@ -9,14 +10,10 @@ let detailArray: [string, keyof DetailValues][] = [
   ["Credentials", "credentials"],
 ];
 interface CredentialProps {
-  currentTutor: DetailValues | undefined;
-  open: () => void;
+  currentTutor: User | undefined;
 }
 ///used to display the credentials for a tutor in the tutor homepage
-const CredentialsDisplay: React.FC<CredentialProps> = ({
-  currentTutor,
-  open,
-}) => {
+const CredentialsDisplay: React.FC<CredentialProps> = ({ currentTutor }) => {
   const currentUser = useLoginContext();
 
   return (
@@ -29,59 +26,54 @@ const CredentialsDisplay: React.FC<CredentialProps> = ({
         }}
       >
         <Stack p="sm" bg="gray">
-          <Title order={2}>{currentUser.user.User_FirstName}</Title>
+          <Title order={2}>Profile</Title>
         </Stack>
-        <Group justify="center">
-          {" "}
-          <Image
-            w="50%"
-            radius="md"
-            src={`/images/${currentUser.user.User_FirstName.split(" ")[0]}.jpg`}
-          />
-        </Group>
         <Stack p="md">
           <Stack gap="0px">
-            <Title order={4}>Previous Roles</Title>
+            <Title order={4}>First name</Title>
             {currentTutor ? (
-              <Text>{currentTutor.previousRoles}</Text>
+              <Text>{currentTutor.User_FirstName}</Text>
             ) : (
               <Text>Not set</Text>
             )}
           </Stack>
           <Stack gap="0px">
-            <Title order={4}>Availability</Title>
+            <Title order={4}>Last name</Title>
             {currentTutor ? (
-              <Text>{currentTutor.availability}</Text>
+              <Text>{currentTutor.User_LastName}</Text>
             ) : (
               <Text>Not set</Text>
             )}
           </Stack>
           <Stack gap="0px">
-            <Title order={4}>Skills</Title>
+            <Title order={4}>Email</Title>
             {currentTutor ? (
-              <Text>{currentTutor.skills}</Text>
+              <Text>{currentTutor.User_Email}</Text>
             ) : (
               <Text>Not set</Text>
             )}
           </Stack>
+
           <Stack gap="0px">
-            <Title order={4}>Credentials</Title>
+            <Title order={4}>Join date</Title>
             {currentTutor ? (
-              <Text>{currentTutor.credentials}</Text>
+              <Text>
+                {new Date(currentTutor.User_Date_Joined).toDateString()}
+              </Text>
             ) : (
               <Text>Not set</Text>
             )}
           </Stack>
         </Stack>
       </Stack>
-      <Button
+      {/* <Button
         variant="filled"
         size="md"
         // style={{ width: "30%" }}
         onClick={open}
       >
         Update Details
-      </Button>
+      </Button> */}
     </Stack>
   );
 };

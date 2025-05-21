@@ -1,3 +1,10 @@
+import { User } from "./Types";
+
+export enum ApplicationType {
+  LAB_ASSISTANT = "lab_assistant",
+  TUTOR         = "tutor",
+}
+
 export interface DetailValues {
   email: string;
   name: string;
@@ -8,6 +15,7 @@ export interface DetailValues {
   skills: string;
   credentials: string;
 }
+
 
 export interface AppAndComment {
     applicant: DetailValues
@@ -21,12 +29,15 @@ export interface IndCourse {
   lecturerRankings: Record<string, AppAndComment[]>;
 }
 export interface Application {
-  applicant: Applicant
-  lecturerComments: Record<string, string>[];
+  applicant: User
+  type: ApplicationType
+  lecturerComments: string[];
   previousRoles: string;
   availability: string;
   skills: string;
   credentials: string;
+  course: Course
+  votes: Vote[]
 }
 export interface Applicant {
   id: number;
@@ -35,11 +46,17 @@ export interface Applicant {
   email: string;
   password: string;
   applications: Application[]
+  createdAt: Date,
+  updatedAt: Date
 }
 export interface Vote {
 
 }
 export interface Course {
+  name: string;
+  courseCode: string;
+  semester: string;
+  applicants: DetailValues[];
   assigned_lecturers: Lecturer[]
 }
 export interface Lecturer {
@@ -50,4 +67,6 @@ export interface Lecturer {
   password: string;
   votes: Vote[]
   courses_assigned_to: Course[]
+  createdAt: Date,
+  updatedAt: Date
 }

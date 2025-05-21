@@ -19,7 +19,8 @@ export default function NavBar() {
       User_FirstName: "",
       User_Type: "default",
       User_Password: "",
-      User_Img_Url: "",
+      User_Date_Joined: new Date(),
+      User_Updated_At: new Date(),
     };
 
     setUser(signedOut);

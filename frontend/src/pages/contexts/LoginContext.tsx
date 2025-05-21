@@ -23,13 +23,14 @@ const defaultUser: User = {
   User_id: -1,
   User_Applications: [],
   User_Courses_Assigned_To: [],
-  User_LastName: "",
+  User_LastName: "test",
   User_Votes: [],
-  User_Email: "",
-  User_FirstName: "",
-  User_Type: "default",
-  User_Password: "",
-  User_Img_Url: "",
+  User_Email: "test",
+  User_FirstName: "test",
+  User_Type: "logged_in",
+  User_Password: "test",
+  User_Date_Joined: new Date(),
+  User_Updated_At: new Date()
 };
 
 export function LoginProvider({ children }: LoginProviderProps) {

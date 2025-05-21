@@ -25,8 +25,8 @@ import { useLecturerState } from "@/pages/contexts/LecturerState";
 import { toast } from "react-toastify";
 import ApplicantFilters from "@/components/Applications/ApplicantFilters";
 interface tutorHomePageProps {
-  courses: IndCourse[];
-  setCourses: Dispatch<SetStateAction<IndCourse[]>>;
+  courses: Course[];
+  setCourses: Dispatch<SetStateAction<Course[]>>;
 }
 /*
 Validation of user inputs:

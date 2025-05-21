@@ -1,3 +1,5 @@
+
+
 export type User = {
   User_id: number
   User_FirstName: string;
@@ -11,10 +13,11 @@ export type User = {
       "admin_logged_in" |
       "admin_lecturer";
   User_Password: string;
-  User_Img_Url: string;
   User_Applications: []
   User_Courses_Assigned_To: []
   User_Votes: []
+  User_Date_Joined: Date
+  User_Updated_At: Date
 }
 
 
