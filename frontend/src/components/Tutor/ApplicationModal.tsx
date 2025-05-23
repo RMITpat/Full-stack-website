@@ -1,4 +1,4 @@
-import { Application, DetailValues } from "@/interfaces/Interfaces";
+import { Application, Course, DetailValues } from "@/interfaces/Interfaces";
 import {
   Button,
   Group,
@@ -15,6 +15,7 @@ interface ApplicationProps {
   close: () => void;
   form: UseFormReturnType<Application, (values: Application) => Application>;
   handleSubmit: (values: Application) => void;
+  course: Course
 }
 //the modal that is used for entering credentials
 const ApplicationModal: React.FC<ApplicationProps> = ({
@@ -22,7 +23,9 @@ const ApplicationModal: React.FC<ApplicationProps> = ({
   close,
   form,
   handleSubmit,
+  course
 }) => {
+  form.setFieldValue("course", course)
   return (
     <Modal opened={opened} onClose={close} title="Become a candidate">
       <form onSubmit={form.onSubmit(handleSubmit)}>

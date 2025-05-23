@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { Application } from "../entity/Application";
+import { Course } from "../entity/Course";
+import { Applicant } from "../entity/Applicant";
 
 export class ApplicationController {
   private applicationRepository = AppDataSource.getRepository(Application);
-
+  private courseRepository = AppDataSource.getRepository(Course);
+  private applicantRepository = AppDataSource.getRepository(Applicant);
   /* ┌─┐┌─┐┌┬┐  ┌─┐┬  ┬   */
   /* │ ┬├┤  │   ├─┤│  │   */
   /* └─┘└─┘ ┴   ┴ ┴┴─┘┴─┘ */
@@ -41,9 +44,6 @@ export class ApplicationController {
     return response.json(application);
   }
 
-
-  
-
   /* ┌─┐┌─┐┬  ┬┌─┐  ┌─┐┌┐┌┌─┐ */
   /* └─┐├─┤└┐┌┘├┤   │ ││││├┤  */
   /* └─┘┴ ┴ └┘ └─┘  └─┘┘└┘└─┘ */
@@ -54,9 +54,9 @@ export class ApplicationController {
    * @returns JSON response containing the created applicant or error message
    */
   async save(request: Request, response: Response) {
-    const {
+    const { //these match the front end's type/interface attributes exactly
       type,
-      previous_roles,
+      previousRoles,
       availability,
       skills,
       credentials,
@@ -65,14 +65,29 @@ export class ApplicationController {
       votes,
     } = request.body;
 
+   
+    const courseRecord = await this.courseRepository.findOneBy({
+      code: request.body.course.courseCode,
+    });
+
+    if (!courseRecord) {
+      return response.status(404).json({ message: "CourseRecord not found" });
+    }
+    const applicantRecord = await this.applicantRepository.findOneBy({
+      id: request.body.applicant.User_id,
+    });
+
+    if (!applicantRecord) {
+      return response.status(404).json({ message: "Applicant not found" });
+    }
     const application = Object.assign(new Application(), {
-      type,
-      previous_roles,
+      type, //these match the entity columns exactly
+      previousRoles,
       availability,
       skills,
       credentials,
-      applicant,
-      course,
+      applicant: applicantRecord,
+      course: courseRecord,
       votes,
     });
     try {
@@ -83,7 +98,7 @@ export class ApplicationController {
     } catch (error) {
       return response
         .status(400)
-        .json({ message: "Error creating applicant", error });
+        .json({ message: "Error creating application", error });
     }
   }
 
@@ -121,14 +136,15 @@ export class ApplicationController {
    */
   async update(request: Request, response: Response) {
     const id = parseInt(request.params.id);
-    const { type,
-      previous_roles,
+    const {
+      type,
+      previousRoles,
       availability,
       skills,
       credentials,
       applicant,
       course,
-      votes, } = request.body;
+    } = request.body;
 
     let applicationToUpdate = await this.applicationRepository.findOne({
       where: { id },
@@ -140,15 +156,16 @@ export class ApplicationController {
 
     const updates: Partial<Application> = {};
     if (type !== undefined) updates.type = type;
-    if (previous_roles !== undefined) updates.previous_roles = previous_roles;
+    if (availability !== undefined) updates.availability = availability;
+
+    if (previousRoles !== undefined) updates.previousRoles = previousRoles;
     if (skills !== undefined) updates.skills = skills;
     if (credentials !== undefined) updates.credentials = credentials;
     if (applicant !== undefined) updates.applicant = applicant;
     if (course !== undefined) updates.course = course;
-    if (votes !== undefined) updates.votes = votes;
 
     Object.assign(applicationToUpdate, updates);
-    
+
     try {
       const updatedApplicant = await this.applicationRepository.save(
         applicationToUpdate

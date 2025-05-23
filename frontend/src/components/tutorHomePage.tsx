@@ -17,6 +17,7 @@ import {
   SegmentedControl,
   Accordion,
 } from "@mantine/core";
+import { applicationApi } from "@/services/applicationApi";
 import { useLoginContext } from "../pages/contexts/LoginContext";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -28,7 +29,7 @@ import {
 import { DetailValues, Course } from "../interfaces/Interfaces";
 import { User, UserCredential } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
-import ApplicationModal from "@/components/Tutor/CredentialsModal";
+import ApplicationModal from "@/components/Tutor/ApplicationModal";
 
 import UpdateApplication from "@/api/UpdateApplications";
 import { isEmptyDetail } from "@/api/isEmpty";
@@ -47,6 +48,9 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
   const [currentTutor, setCurrentTutor] = useState<User | undefined>(undefined);
+  const [courseApplication, setCourseApplication] = useState<Course>(
+    courses[0]
+  );
 
   /* 
 
@@ -66,12 +70,10 @@ If a duplicate is found then it replaces that application to faciliate the updat
       applicant: currentUser.user,
       type: ApplicationType.TUTOR,
       course: courses[0],
-      votes: [],
       previousRoles: "",
       availability: "Part time",
       skills: "",
       credentials: "",
-      lecturerComments: [],
     },
 
     validate: {
@@ -113,8 +115,20 @@ If a duplicate is found then it replaces that application to faciliate the updat
     }
   }
 
-  const handleSubmit = (values: Application) => {
+  const handleSubmit = async (values: Application) => {
     //update courses applications
+    try {
+      await applicationApi.createApplication(values);
+
+      toast.success("Application successful!");
+    } catch (err) {
+      toast.error("Application failed");
+    }
+  };
+  const startApplying = async (course: Course) => {
+    console.log(currentUser.user);
+    open();
+    setCourseApplication(course);
   };
 
   const applyForCourse = (course: IndCourse) => {
@@ -193,7 +207,9 @@ If a duplicate is found then it replaces that application to faciliate the updat
                   <AccordionPanel>
                     {course.courseCode} {course.semester}
                     <Group>
-                      <Button onClick={() => open()}>Apply</Button>
+                      <Button onClick={() => startApplying(course)}>
+                        Apply
+                      </Button>
                     </Group>
                   </AccordionPanel>
                 </AccordionItem>
@@ -207,6 +223,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
           close={close}
           form={form}
           handleSubmit={handleSubmit}
+          course={courseApplication}
         />{" "}
       </Group>
     </>
