@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { lecturerApi } from "@/services/lecturerApi";
 import { applicantApi } from "@/services/applicantApi";
 import { toast } from "react-toastify";
+import { User } from "@/interfaces/Types";
 
 export default function Login() {
   const { setUser } = useLoginContext();
@@ -62,7 +63,21 @@ export default function Login() {
   }) => {
     try {
       const user = await applicantApi.logInApplicant(values);
-      setUser(user);
+      let userObject: User = {
+        User_id: user.id,
+        User_Applications: user.Applications,
+        User_Courses_Assigned_To: [],
+        User_LastName: user.lastName,
+        User_Votes: [],
+        User_Email: user.email,
+        User_FirstName: user.firstName,
+        User_Type: "logged_in",
+        User_Password: user.password,
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
+      };
+
+      setUser(userObject);
       router.push("/");
       toast.success("Applicant log in successful!");
     } catch (err) {
@@ -76,7 +91,20 @@ export default function Login() {
   }) => {
     try {
       const user = await lecturerApi.logInLecturer(values);
-      setUser(user);
+      let userObject: User = {
+        User_id: user.id,
+        User_Applications: [],
+        User_Courses_Assigned_To: user.courses_assigned_to,
+        User_LastName: user.lastName,
+        User_Votes: user.votes,
+        User_Email: user.email,
+        User_FirstName: user.firstName,
+        User_Type: "logged_in",
+        User_Password: user.password,
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
+      };
+      setUser(userObject);
       router.push("/");
       toast.success("Lecturer log in successful!");
     } catch (err) {

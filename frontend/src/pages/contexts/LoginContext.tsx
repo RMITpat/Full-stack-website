@@ -6,11 +6,11 @@ import {
   useEffect,
 } from "react";
 
-import { User } from "@/interfaces/Types"
+import { User } from "@/interfaces/Types";
 import { Applicant, Lecturer } from "@/interfaces/Interfaces";
 type LoginContextType = {
-  user:Applicant | Lecturer;
-  setUser: React.Dispatch<React.SetStateAction<Applicant | Lecturer>>;
+  user: User;
+  setUser: React.Dispatch<React.SetStateAction<User>>;
 };
 
 type LoginProviderProps = {
@@ -19,17 +19,22 @@ type LoginProviderProps = {
 
 const loginContext = createContext<LoginContextType | undefined>(undefined);
 
-const defaultUser: Applicant = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  applications: []
-
+const defaultUser: User = {
+  User_id: -1,
+  User_Applications: [],
+  User_Courses_Assigned_To: [],
+  User_LastName: "test",
+  User_Votes: [],
+  User_Email: "test",
+  User_FirstName: "test",
+  User_Type: "logged_in",
+  User_Password: "test",
+  User_Date_Joined: new Date(),
+  User_Updated_At: new Date()
 };
 
 export function LoginProvider({ children }: LoginProviderProps) {
-  const [user, setUser] = useState<Applicant | Lecturer>(defaultUser);
+  const [user, setUser] = useState<User>(defaultUser);
 
   // useEffect(() => {
   //   const rawPrevUser = localStorage.getItem("prevUser");
@@ -48,9 +53,9 @@ export function LoginProvider({ children }: LoginProviderProps) {
   // }, [user]);
 
   return (
-      <loginContext.Provider value={{ user, setUser }}>
-        {children}
-      </loginContext.Provider>
+    <loginContext.Provider value={{ user, setUser }}>
+      {children}
+    </loginContext.Provider>
   );
 }
 

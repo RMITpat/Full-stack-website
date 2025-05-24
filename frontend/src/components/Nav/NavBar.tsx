@@ -10,44 +10,50 @@ export default function NavBar() {
 
   const signOut = () => {
     const signedOut: User = {
-      User_Password: "",
-      User_Name: "",
+      User_id: -1,
+      User_Applications: [],
+      User_Courses_Assigned_To: [],
+      User_LastName: "",
+      User_Votes: [],
       User_Email: "",
+      User_FirstName: "",
       User_Type: "default",
-      User_Img_Url: "",
+      User_Password: "",
+      User_Date_Joined: new Date(),
+      User_Updated_At: new Date(),
     };
 
     setUser(signedOut);
   };
 
   return (
-      <Stack
-          bg="var(--mantine-color-body)"
-          align="stretch"
-          justify="center"
-          gap="md"
-      >
-        {currentUser.user.User_Type == "default" ? (
-            <Button mt={"sm"} component={Link} href="/Login">
-              Login
-            </Button>
-        ) : (
-            <Button
-                onClick={() => signOut()}
-                mt={"sm"}
-                component={Link}
-                href="/Login"
-            >
-              Sign out
-            </Button>
-        )}
-        <Button mt={"sm"} component={Link} href="/SignUp">
-              Sign Up
-            </Button>
-
-        <Button mt={"sm"} component={Link} href="/">
-          TeachTeam
+    <Stack
+      bg="var(--mantine-color-body)"
+      align="stretch"
+      justify="center"
+      gap="md"
+    >
+      {currentUser.user.User_Type == "default" ? (
+        <Button mt={"sm"} component={Link} href="/Login">
+          Login
         </Button>
-      </Stack>
+      ) : (
+        <Button
+          onClick={() => signOut()}
+          mt={"sm"}
+          component={Link}
+          href="/Login"
+        >
+          Sign out
+        </Button>
+      )}
+      <Button mt={"sm"} component={Link} href="/SignUp">
+        Sign Up
+      </Button>
+
+      <Button mt={"sm"} component={Link} href="/">
+        TeachTeam
+      </Button>
+    </Stack>
   );
 }

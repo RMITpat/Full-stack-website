@@ -1,4 +1,4 @@
-import { DetailValues } from "@/interfaces/Interfaces";
+import { Application, Course, DetailValues } from "@/interfaces/Interfaces";
 import {
   Button,
   Group,
@@ -10,21 +10,24 @@ import {
 import { UseFormReturnType } from "@mantine/form";
 import { form } from "framer-motion/m";
 
-interface CredentialProps {
+interface ApplicationProps {
   opened: boolean;
   close: () => void;
-  form: UseFormReturnType<DetailValues, (values: DetailValues) => DetailValues>;
-  handleSubmit: (values: DetailValues) => void;
+  form: UseFormReturnType<Application, (values: Application) => Application>;
+  handleSubmit: (values: Application) => void;
+  course: Course
 }
 //the modal that is used for entering credentials
-const CredentialsModal: React.FC<CredentialProps> = ({
+const ApplicationModal: React.FC<ApplicationProps> = ({
   opened,
   close,
   form,
   handleSubmit,
+  course
 }) => {
+  form.setFieldValue("course", course)
   return (
-    <Modal opened={opened} onClose={close} title="Update Details">
+    <Modal opened={opened} onClose={close} title="Become a candidate">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           {...form.getInputProps("previousRoles")}
@@ -39,6 +42,16 @@ const CredentialsModal: React.FC<CredentialProps> = ({
         <SegmentedControl
           {...form.getInputProps("availability")}
           data={["Part time", "Full time"]}
+          //value={form.values.availability}
+          //onChange={(value) => form.setFieldValue("availability", value)}
+        ></SegmentedControl>
+        <Text size="sm" style={{ marginBottom: "3px", marginTop: "16px" }}>
+          Type
+        </Text>
+        <SegmentedControl
+          {...form.getInputProps("type")}
+          data={["Tutor", "Lab Assistant"]}
+
           //value={form.values.availability}
           //onChange={(value) => form.setFieldValue("availability", value)}
         ></SegmentedControl>
@@ -57,11 +70,11 @@ const CredentialsModal: React.FC<CredentialProps> = ({
           required
         />
         <Group justify="center" mt="md">
-          <Button type="submit">Update</Button>
+          <Button type="submit">Submit Application</Button>
         </Group>
       </form>
     </Modal>
   );
 };
 
-export default CredentialsModal;
+export default ApplicationModal;

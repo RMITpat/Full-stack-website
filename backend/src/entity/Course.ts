@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   OneToOne,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Applicant } from "./Applicant";
 import { Lecturer } from "./Lecturer";
@@ -21,16 +22,16 @@ export class Course {
   semester: string; 
 
   @Column({ unique: true })
-  name: string; 
+  name: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-  
-  @ManyToOne(() => Application, (application) => application.course)
-  applications: Application[]
+
+  @OneToMany(() => Application, (application) => application.course)
+  applications: Application[];
   // @ManyToMany(() => Applicant, (app) => app.courses_applied_to)
   // applied_users: Applicant[];
 

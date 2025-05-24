@@ -77,7 +77,7 @@ export default function OrderApplications({
                     <AppliCard
                         key={key}
                         application={app}
-                        username={allUsers[key.split("_")[0]]?.User_Name ?? "Unknown User"}
+                        username={allUsers[key.split("_")[0]]?.User_FirstName ?? "Unknown User"}
                         courseCode={key.split("_")[1]}
                     />
                 ))}

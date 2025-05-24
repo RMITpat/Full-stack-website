@@ -1,9 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   AccordionControl,
   AccordionItem,
@@ -22,26 +17,27 @@ import {
   SegmentedControl,
   Accordion,
 } from "@mantine/core";
+import { applicationApi } from "@/services/applicationApi";
 import { useLoginContext } from "../pages/contexts/LoginContext";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import { IndCourse } from "../interfaces/Interfaces";
-import { DetailValues } from "../interfaces/Interfaces";
 import {
-  
-  UserCredential,
-} from "@/interfaces/Types";
+  Application,
+  ApplicationType,
+  IndCourse,
+} from "../interfaces/Interfaces";
+import { DetailValues, Course } from "../interfaces/Interfaces";
+import { User, UserCredential } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
-import CredentialsModal from "@/components/Tutor/CredentialsModal";
-
+import ApplicationModal from "@/components/Tutor/ApplicationModal";
 
 import UpdateApplication from "@/api/UpdateApplications";
 import { isEmptyDetail } from "@/api/isEmpty";
 import { toast } from "react-toastify";
 
 interface tutorHomePageProps {
-  courses: IndCourse[];
-  setCourses: Dispatch<SetStateAction<IndCourse[]>>;
+  courses: Course[];
+  setCourses: Dispatch<SetStateAction<Course[]>>;
 }
 
 const tutorHomePage: React.FC<tutorHomePageProps> = ({
@@ -51,8 +47,9 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   const currentUser = useLoginContext();
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
-  const [currentTutor, setCurrentTutor] = useState<DetailValues | undefined>(
-    undefined
+  const [currentTutor, setCurrentTutor] = useState<User | undefined>(undefined);
+  const [courseApplication, setCourseApplication] = useState<Course>(
+    courses[0]
   );
 
   /* 
@@ -67,16 +64,16 @@ If a duplicate is found then it replaces that application to faciliate the updat
 
 
 */
-  const form = useForm<DetailValues>({
+  const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
-      email: currentUser.user.User_Email,
-      name: currentUser.user.User_Name,
+      applicant: currentUser.user,
+      type: ApplicationType.TUTOR,
+      course: courses[0],
       previousRoles: "",
       availability: "Part time",
       skills: "",
       credentials: "",
-      lecturerComments: [],
     },
 
     validate: {
@@ -118,9 +115,20 @@ If a duplicate is found then it replaces that application to faciliate the updat
     }
   }
 
-  const handleSubmit = (values: typeof form.values) => {
-    setCurrentTutor(values);
-    updateCredentialsWithTutorDetails(values);
+  const handleSubmit = async (values: Application) => {
+    //update courses applications
+    try {
+      await applicationApi.createApplication(values);
+
+      toast.success("Application successful!");
+    } catch (err) {
+      toast.error("Application failed");
+    }
+  };
+  const startApplying = async (course: Course) => {
+    console.log(currentUser.user);
+    open();
+    setCourseApplication(course);
   };
 
   const applyForCourse = (course: IndCourse) => {
@@ -146,7 +154,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
           All_Credentials = JSON.parse(storedData);
           tutorDetails = {
             email: currentUser.user.User_Email,
-            name: currentUser.user.User_Name,
+            name: currentUser.user.User_FirstName,
             previousRoles:
               All_Credentials[currentUser.user.User_Email].previousRoles,
             availability:
@@ -197,24 +205,25 @@ If a duplicate is found then it replaces that application to faciliate the updat
                 <AccordionItem value={course.name}>
                   <AccordionControl>{course.name}</AccordionControl>
                   <AccordionPanel>
-                    <Stack>
-                      {course.courseCode} {course.semester}
-                      <Button onClick={() => applyForCourse(course)}>
+                    {course.courseCode} {course.semester}
+                    <Group>
+                      <Button onClick={() => startApplying(course)}>
                         Apply
                       </Button>
-                    </Stack>
+                    </Group>
                   </AccordionPanel>
                 </AccordionItem>
               </>
             ))}
           </Accordion>
         </Stack>
-        <CredentialsDisplay currentTutor={currentTutor} open={open} />
-        <CredentialsModal
+        <CredentialsDisplay currentTutor={currentUser.user} />
+        <ApplicationModal
           opened={opened}
           close={close}
           form={form}
           handleSubmit={handleSubmit}
+          course={courseApplication}
         />{" "}
       </Group>
     </>

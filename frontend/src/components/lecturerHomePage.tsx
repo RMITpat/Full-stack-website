@@ -25,8 +25,8 @@ import { useLecturerState } from "@/pages/contexts/LecturerState";
 import { toast } from "react-toastify";
 import ApplicantFilters from "@/components/Applications/ApplicantFilters";
 interface tutorHomePageProps {
-  courses: IndCourse[];
-  setCourses: Dispatch<SetStateAction<IndCourse[]>>;
+  courses: Course[];
+  setCourses: Dispatch<SetStateAction<Course[]>>;
 }
 /*
 Validation of user inputs:
@@ -323,7 +323,7 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
       {lecturerState == "default" ? (
         // base view which shows all the courses
         <>
-          <Text size="lg">Hi, {currentUser.user.User_Name}!</Text>
+          <Text size="lg">Hi, {currentUser.user.User_FirstName}!</Text>
 
           <Group justify="space-between">
             <Title mb="sm">Courses</Title>

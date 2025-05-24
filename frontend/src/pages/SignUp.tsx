@@ -16,6 +16,7 @@ import { Applicant, Lecturer } from "@/interfaces/Interfaces";
 import { lecturerApi } from "@/services/lecturerApi";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { User } from "@/interfaces/Types";
 
 export default function SignUp() {
   const router = useRouter();
@@ -26,12 +27,15 @@ export default function SignUp() {
   const lecturerForm = useForm({
     mode: "controlled",
     initialValues: {
+      id: -1,
       firstName: "",
       lastName: "",
       email: "",
       password: "",
       courses_assigned_to: [],
       votes: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     validate: {
       //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -41,11 +45,14 @@ export default function SignUp() {
   const applicantForm = useForm({
     mode: "controlled",
     initialValues: {
+      id: -1,
       firstName: "",
       lastName: "",
       email: "",
       password: "",
       applications: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     validate: {
       //email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
@@ -57,7 +64,20 @@ export default function SignUp() {
   const handleCreateApplicant = async (values: Applicant) => {
     try {
       const user = await applicantApi.createApplicant(values);
-      setUser(user);
+      let userObject: User = {
+        User_id: user.id,
+        User_Applications: user.Applications,
+        User_Courses_Assigned_To: [],
+        User_LastName: user.lastName,
+        User_Votes: [],
+        User_Email: user.email,
+        User_FirstName: user.firstName,
+        User_Type: "logged_in",
+        User_Password: user.password,
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
+      };
+      setUser(userObject);
       router.push("/");
       toast.success("Applicant account successfully created!");
     } catch (err) {
@@ -72,7 +92,20 @@ export default function SignUp() {
   const handleCreateLecturer = async (values: Lecturer) => {
     try {
       const user = await lecturerApi.createLecturer(values);
-      setUser(user);
+      let userObject: User = {
+        User_id: user.id,
+        User_Applications: [],
+        User_Courses_Assigned_To: user.courses_assigned_to,
+        User_LastName: user.lastName,
+        User_Votes: user.votes,
+        User_Email: user.email,
+        User_FirstName: user.firstName,
+        User_Type: "logged_in_lecturer",
+        User_Password: user.password,
+        User_Date_Joined: user.createdAt,
+        User_Updated_At: user.updatedAt,
+      };
+      setUser(userObject);
       router.push("/");
       toast.success("Lecturer account successfully created!");
     } catch (err) {
