@@ -1,6 +1,8 @@
 import { Lecturer } from "../entity/Lecturer";
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
+import { In } from "typeorm"; 
+import { Course } from "../entity/Course";
 
 export class LecturerController {
   private lecturerRepository = AppDataSource.getRepository(Lecturer);
@@ -62,15 +64,25 @@ export class LecturerController {
    * @param response - Express response object
    * @returns JSON response containing the created applicant or error message
    */
+
   async save(request: Request, response: Response) {
     const { firstName, lastName, email, courses_assigned_to, votes, password } =
       request.body;
+
+    const courseRepo = AppDataSource.getRepository(Course);
+    let assignedCourses: Course[] = [];
+
+    if (Array.isArray(courses_assigned_to) && courses_assigned_to.length > 0) {
+      assignedCourses = await courseRepo.findBy({
+        code: In(courses_assigned_to),
+      });
+    }
 
     const lecturer = Object.assign(new Lecturer(), {
       firstName,
       lastName,
       email,
-      courses_assigned_to,
+      courses_assigned_to: assignedCourses,
       votes,
       password,
     });
@@ -84,7 +96,7 @@ export class LecturerController {
         .json({ message: "Error creating lecturer", error });
     }
   }
-
+  
   /* ┌┬┐┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌┐┌┌─┐ */
   /*  ││├┤ │  ├┤  │ ├┤   │ ││││├┤  */
   /* ─┴┘└─┘┴─┘└─┘ ┴ └─┘  └─┘┘└┘└─┘ */
@@ -117,40 +129,47 @@ export class LecturerController {
    * @param response - Express response object
    * @returns JSON response containing the updated applicant or error message
    */
-  async update(request: Request, response: Response) {
-    const id = parseInt(request.params.id);
-    const { firstName, lastName, email, courses_assigned_to, votes, password } =
-      request.body;
+    async update(request: Request, response: Response) {
+      const id = parseInt(request.params.id);
+      const { firstName, lastName, email, courses_assigned_to, votes, password } =
+        request.body;
 
-    let lecturerToUpdate = await this.lecturerRepository.findOne({
-      where: { id },
-    });
+      let lecturerToUpdate = await this.lecturerRepository.findOne({
+        where: { id },
+        relations: ["courses_assigned_to"],
+      });
 
-    if (!lecturerToUpdate) {
-      return response.status(404).json({ message: "Lecturer not found" });
+      if (!lecturerToUpdate) {
+        return response.status(404).json({ message: "Lecturer not found" });
+      }
+
+      // Prepare updates
+      const updates: Partial<Lecturer> = {};
+      if (firstName !== undefined) updates.firstName = firstName;
+      if (lastName !== undefined) updates.lastName = lastName;
+      if (email !== undefined) updates.email = email;
+      if (votes !== undefined) updates.votes = votes;
+      if (password !== undefined) updates.password = password;
+
+      // get the course's in the req body from the db
+      if (courses_assigned_to !== undefined) {
+        const courseRepo = AppDataSource.getRepository(Course);
+        const courseEntities = await courseRepo.findBy({
+          code: In(courses_assigned_to),
+        });
+        updates.courses_assigned_to = courseEntities;
+      }
+
+      Object.assign(lecturerToUpdate, updates);
+
+      try {
+        const updatedLecturer = await this.lecturerRepository.save(lecturerToUpdate);
+        return response.json(updatedLecturer);
+      } catch (error) {
+        return response
+          .status(400)
+          .json({ message: "Error updating lecturer", error });
+      }
     }
 
-    //can update specific fields only now
-    const updates: Partial<Lecturer> = {};
-    if (firstName !== undefined) updates.firstName = firstName;
-    if (lastName !== undefined) updates.lastName = lastName;
-    if (email !== undefined) updates.email = email;
-    if (courses_assigned_to !== undefined)
-      updates.courses_assigned_to = courses_assigned_to;
-    if (votes !== undefined) updates.votes = votes;
-    if (password !== undefined) updates.password = password;
-
-    Object.assign(lecturerToUpdate, updates);
-
-    try {
-      const updatedLecturer = await this.lecturerRepository.save(
-        lecturerToUpdate
-      );
-      return response.json(updatedLecturer);
-    } catch (error) {
-      return response
-        .status(400)
-        .json({ message: "Error updating lecturer", error });
-    }
-  }
 }

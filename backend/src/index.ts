@@ -2,15 +2,18 @@ import "reflect-metadata";
 import express from "express";
 import { AppDataSource } from "./data-source";
 import userRoutes from "./routes/applicant.routes";
+import courseRoutes from "./routes/course.routes"
 import lecturerRoutes from "./routes/lecturer.routes";
 import cors from "cors";
 import { populate } from "./controller/populateDatabase"
+import { Course } from "./entity/Course";
+import { courseData } from "./controller/data/courseData";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoutes, lecturerRoutes);
+app.use("/api", userRoutes, lecturerRoutes, courseRoutes);
 
 AppDataSource.initialize()
   .then(async () => {

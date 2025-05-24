@@ -17,7 +17,7 @@ export class Course {
   @PrimaryColumn()
   code: string; 
 
-  @Column({ unique: true })
+  @Column()
   semester: string; 
 
   @Column({ unique: true })
