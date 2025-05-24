@@ -20,7 +20,7 @@ router.post("/lecturer/authenticate", async (req, res) => {
   await lecturerController.authenticate(req, res);
 });
 
-router.post("/lecturer/allCourses", async (req, res) => {
+router.get("/lecturer/:id/allCourses", async (req, res) => {
   await lecturerController.allCourses(req, res);
 });
 

@@ -23,6 +23,10 @@ export class ApplicationController {
     return response.json(applications);
   }
 
+
+  // async courseAll(request: Request, response: Response) {
+  //   const id = 
+  // }
   /* ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐ */
   /* │ ┬├┤  │   │ ││││├┤  */
   /* └─┘└─┘ ┴   └─┘┘└┘└─┘ */

@@ -26,14 +26,15 @@ export const lecturerApi = {
     return response.data;
   },
 
-  logInLecturer: async (values: {email: string, password: string}) => {
+  logInLecturer: async (values: { email: string; password: string }) => {
     const response = await api.post("/lecturer/authenticate", values);
-    return response.data; 
+    return response.data;
   },
 
   allCourses: async (id: number) => {
-    const response = await api.post("/lecturer/allCourses", id);
-    return response.data
+    
+    const response = await api.get(`/lecturer/${id}/allCourses`);
+    return response.data;
   },
 
   deleteLecturer: async (id: number) => {

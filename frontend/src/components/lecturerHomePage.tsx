@@ -46,7 +46,7 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
   const currentUser = useLoginContext();
   const currentEmail = currentUser.user.User_Email;
   const { lecturerState, setLecturerState } = useLecturerState();
-  const [currentCourse, setCurrentCourse] = useState<IndCourse | null>(null);
+  const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [availability, setAvailability] = useState<string | null>("Full-Time"); //for the availability filter
@@ -58,13 +58,13 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [currentUser.user.User_id]);
 
   const fetchCourses = async () => {
     try {
-      const assignedCourses = await lecturerApi.allCourses(
-        currentUser.user.User_id
-      );
+      console.log(currentUser.user.User_id);
+
+      const assignedCourses = await lecturerApi.allCourses(currentUser.user.User_id);
       setCourses(assignedCourses);
       console.log(assignedCourses);
     } catch (error) {
@@ -72,24 +72,24 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
     }
   };
   const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
-  useEffect(() => {
-    console.log("lecturer state changed");
+  // useEffect(() => {
+  //   console.log("lecturer state changed");
 
-    if (currentCourse) {
-      //updateApplication(currentCourse);
-      const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
-      console.log("last chosen applicants: " + lastChosenApplicants);
-      if (lastChosenApplicants) {
-        setChosenApplicants(lastChosenApplicants);
-      } else {
-        setChosenApplicants([]);
-      }
-    }
-  }, [lecturerState]);
+  //   if (currentCourse) {
+  //     //updateApplication(currentCourse);
+  //     const lastChosenApplicants = currentCourse.lecturerRankings[currentEmail];
+  //     console.log("last chosen applicants: " + lastChosenApplicants);
+  //     if (lastChosenApplicants) {
+  //       setChosenApplicants(lastChosenApplicants);
+  //     } else {
+  //       setChosenApplicants([]);
+  //     }
+  //   }
+  // }, [lecturerState]);
   useEffect(() => {
     console.log("Updated applicants:", chosenApplicants);
   }, [chosenApplicants]);
-  const viewCourse = (course: IndCourse) => {
+  const viewCourse = (course: Course) => {
     setCurrentCourse(course);
     setLecturerState("courseView");
     console.log(currentCourse);
@@ -361,9 +361,9 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
                   {course.semester}
                 </Text>
 
-                {/* <Button mt="md" onClick={() => viewCourse(course)}>
+                <Button mt="md" onClick={() => viewCourse(course)}>
                   Manage Tutors
-                </Button> */}
+                </Button>
               </Card>
             ))}
           </SimpleGrid>

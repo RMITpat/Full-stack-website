@@ -24,16 +24,14 @@ export class LecturerController {
   }
 
   async allCourses(request: Request, response: Response) {
-    const { id } = request.body;
     const foundLecturer = await this.lecturerRepository.findOne({
-      where: { id },
+      where: { id: parseInt(request.params.id) },
       relations: ["courses_assigned_to"],
     });
 
     if (!foundLecturer) {
       return response.status(404).json({ message: "Lecturer not found" });
     }
-
     return response.json(foundLecturer.courses_assigned_to);
   }
 
