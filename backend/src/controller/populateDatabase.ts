@@ -12,9 +12,9 @@ export async function populate() {
   const applicantController = new ApplicantController();
   const lecturerController = new LecturerController();
   //courses
-  //await runPopulateCourse(courseController);
+  await runPopulateCourse(courseController);
   //applicants
-  //await runPopulateApplicants(applicantController)
+ // await runPopulateApplicants(applicantController)
   //
   await runPopulateLecturers(lecturerController)
 

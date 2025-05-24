@@ -22,9 +22,9 @@ type ApplicationProps = {
   index: number;
   buttonSetting: string;
   showNumber: string;
-  moveLeft: (currentCourse: IndCourse, index: number) => void;
-  moveRight: (currentCourse: IndCourse, index: number) => void;
-  currentCourse: IndCourse;
+  moveLeft: (currentCourse: Course, index: number) => void;
+  moveRight: (currentCourse: Course, index: number) => void;
+  currentCourse: Course;
   avg: number;
 };
 //the application card that is used for displaying rankings and selected applicants

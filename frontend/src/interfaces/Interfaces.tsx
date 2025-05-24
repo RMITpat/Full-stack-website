@@ -48,10 +48,9 @@ export interface Applicant {
 }
 export interface Vote {}
 
-
 export interface Course {
   name: string;
-  courseCode: string;
+  code: string;
   semester: string;
   assigned_lecturers: Lecturer[];
 }

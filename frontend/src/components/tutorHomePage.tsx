@@ -205,7 +205,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
                 <AccordionItem value={course.name}>
                   <AccordionControl>{course.name}</AccordionControl>
                   <AccordionPanel>
-                    {course.courseCode} {course.semester}
+                    {course.code} {course.semester}
                     <Group>
                       <Button onClick={() => startApplying(course)}>
                         Apply

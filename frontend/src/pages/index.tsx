@@ -15,19 +15,19 @@ export default function Home() {
   let defaultCourses: Course[] = [
     {
       name: "Full Stack Development",
-      courseCode: "COSC1048",
+      code: "COSC1048",
       semester: "Semester 1",
       assigned_lecturers: [],
     },
     {
       name: "Cloud Computing",
-      courseCode: "COSC4839",
+      code: "COSC4839",
       semester: "Semester 2",
       assigned_lecturers: [],
     },
     {
       name: "Programming Bootcamp",
-      courseCode: "COSC4830",
+      code: "COSC4830",
       semester: "Semester 1",
       assigned_lecturers: [],
     },
@@ -68,7 +68,7 @@ export default function Home() {
     }
 
     if (userType === "logged_in_lecturer") {
-      return <LecturerHomePage courses={courses} setCourses={setCourses} />;
+      return <LecturerHomePage />;
     }
 
     if (userType === "logged_in" || userType === "admin_default") {

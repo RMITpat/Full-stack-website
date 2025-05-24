@@ -61,7 +61,7 @@ function mergeAllApps(
   return newAppStats.reduce(
     (acc, application) => {
       //this determins the key in ApplicationStatuses
-      const key = `${application.User_Email}_${course.courseCode}`;
+      const key = `${application.User_Email}_${course.code}`;
       const { User_Email, ...appDetails } = application; //somehow this removes User_Email from appDetails
       acc[key] = appDetails;
       return acc;

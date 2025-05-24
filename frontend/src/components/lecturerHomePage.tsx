@@ -24,10 +24,9 @@ import { ApplicationDetails } from "@/interfaces/Types";
 import { useLecturerState } from "@/pages/contexts/LecturerState";
 import { toast } from "react-toastify";
 import ApplicantFilters from "@/components/Applications/ApplicantFilters";
-interface tutorHomePageProps {
-  courses: Course[];
-  setCourses: Dispatch<SetStateAction<Course[]>>;
-}
+import { useRouter } from "next/router";
+
+
 /*
 Validation of user inputs:
 
@@ -39,14 +38,11 @@ A lecturer cannot choose an applicant twice as each time the select button is pr
 if that applicant is already present. If it is, they are not added. This can be seen in the selectApplicant function below.
 
 */
-const LecturerHomePage: React.FC<tutorHomePageProps> = ({
-  courses,
-  setCourses,
-}) => {
+export default function LecturerHomePage() {
   const currentUser = useLoginContext();
   const currentEmail = currentUser.user.User_Email;
   const { lecturerState, setLecturerState } = useLecturerState();
-  const [currentCourse, setCurrentCourse] = useState<Course | null>(null);
+  const [assignedCourses, setAssignedCourses] = useState<any[]>([]);
   const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [availability, setAvailability] = useState<string | null>("Full-Time"); //for the availability filter
@@ -56,22 +52,28 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
     "COSC4830",
   ]);
 
+  const router = useRouter();
+
   useEffect(() => {
     fetchCourses();
   }, [currentUser.user.User_id]);
 
   const fetchCourses = async () => {
     try {
-      console.log(currentUser.user.User_id);
+      
 
-      const assignedCourses = await lecturerApi.allCourses(currentUser.user.User_id);
-      setCourses(assignedCourses);
+      const assignedCourses = await lecturerApi.allCourses(
+        currentUser.user.User_id
+      );
+      
+      
+      setAssignedCourses(assignedCourses);
       console.log(assignedCourses);
     } catch (error) {
       toast.error("Failed to fetch courses");
     }
   };
-  const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
+  //const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
   // useEffect(() => {
   //   console.log("lecturer state changed");
 
@@ -86,474 +88,389 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
   //     }
   //   }
   // }, [lecturerState]);
-  useEffect(() => {
-    console.log("Updated applicants:", chosenApplicants);
-  }, [chosenApplicants]);
-  const viewCourse = (course: Course) => {
-    setCurrentCourse(course);
-    setLecturerState("courseView");
-    console.log(currentCourse);
-  };
-  const selectApplicant = (
-    applicant: DetailValues,
-    currentCourse: IndCourse
-  ) => {
-    const applicantAndComment: AppAndComment = {
-      applicant: applicant,
-      comment: "",
-    };
-    //if  a lecturer ranking for the current logged in lecturer exists:
-    if (currentCourse.lecturerRankings[currentEmail]) {
-      let duplicateSelection: boolean = false;
-      //search  through it and look for the applicant being submitted
-      for (
-        let index = 0;
-        index < currentCourse.lecturerRankings[currentEmail].length;
-        index++
-      ) {
-        //if it is found then set duplicateSelection to true and replace that application with the new one, in case a tutor has updated their application
-        if (
-          currentCourse.lecturerRankings[currentEmail][index].applicant.email ==
-          applicant.email
-        ) {
-          duplicateSelection = true;
-        }
-      }
-      //if no duplicate was found, add the applicant to the array
-      if (!duplicateSelection) {
-        currentCourse.lecturerRankings[currentEmail] = [
-          ...currentCourse.lecturerRankings[currentEmail],
-          applicantAndComment,
-        ];
-      }
-      //if a ranking does NOT exist for the current logged in lecture, create one and initialise it with the selected applicant
-    } else {
-      currentCourse.lecturerRankings = {
-        ...currentCourse.lecturerRankings,
-        [currentEmail]: [applicantAndComment],
-      };
-    }
-    //update the local store with the new chosen applicant
-    localStorage.setItem("courseDetails", JSON.stringify(courses));
-    //sets the state so that the new selection can be  displayed
-    setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-  };
+  // useEffect(() => {
+  //   console.log("Updated applicants:", chosenApplicants);
+  // }, [chosenApplicants]);
+  // const viewCourse = (course: Course) => {
+  //   setCurrentCourse(course);
+  //   setLecturerState("courseView");
+  //   console.log(currentCourse);
+  // };
+  // const selectApplicant = (
+  //   applicant: DetailValues,
+  //   currentCourse: IndCourse
+  // ) => {
+  //   const applicantAndComment: AppAndComment = {
+  //     applicant: applicant,
+  //     comment: "",
+  //   };
+  //   //if  a lecturer ranking for the current logged in lecturer exists:
+  //   if (currentCourse.lecturerRankings[currentEmail]) {
+  //     let duplicateSelection: boolean = false;
+  //     //search  through it and look for the applicant being submitted
+  //     for (
+  //       let index = 0;
+  //       index < currentCourse.lecturerRankings[currentEmail].length;
+  //       index++
+  //     ) {
+  //       //if it is found then set duplicateSelection to true and replace that application with the new one, in case a tutor has updated their application
+  //       if (
+  //         currentCourse.lecturerRankings[currentEmail][index].applicant.email ==
+  //         applicant.email
+  //       ) {
+  //         duplicateSelection = true;
+  //       }
+  //     }
+  //     //if no duplicate was found, add the applicant to the array
+  //     if (!duplicateSelection) {
+  //       currentCourse.lecturerRankings[currentEmail] = [
+  //         ...currentCourse.lecturerRankings[currentEmail],
+  //         applicantAndComment,
+  //       ];
+  //     }
+  //     //if a ranking does NOT exist for the current logged in lecture, create one and initialise it with the selected applicant
+  //   } else {
+  //     currentCourse.lecturerRankings = {
+  //       ...currentCourse.lecturerRankings,
+  //       [currentEmail]: [applicantAndComment],
+  //     };
+  //   }
+  //   //update the local store with the new chosen applicant
+  //   localStorage.setItem("courseDetails", JSON.stringify(courses));
+  //   //sets the state so that the new selection can be  displayed
+  //   setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
+  // };
 
   //used for ranking. when the left arrow button is chosen, it shifts the applicant to the left (up in ranking).
 
-  const moveLeft = (currentCourse: IndCourse, index: number) => {
-    //checks that the applicant isnt first as you can't move an applicant higher than first
-    if (index > 0) {
-      let temp = currentCourse.lecturerRankings[currentEmail][index - 1];
-      currentCourse.lecturerRankings[currentEmail][index - 1] =
-        currentCourse.lecturerRankings[currentEmail][index];
-      currentCourse.lecturerRankings[currentEmail][index] = temp;
-      setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-      localStorage.setItem("courseDetails", JSON.stringify(courses));
-    }
-  };
-  //used for ranking. when the right arrow button is chosen, it shifts the applicant to the right (down in ranking).
+  // const moveLeft = (currentCourse: IndCourse, index: number) => {
+  //   //checks that the applicant isnt first as you can't move an applicant higher than first
+  //   if (index > 0) {
+  //     let temp = currentCourse.lecturerRankings[currentEmail][index - 1];
+  //     currentCourse.lecturerRankings[currentEmail][index - 1] =
+  //       currentCourse.lecturerRankings[currentEmail][index];
+  //     currentCourse.lecturerRankings[currentEmail][index] = temp;
+  //     setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
+  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
+  //   }
+  // };
+  // //used for ranking. when the right arrow button is chosen, it shifts the applicant to the right (down in ranking).
 
-  const moveRight = (currentCourse: IndCourse, index: number) => {
-    //checks that the applicant isnt last as you can't move an applicant higher than first
+  // const moveRight = (currentCourse: IndCourse, index: number) => {
+  //   //checks that the applicant isnt last as you can't move an applicant higher than first
 
-    if (index < currentCourse.lecturerRankings[currentEmail].length - 1) {
-      let temp = currentCourse.lecturerRankings[currentEmail][index + 1];
-      currentCourse.lecturerRankings[currentEmail][index + 1] =
-        currentCourse.lecturerRankings[currentEmail][index];
-      currentCourse.lecturerRankings[currentEmail][index] = temp;
-      setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-      localStorage.setItem("courseDetails", JSON.stringify(courses));
-    }
-  };
+  //   if (index < currentCourse.lecturerRankings[currentEmail].length - 1) {
+  //     let temp = currentCourse.lecturerRankings[currentEmail][index + 1];
+  //     currentCourse.lecturerRankings[currentEmail][index + 1] =
+  //       currentCourse.lecturerRankings[currentEmail][index];
+  //     currentCourse.lecturerRankings[currentEmail][index] = temp;
+  //     setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
+  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
+  //   }
+  // };
 
-  //clears the selection when Reset is pressed
-  const clearSelection = (currentCourse: IndCourse) => {
-    if (currentCourse.lecturerRankings[currentEmail]) {
-      currentCourse.lecturerRankings[currentEmail] = [];
-      setChosenApplicants([]);
-      currentCourse.applicants.forEach((applicant) => {
-        applicant.lecturerComments = applicant.lecturerComments.filter(
-          (comment) => comment.email !== currentEmail
-        );
-      });
-      localStorage.setItem("courseDetails", JSON.stringify(courses));
-    }
-  };
-  const submitRanking = (currentCourse: IndCourse) => {
-    updateApplication(currentCourse);
+  // //clears the selection when Reset is pressed
+  // const clearSelection = (currentCourse: IndCourse) => {
+  //   if (currentCourse.lecturerRankings[currentEmail]) {
+  //     currentCourse.lecturerRankings[currentEmail] = [];
+  //     setChosenApplicants([]);
+  //     currentCourse.applicants.forEach((applicant) => {
+  //       applicant.lecturerComments = applicant.lecturerComments.filter(
+  //         (comment) => comment.email !== currentEmail
+  //       );
+  //     });
+  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
+  //   }
+  // };
+  // const submitRanking = (currentCourse: IndCourse) => {
+  //   updateApplication(currentCourse);
 
-    if (currentCourse.lecturerRankings[currentEmail]) {
-      toast.success("Rankings updated!");
-      currentCourse.lecturerRankings[currentEmail].forEach((appAndComment) => {
-        for (let i = 0; i < currentCourse.applicants.length; ++i) {
-          if (
-            appAndComment.applicant.email === currentCourse.applicants[i].email
-          ) {
-            let duplicateFound = false;
-            const comments = currentCourse.applicants[i].lecturerComments;
+  //   if (currentCourse.lecturerRankings[currentEmail]) {
+  //     toast.success("Rankings updated!");
+  //     currentCourse.lecturerRankings[currentEmail].forEach((appAndComment) => {
+  //       for (let i = 0; i < currentCourse.applicants.length; ++i) {
+  //         if (
+  //           appAndComment.applicant.email === currentCourse.applicants[i].email
+  //         ) {
+  //           let duplicateFound = false;
+  //           const comments = currentCourse.applicants[i].lecturerComments;
 
-            for (let j = 0; j < comments.length; ++j) {
-              if (comments[j].email === currentEmail) {
-                console.log("replacing comment", comments[j]);
-                comments[j].comment = appAndComment.comment;
-                duplicateFound = true;
-                break;
-              }
-            }
+  //           for (let j = 0; j < comments.length; ++j) {
+  //             if (comments[j].email === currentEmail) {
+  //               console.log("replacing comment", comments[j]);
+  //               comments[j].comment = appAndComment.comment;
+  //               duplicateFound = true;
+  //               break;
+  //             }
+  //           }
 
-            if (!duplicateFound) {
-              console.log("pushing comment");
-              comments.push({
-                email: currentEmail,
-                comment: appAndComment.comment,
-              });
-            }
-          }
-        }
-      });
-      localStorage.setItem("courseDetails", JSON.stringify(courses));
-    }
-  };
-  const getAvgRanking = (currentCourse: IndCourse, applicant: DetailValues) => {
-    const applicationStatuses = getApplicationStatuses();
-    let avgRanking: number = 0;
-    const transformedData = Object.entries(applicationStatuses).map(
-      ([key, details]) => ({
-        email: key.split("_")[0],
-        course: key.split("_")[1],
-        avgRanking: details.Avg_Ranking,
-      })
-    );
-    transformedData.forEach((element) => {
-      if (
-        element.email == applicant.email &&
-        element.course == currentCourse.courseCode
-      ) {
-        console.log("avg rank gotten" + element.avgRanking);
-        avgRanking = element.avgRanking;
-      }
-    });
-    console.log("returned 0");
-    return avgRanking;
-  };
-  const highestRankedTutors = (currentCourse: IndCourse) => {
-    const applicationStatuses = getApplicationStatuses();
-    console.log("highestRankedtutor called" + currentCourse);
-    //splits it so we get the emails for identification, and course for identification,  and avg ranking for sorting
-    const transformedData = Object.entries(applicationStatuses).map(
-      ([key, details]) => ({
-        email: key.split("_")[0],
-        course: key.split("_")[1],
-        avgRanking: details.Avg_Ranking,
-      })
-    );
-    //will hold the applicants for the current course
-    let courseData: {
-      email: string;
-      course: string;
-      avgRanking: number;
-    }[] = [];
+  //           if (!duplicateFound) {
+  //             console.log("pushing comment");
+  //             comments.push({
+  //               email: currentEmail,
+  //               comment: appAndComment.comment,
+  //             });
+  //           }
+  //         }
+  //       }
+  //     });
+  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
+  //   }
+  // };
+  // const getAvgRanking = (currentCourse: IndCourse, applicant: DetailValues) => {
+  //   const applicationStatuses = getApplicationStatuses();
+  //   let avgRanking: number = 0;
+  //   const transformedData = Object.entries(applicationStatuses).map(
+  //     ([key, details]) => ({
+  //       email: key.split("_")[0],
+  //       course: key.split("_")[1],
+  //       avgRanking: details.Avg_Ranking,
+  //     })
+  //   );
+  //   transformedData.forEach((element) => {
+  //     if (
+  //       element.email == applicant.email &&
+  //       element.course == currentCourse.courseCode
+  //     ) {
+  //       console.log("avg rank gotten" + element.avgRanking);
+  //       avgRanking = element.avgRanking;
+  //     }
+  //   });
+  //   console.log("returned 0");
+  //   return avgRanking;
+  // };
 
-    transformedData.forEach((element) => {
-      if (
-        element.course == currentCourse.courseCode &&
-        element.avgRanking > 0
-      ) {
-        courseData.push(element);
-      }
-    });
-    //sort the applicants by their ranking
-    if (courseData.length > 1) {
-      for (let i = 1; i < courseData.length; ++i) {
-        let curr = courseData[i];
-        let j = i - 1;
+  // const sortByTimesChosenDesc = (
+  //   a: ApplicationDetails,
+  //   b: ApplicationDetails
+  // ) => b.Times_Chosen - a.Times_Chosen;
 
-        while (j >= 0 && courseData[j].avgRanking > curr.avgRanking) {
-          courseData[j + 1] = courseData[j];
-          j = j - 1;
-        }
-        courseData[j + 1] = curr;
-      }
-    }
-    //holds the same applicants but in form detailValues so they can be displayed using applicationCard
-    const applicantArray: DetailValues[] = [];
-    for (let i = 0; i < courseData.length; ++i) {
-      let currTutor = courseData[i];
-      for (let j = 0; j < currentCourse.applicants.length; ++j) {
-        if (currTutor.email == currentCourse.applicants[j].email) {
-          applicantArray.push(currentCourse.applicants[j]);
-          break;
-        }
-      }
-    }
-    return applicantArray;
-  };
-
-  const graphData = (currentCourse: IndCourse) => {
-    const applicationStatuses = getApplicationStatuses();
-    const transformedData = Object.entries(applicationStatuses).map(
-      ([key, details]) => ({
-        email: key.split("@")[0],
-        course: key.split("_")[1],
-        timesChosen: details.Times_Chosen,
-      })
-    );
-
-    let courseData: {
-      email: string;
-      course: string;
-      timesChosen: number;
-    }[] = [];
-
-    transformedData.forEach((element) => {
-      if (element.course == currentCourse.courseCode) {
-        courseData.push(element);
-      }
-    });
-    if (courseData.length > 1) {
-      for (let i = 1; i < courseData.length; ++i) {
-        let curr = courseData[i];
-        let j = i - 1;
-
-        while (j >= 0 && courseData[j].timesChosen > curr.timesChosen) {
-          courseData[j + 1] = courseData[j];
-          j = j - 1;
-        }
-        courseData[j + 1] = curr;
-      }
-    }
-
-    return courseData;
-  };
-  const sortByTimesChosenDesc = (
-    a: ApplicationDetails,
-    b: ApplicationDetails
-  ) => b.Times_Chosen - a.Times_Chosen;
-
-  const sortByTimesChosenAsc = (a: ApplicationDetails, b: ApplicationDetails) =>
-    a.Times_Chosen - b.Times_Chosen;
+  // const sortByTimesChosenAsc = (a: ApplicationDetails, b: ApplicationDetails) =>
+  //   a.Times_Chosen - b.Times_Chosen;
   return (
     <>
-      {lecturerState == "default" ? (
-        // base view which shows all the courses
-        <>
-          <Text size="lg">Hi, {currentUser.user.User_FirstName}!</Text>
+      <Text size="lg">Hi, {currentUser.user.User_FirstName}!</Text>
 
-          <Group justify="space-between">
-            <Title mb="sm">Courses</Title>
-            <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
-              All Applicants View
+      <Group justify="space-between">
+        <Title mb="sm">Courses</Title>
+        <Button mt="md" onClick={() => setLecturerState("allApplicants")}>
+          All Applicants View
+        </Button>
+      </Group>
+
+      <SimpleGrid spacing="70px" cols={4}>
+        {assignedCourses.map((course, index) => (
+          <Card key={index} shadow="sm" withBorder>
+            <Group justify="space-between" mt="md" mb="xs">
+              <Text fw={500}>{course.name}</Text>
+            </Group>
+
+            <Text size="sm" c="dimmed">
+              {course.code}
+            </Text>
+            <Text size="sm" c="dimmed">
+              {course.semester}
+            </Text>
+
+            <Button
+              mt="md"
+              onClick={() => router.push(`/course/${course.code}`) }
+            >
+              Manage Tutors
             </Button>
-          </Group>
-
-          <SimpleGrid spacing="70px" cols={4}>
-            {courses.map((course, index) => (
-              <Card key={index} shadow="sm" withBorder>
-                <Group justify="space-between" mt="md" mb="xs">
-                  <Text fw={500}>{course.name}</Text>
-                </Group>
-
-                <Text size="sm" c="dimmed">
-                  {course.courseCode}
-                </Text>
-                <Text size="sm" c="dimmed">
-                  {course.semester}
-                </Text>
-
-                <Button mt="md" onClick={() => viewCourse(course)}>
-                  Manage Tutors
-                </Button>
-              </Card>
-            ))}
-          </SimpleGrid>
-        </>
-      ) : lecturerState == "courseView" ? (
-        //course details view which shows the highest ranked applicants and the most chosen applicants
-
-        <>
-          {currentCourse ? (
-            <>
-              <Title>
-                {currentCourse.name + " - " + currentCourse.courseCode}
-              </Title>
-              <Button mt="md" onClick={() => setLecturerState("default")}>
-                Back
-              </Button>
-              <Stack>
-                <Space w="lg"></Space>
-                <Group justify="space-between">
-                  <Title order={2}>Highest Ranked Applicants</Title>
-                  <Button onClick={() => setLecturerState("chooseTutors")}>
-                    Rank Applicants
-                  </Button>
-                </Group>
-                <SimpleGrid bd="sm" spacing="70px" cols={5}>
-                  {highestRankedTutors(currentCourse).length == 0 ? (
-                    <Text>No tutors have been ranked.</Text>
-                  ) : (
-                    highestRankedTutors(currentCourse).map(
-                      (applicant, index) => (
-                        <ApplicationCard
-                          key={index}
-                          applicant={applicant}
-                          index={index}
-                          buttonSetting="noButton"
-                          avg={getAvgRanking(currentCourse, applicant)}
-                          showNumber={"numberOnly"}
-                          moveLeft={moveLeft}
-                          moveRight={moveRight}
-                          currentCourse={currentCourse}
-                        />
-                      )
-                    )
-                  )}
-                </SimpleGrid>
-              </Stack>
-              <Title order={2}>Applicant Data</Title>
-              <Group justify="center" w="100%">
-                <Stack align="center" w="50%">
-                  <Title order={4}>Most Chosen Tutors</Title>
-                  {graphData(currentCourse).length == 0 ? (
-                    <Text>No applicants have been ranked. </Text>
-                  ) : (
-                    <BarChart
-                      h={300}
-                      data={graphData(currentCourse)}
-                      dataKey="email"
-                      series={[{ name: "timesChosen", color: "violet.6" }]}
-                      tickLine="y"
-                      xAxisLabel="Tutors"
-                      yAxisLabel="Times Chosen"
-                    />
-                  )}
-                </Stack>
-              </Group>
-            </>
-          ) : (
-            <p>undefined</p>
-          )}
-        </>
-      ) : lecturerState == "chooseTutors" ? (
-        <>
-          {currentCourse ? (
-            <>
-              <Title>
-                {currentCourse.name + " - " + currentCourse.courseCode}
-              </Title>
-              <Button mt="md" onClick={() => setLecturerState("courseView")}>
-                Back
-              </Button>
-              <Space w="lg"></Space>
-              <Stack mt="30px">
-                <Group justify="space-between">
-                  <Title order={3}>Your Chosen Applicants</Title>
-                  <Group>
-                    <Button onClick={() => submitRanking(currentCourse)}>
-                      Update Your Ranking
-                    </Button>
-                    <Button
-                      bg="red"
-                      onClick={() => clearSelection(currentCourse)}
-                    >
-                      Reset
-                    </Button>
-                  </Group>
-                </Group>
-                {/* displays selected tutors and allows you to submit your rankings */}
-                {chosenApplicants.length > 0 ? (
-                  <Flex bg="gray" p="lg">
-                    <SimpleGrid bd="black" spacing="40px" cols={6}>
-                      {chosenApplicants.map((applicant, index) => (
-                        <>
-                          <ApplicationCard
-                            applicant={applicant.applicant}
-                            index={index}
-                            buttonSetting="Rank"
-                            showNumber={"showButtons"}
-                            moveLeft={moveLeft}
-                            moveRight={moveRight}
-                            avg={0}
-                            currentCourse={currentCourse}
-                          />
-                        </>
-                      ))}
-                      {/* {OrderApplications(currentCourse.applicants)} */}
-                    </SimpleGrid>
-                  </Flex>
-                ) : (
-                  <p>No applicants chosen.</p>
-                )}
-              </Stack>
-              <Stack mt="30px">
-                <Title order={3}>All Applicants</Title>
-                <Flex p="lg">
-                  <SimpleGrid bd="sm" spacing="40px" cols={6}>
-                    {currentCourse.applicants.map((applicant, index) => (
-                      <Flex direction="column">
-                        <ApplicationCard
-                          applicant={applicant}
-                          index={index}
-                          buttonSetting="Select"
-                          showNumber={"false"}
-                          moveLeft={moveLeft}
-                          moveRight={moveRight}
-                          avg={0}
-                          currentCourse={currentCourse}
-                        />
-                        {/* <Checkbox onChan /> */}
-                        <Button
-                          disabled={false}
-                          size="sm"
-                          mt="15px"
-                          onClick={() =>
-                            selectApplicant(applicant, currentCourse)
-                          }
-                        >
-                          Select
-                        </Button>
-                      </Flex>
-                    ))}
-                  </SimpleGrid>
-                </Flex>
-              </Stack>
-            </>
-          ) : (
-            <p>undefined</p>
-          )}
-        </>
-      ) : lecturerState == "allApplicants" ? (
-        <>
-          <Title>All Applicants</Title>
-          <ApplicantFilters
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            availability={availability}
-            setAvailability={setAvailability}
-            courseFilter={courseFilter}
-            setCourseFilter={setCourseFilter}
-            order={order}
-            setOrder={setOrder}
-            onBack={() => setLecturerState("default")}
-          />
-
-          <OrderApplications
-            sortFn={
-              order === "Ascending"
-                ? sortByTimesChosenAsc
-                : sortByTimesChosenDesc
-            }
-            courseCode={courseFilter}
-            availability={availability}
-            searchTerm={searchTerm}
-            //chosen={true}
-          />
-        </>
-      ) : (
-        <p>Unknown status</p>
-      )}
+          </Card>
+        ))}
+      </SimpleGrid>
     </>
+    // <>
+    //   {lecturerState == "default" ? (
+    //     // base view which shows all the courses
+
+    //   ) : lecturerState == "courseView" ? (
+    //     //course details view which shows the highest ranked applicants and the most chosen applicants
+
+    //     <>
+    //       {currentCourse ? (
+    //         <>
+    //           <Title>
+    //             {currentCourse.name + " - " + currentCourse.courseCode}
+    //           </Title>
+    //           <Button mt="md" onClick={() => setLecturerState("default")}>
+    //             Back
+    //           </Button>
+    //           <Stack>
+    //             <Space w="lg"></Space>
+    //             <Group justify="space-between">
+    //               <Title order={2}>Highest Ranked Applicants</Title>
+    //               <Button onClick={() => setLecturerState("chooseTutors")}>
+    //                 Rank Applicants
+    //               </Button>
+    //             </Group>
+    //             <SimpleGrid bd="sm" spacing="70px" cols={5}>
+    //               {highestRankedTutors(currentCourse).length == 0 ? (
+    //                 <Text>No tutors have been ranked.</Text>
+    //               ) : (
+    //                 highestRankedTutors(currentCourse).map(
+    //                   (applicant, index) => (
+    //                     <ApplicationCard
+    //                       key={index}
+    //                       applicant={applicant}
+    //                       index={index}
+    //                       buttonSetting="noButton"
+    //                       avg={getAvgRanking(currentCourse, applicant)}
+    //                       showNumber={"numberOnly"}
+    //                       moveLeft={moveLeft}
+    //                       moveRight={moveRight}
+    //                       currentCourse={currentCourse}
+    //                     />
+    //                   )
+    //                 )
+    //               )}
+    //             </SimpleGrid>
+    //           </Stack>
+    //           <Title order={2}>Applicant Data</Title>
+    //           <Group justify="center" w="100%">
+    //             <Stack align="center" w="50%">
+    //               <Title order={4}>Most Chosen Tutors</Title>
+    //               {graphData(currentCourse).length == 0 ? (
+    //                 <Text>No applicants have been ranked. </Text>
+    //               ) : (
+    //                 <BarChart
+    //                   h={300}
+    //                   data={graphData(currentCourse)}
+    //                   dataKey="email"
+    //                   series={[{ name: "timesChosen", color: "violet.6" }]}
+    //                   tickLine="y"
+    //                   xAxisLabel="Tutors"
+    //                   yAxisLabel="Times Chosen"
+    //                 />
+    //               )}
+    //             </Stack>
+    //           </Group>
+    //         </>
+    //       ) : (
+    //         <p>undefined</p>
+    //       )}
+    //     </>
+    //   ) : lecturerState == "chooseTutors" ? (
+    //     <>
+    //       {currentCourse ? (
+    //         <>
+    //           <Title>
+    //             {currentCourse.name + " - " + currentCourse.courseCode}
+    //           </Title>
+    //           <Button mt="md" onClick={() => setLecturerState("courseView")}>
+    //             Back
+    //           </Button>
+    //           <Space w="lg"></Space>
+    //           <Stack mt="30px">
+    //             <Group justify="space-between">
+    //               <Title order={3}>Your Chosen Applicants</Title>
+    //               <Group>
+    //                 <Button onClick={() => submitRanking(currentCourse)}>
+    //                   Update Your Ranking
+    //                 </Button>
+    //                 <Button
+    //                   bg="red"
+    //                   onClick={() => clearSelection(currentCourse)}
+    //                 >
+    //                   Reset
+    //                 </Button>
+    //               </Group>
+    //             </Group>
+    //             {/* displays selected tutors and allows you to submit your rankings */}
+    //             {chosenApplicants.length > 0 ? (
+    //               <Flex bg="gray" p="lg">
+    //                 <SimpleGrid bd="black" spacing="40px" cols={6}>
+    //                   {chosenApplicants.map((applicant, index) => (
+    //                     <>
+    //                       <ApplicationCard
+    //                         applicant={applicant.applicant}
+    //                         index={index}
+    //                         buttonSetting="Rank"
+    //                         showNumber={"showButtons"}
+    //                         moveLeft={moveLeft}
+    //                         moveRight={moveRight}
+    //                         avg={0}
+    //                         currentCourse={currentCourse}
+    //                       />
+    //                     </>
+    //                   ))}
+    //                   {/* {OrderApplications(currentCourse.applicants)} */}
+    //                 </SimpleGrid>
+    //               </Flex>
+    //             ) : (
+    //               <p>No applicants chosen.</p>
+    //             )}
+    //           </Stack>
+    //           <Stack mt="30px">
+    //             <Title order={3}>All Applicants</Title>
+    //             <Flex p="lg">
+    //               <SimpleGrid bd="sm" spacing="40px" cols={6}>
+    //                 {currentCourse.applicants.map((applicant, index) => (
+    //                   <Flex direction="column">
+    //                     <ApplicationCard
+    //                       applicant={applicant}
+    //                       index={index}
+    //                       buttonSetting="Select"
+    //                       showNumber={"false"}
+    //                       moveLeft={moveLeft}
+    //                       moveRight={moveRight}
+    //                       avg={0}
+    //                       currentCourse={currentCourse}
+    //                     />
+    //                     {/* <Checkbox onChan /> */}
+    //                     <Button
+    //                       disabled={false}
+    //                       size="sm"
+    //                       mt="15px"
+    //                       onClick={() =>
+    //                         selectApplicant(applicant, currentCourse)
+    //                       }
+    //                     >
+    //                       Select
+    //                     </Button>
+    //                   </Flex>
+    //                 ))}
+    //               </SimpleGrid>
+    //             </Flex>
+    //           </Stack>
+    //         </>
+    //       ) : (
+    //         <p>undefined</p>
+    //       )}
+    //     </>
+    //   ) : lecturerState == "allApplicants" ? (
+    //     <>
+    //       <Title>All Applicants</Title>
+    //       <ApplicantFilters
+    //         searchTerm={searchTerm}
+    //         setSearchTerm={setSearchTerm}
+    //         availability={availability}
+    //         setAvailability={setAvailability}
+    //         courseFilter={courseFilter}
+    //         setCourseFilter={setCourseFilter}
+    //         order={order}
+    //         setOrder={setOrder}
+    //         onBack={() => setLecturerState("default")}
+    //       />
+
+    //       <OrderApplications
+    //         sortFn={
+    //           order === "Ascending"
+    //             ? sortByTimesChosenAsc
+    //             : sortByTimesChosenDesc
+    //         }
+    //         courseCode={courseFilter}
+    //         availability={availability}
+    //         searchTerm={searchTerm}
+    //         //chosen={true}
+    //       />
+    //     </>
+    //   ) : (
+    //     <p>Unknown status</p>
+    //   )}
+    // </>
   );
 };
 
-export default LecturerHomePage;

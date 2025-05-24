@@ -71,7 +71,7 @@ export class ApplicationController {
 
    
     const courseRecord = await this.courseRepository.findOneBy({
-      code: request.body.course.courseCode,
+      code: request.body.course.code,
     });
 
     if (!courseRecord) {
