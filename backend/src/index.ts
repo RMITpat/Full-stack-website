@@ -18,7 +18,7 @@ AppDataSource.initialize()
     console.log("Data Source has been initialized!");
 
     console.log("populating database...");
-    await populate();
+    //await populate();
     console.log("population done!!!");
 
     app.listen(PORT, () => {

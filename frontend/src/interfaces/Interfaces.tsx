@@ -47,11 +47,12 @@ export interface Applicant {
   updatedAt: Date;
 }
 export interface Vote {}
+
+
 export interface Course {
   name: string;
   courseCode: string;
   semester: string;
-  applicants: DetailValues[];
   assigned_lecturers: Lecturer[];
 }
 export interface Lecturer {

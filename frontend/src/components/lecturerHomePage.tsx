@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { AppAndComment, IndCourse } from "../interfaces/Interfaces";
+import { AppAndComment, Course, IndCourse } from "../interfaces/Interfaces";
 import { DetailValues } from "../interfaces/Interfaces";
 import ApplicationCard from "@/components/applicationCard";
 import { BarChart } from "@mantine/charts";
