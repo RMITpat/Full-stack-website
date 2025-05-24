@@ -85,6 +85,8 @@ export class LecturerController {
       request.body;
 
     const courseRepo = AppDataSource.getRepository(Course);
+    const lecturerRepo = AppDataSource.getRepository(Lecturer);
+
     let assignedCourses: Course[] = [];
 
     if (Array.isArray(courses_assigned_to) && courses_assigned_to.length > 0) {
@@ -93,22 +95,37 @@ export class LecturerController {
       });
     }
 
-    const lecturer = Object.assign(new Lecturer(), {
-      firstName,
-      lastName,
-      email,
-      courses_assigned_to: assignedCourses,
-      votes,
-      password,
+    let lecturer = await lecturerRepo.findOne({
+      where: { email },
+      relations: ["courses_assigned_to"], // ensure we load the relation
     });
 
+    if (lecturer) {
+      // Update existing lecturer and reset courses
+      lecturer.firstName = firstName;
+      lecturer.lastName = lastName;
+      lecturer.password = password;
+      lecturer.votes = votes;
+      lecturer.courses_assigned_to = assignedCourses;
+    } else {
+      // Create new
+      lecturer = lecturerRepo.create({
+        firstName,
+        lastName,
+        email,
+        password,
+        votes,
+        courses_assigned_to: assignedCourses,
+      });
+    }
+
     try {
-      const savedLecturer = await this.lecturerRepository.save(lecturer);
+      const savedLecturer = await lecturerRepo.save(lecturer);
       return response.status(201).json(savedLecturer);
     } catch (error) {
       return response
         .status(400)
-        .json({ message: "Error creating lecturer", error });
+        .json({ message: "Error saving lecturer", error });
     }
   }
 
