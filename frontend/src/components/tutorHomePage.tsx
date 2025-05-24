@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   AccordionControl,
   AccordionItem,
@@ -21,6 +21,7 @@ import { applicationApi } from "@/services/applicationApi";
 import { useLoginContext } from "../pages/contexts/LoginContext";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+import { Applicant } from "../interfaces/Interfaces";
 import {
   Application,
   ApplicationType,
@@ -47,7 +48,17 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   const currentUser = useLoginContext();
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
-  const [currentTutor, setCurrentTutor] = useState<User | undefined>(undefined);
+  const defaultApplicant: Applicant = {
+    id: -1,
+    applications: [],
+    lastName: "",
+    email: "",
+    firstName: "",
+    password: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  const [currentTutor, setCurrentTutor] = useState<Applicant>(defaultApplicant);
   const [courseApplication, setCourseApplication] = useState<Course>(
     courses[0]
   );
@@ -64,10 +75,24 @@ If a duplicate is found then it replaces that application to faciliate the updat
 
 
 */
+  useEffect(() => {
+    const applicant: Applicant = {
+      id: currentUser.user.User_id,
+      firstName: currentUser.user.User_FirstName,
+      lastName: currentUser.user.User_LastName,
+      email: currentUser.user.User_Email,
+      password: currentUser.user.User_Password,
+      applications: [],
+      createdAt: currentUser.user.User_Date_Joined,
+      updatedAt: currentUser.user.User_Updated_At
+    }
+    setCurrentTutor(applicant)
+
+  }, [currentUser.user]);
   const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
-      applicant: currentUser.user,
+      applicant: currentTutor,
       type: ApplicationType.TUTOR,
       course: courses[0],
       previousRoles: "",

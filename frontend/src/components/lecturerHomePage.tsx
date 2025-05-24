@@ -96,78 +96,11 @@ export default function LecturerHomePage() {
   //   setLecturerState("courseView");
   //   console.log(currentCourse);
   // };
-  // const selectApplicant = (
-  //   applicant: DetailValues,
-  //   currentCourse: IndCourse
-  // ) => {
-  //   const applicantAndComment: AppAndComment = {
-  //     applicant: applicant,
-  //     comment: "",
-  //   };
-  //   //if  a lecturer ranking for the current logged in lecturer exists:
-  //   if (currentCourse.lecturerRankings[currentEmail]) {
-  //     let duplicateSelection: boolean = false;
-  //     //search  through it and look for the applicant being submitted
-  //     for (
-  //       let index = 0;
-  //       index < currentCourse.lecturerRankings[currentEmail].length;
-  //       index++
-  //     ) {
-  //       //if it is found then set duplicateSelection to true and replace that application with the new one, in case a tutor has updated their application
-  //       if (
-  //         currentCourse.lecturerRankings[currentEmail][index].applicant.email ==
-  //         applicant.email
-  //       ) {
-  //         duplicateSelection = true;
-  //       }
-  //     }
-  //     //if no duplicate was found, add the applicant to the array
-  //     if (!duplicateSelection) {
-  //       currentCourse.lecturerRankings[currentEmail] = [
-  //         ...currentCourse.lecturerRankings[currentEmail],
-  //         applicantAndComment,
-  //       ];
-  //     }
-  //     //if a ranking does NOT exist for the current logged in lecture, create one and initialise it with the selected applicant
-  //   } else {
-  //     currentCourse.lecturerRankings = {
-  //       ...currentCourse.lecturerRankings,
-  //       [currentEmail]: [applicantAndComment],
-  //     };
-  //   }
-  //   //update the local store with the new chosen applicant
-  //   localStorage.setItem("courseDetails", JSON.stringify(courses));
-  //   //sets the state so that the new selection can be  displayed
-  //   setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-  // };
+  
 
   //used for ranking. when the left arrow button is chosen, it shifts the applicant to the left (up in ranking).
 
-  // const moveLeft = (currentCourse: IndCourse, index: number) => {
-  //   //checks that the applicant isnt first as you can't move an applicant higher than first
-  //   if (index > 0) {
-  //     let temp = currentCourse.lecturerRankings[currentEmail][index - 1];
-  //     currentCourse.lecturerRankings[currentEmail][index - 1] =
-  //       currentCourse.lecturerRankings[currentEmail][index];
-  //     currentCourse.lecturerRankings[currentEmail][index] = temp;
-  //     setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
-  //   }
-  // };
-  // //used for ranking. when the right arrow button is chosen, it shifts the applicant to the right (down in ranking).
 
-  // const moveRight = (currentCourse: IndCourse, index: number) => {
-  //   //checks that the applicant isnt last as you can't move an applicant higher than first
-
-  //   if (index < currentCourse.lecturerRankings[currentEmail].length - 1) {
-  //     let temp = currentCourse.lecturerRankings[currentEmail][index + 1];
-  //     currentCourse.lecturerRankings[currentEmail][index + 1] =
-  //       currentCourse.lecturerRankings[currentEmail][index];
-  //     currentCourse.lecturerRankings[currentEmail][index] = temp;
-  //     setChosenApplicants([...currentCourse.lecturerRankings[currentEmail]]);
-  //     localStorage.setItem("courseDetails", JSON.stringify(courses));
-  //   }
-  // };
 
   // //clears the selection when Reset is pressed
   // const clearSelection = (currentCourse: IndCourse) => {

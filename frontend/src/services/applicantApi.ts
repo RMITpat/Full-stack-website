@@ -12,6 +12,8 @@ export const applicantApi = {
     return response.data;
   },
 
+ 
+
   getApplicantById: async (id: number) => {
     const response = await api.get(`/applicants/${id}`);
     return response.data;

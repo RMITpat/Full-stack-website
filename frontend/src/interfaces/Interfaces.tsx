@@ -28,7 +28,7 @@ export interface IndCourse {
   lecturerRankings: Record<string, AppAndComment[]>;
 }
 export interface Application {
-  applicant: User;
+  applicant: Applicant;
   type: ApplicationType;
   previousRoles: string;
   availability: string;

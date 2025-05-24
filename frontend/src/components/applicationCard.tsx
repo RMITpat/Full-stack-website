@@ -1,4 +1,4 @@
-import { DetailValues, IndCourse } from "@/interfaces/Interfaces";
+import { Applicant, Course, DetailValues, IndCourse } from "@/interfaces/Interfaces";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import {
   Card,
@@ -18,12 +18,12 @@ import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 import { useState } from "react";
 
 type ApplicationProps = {
-  applicant: DetailValues;
+  applicant: Applicant;
   index: number;
   buttonSetting: string;
   showNumber: string;
-  moveLeft: (currentCourse: Course, index: number) => void;
-  moveRight: (currentCourse: Course, index: number) => void;
+  moveLeft: ( index: number) => void;
+  moveRight: ( index: number) => void;
   currentCourse: Course;
   avg: number;
 };

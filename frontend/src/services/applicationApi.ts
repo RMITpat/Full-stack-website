@@ -12,6 +12,12 @@ export const applicationApi = {
     return response.data;
   },
 
+  getCourseApplications: async (code: string) => {
+    console.log(code)
+    const response = await api.get(`/applications/byCourse/${code}`);
+    return response.data;
+  },
+
   getApplicationById: async (id: number) => {
     const response = await api.get(`/applications/${id}`);
     return response.data;

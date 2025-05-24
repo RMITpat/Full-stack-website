@@ -32,7 +32,7 @@ export class Application {
   @Column()
   credentials: string;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.applications)
+  @ManyToOne(() => Applicant, (applicant) => applicant.applications, {eager: true})
   applicant: Applicant;
 
   @ManyToOne(() => Course, (course) => course.applications)

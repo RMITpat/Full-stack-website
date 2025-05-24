@@ -135,7 +135,7 @@ export default function CourseDetail() {
             <Space w="lg"></Space>
             <Group justify="space-between">
               <Title order={2}>Highest Ranked Applicants</Title>
-              <Button onClick={() => router.push("/")}>Rank Applicants</Button>
+              <Button onClick={() => router.push(`/applications/${code}`)}>Rank Applicants</Button>
             </Group>
             {/* <SimpleGrid bd="sm" spacing="70px" cols={5}>
         {highestRankedTutors(course).length == 0 ? (

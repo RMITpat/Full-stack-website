@@ -23,9 +23,23 @@ export class ApplicationController {
     return response.json(applications);
   }
 
+  async allById(request: Request, response: Response) {
+    const code = request.params.code;
+    console.log(code)
+
+    const applications = await this.applicationRepository.find({
+      where: {
+        course: {
+          code: code,
+        },
+      },
+    });
+
+    return response.json(applications);
+  }
 
   // async courseAll(request: Request, response: Response) {
-  //   const id = 
+  //   const id =
   // }
   /* ┌─┐┌─┐┌┬┐  ┌─┐┌┐┌┌─┐ */
   /* │ ┬├┤  │   │ ││││├┤  */
@@ -58,7 +72,8 @@ export class ApplicationController {
    * @returns JSON response containing the created applicant or error message
    */
   async save(request: Request, response: Response) {
-    const { //these match the front end's type/interface attributes exactly
+    const {
+      //these match the front end's type/interface attributes exactly
       type,
       previousRoles,
       availability,
@@ -69,7 +84,6 @@ export class ApplicationController {
       votes,
     } = request.body;
 
-   
     const courseRecord = await this.courseRepository.findOneBy({
       code: request.body.course.code,
     });
