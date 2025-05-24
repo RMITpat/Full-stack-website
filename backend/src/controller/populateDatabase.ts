@@ -10,10 +10,12 @@ import { runPopulateLecturers } from "./data/AddAllLecturers";
 export async function populate() {
   const courseController = new CourseController();
   const applicantController = new ApplicantController();
+  const lecturerController = new LecturerController();
   //courses
-  await runPopulateCourse(courseController);
+  //await runPopulateCourse(courseController);
   //applicants
-  await runPopulateApplicants(applicantController)
+  //await runPopulateApplicants(applicantController)
   //
+  await runPopulateLecturers(lecturerController)
 
 }

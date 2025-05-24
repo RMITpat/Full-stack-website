@@ -16,7 +16,7 @@ import {
 } from "@mantine/core";
 
 import getApplicationStatuses from "@/api/getApplicationStatuses";
-
+import { lecturerApi } from "@/services/lecturerApi";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import OrderApplications from "@/components/Applications/OrderApplications";
 import updateApplication from "@/api/UpdateApplications";
@@ -56,6 +56,21 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
     "COSC4830",
   ]);
 
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const assignedCourses = await lecturerApi.allCourses(
+        currentUser.user.User_id
+      );
+      setCourses(assignedCourses);
+      console.log(assignedCourses);
+    } catch (error) {
+      toast.error("Failed to fetch courses");
+    }
+  };
   const [order, setOrder] = useState("Descending"); //for the order by ascending or descending toggle
   useEffect(() => {
     console.log("lecturer state changed");
@@ -346,9 +361,9 @@ const LecturerHomePage: React.FC<tutorHomePageProps> = ({
                   {course.semester}
                 </Text>
 
-                <Button mt="md" onClick={() => viewCourse(course)}>
+                {/* <Button mt="md" onClick={() => viewCourse(course)}>
                   Manage Tutors
-                </Button>
+                </Button> */}
               </Card>
             ))}
           </SimpleGrid>

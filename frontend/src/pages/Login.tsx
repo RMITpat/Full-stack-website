@@ -99,7 +99,7 @@ export default function Login() {
         User_Votes: user.votes,
         User_Email: user.email,
         User_FirstName: user.firstName,
-        User_Type: "logged_in",
+        User_Type: "logged_in_lecturer",
         User_Password: user.password,
         User_Date_Joined: user.createdAt,
         User_Updated_At: user.updatedAt,

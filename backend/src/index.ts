@@ -2,11 +2,11 @@ import "reflect-metadata";
 import express from "express";
 import { AppDataSource } from "./data-source";
 import userRoutes from "./routes/applicant.routes";
-import courseRoutes from "./routes/course.routes"
+import courseRoutes from "./routes/course.routes";
 import lecturerRoutes from "./routes/lecturer.routes";
 import applicationRoutes from "./routes/application.routes";
 import cors from "cors";
-import { populate } from "./controller/populateDatabase"
+import { populate } from "./controller/populateDatabase";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -19,7 +19,7 @@ AppDataSource.initialize()
     console.log("Data Source has been initialized!");
 
     console.log("populating database...");
-    //await populate();
+    await populate(); 
     console.log("population done!!!");
 
     app.listen(PORT, () => {

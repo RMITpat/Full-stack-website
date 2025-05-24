@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Lecturer } from "@/interfaces/Interfaces";
+import { User } from "@/interfaces/Types";
 export const api = axios.create({
   baseURL: "http://localhost:3001/api", // Adjust this to match your backend URL
 });
@@ -27,7 +28,12 @@ export const lecturerApi = {
 
   logInLecturer: async (values: {email: string, password: string}) => {
     const response = await api.post("/lecturer/authenticate", values);
-    return response.data;
+    return response.data; 
+  },
+
+  allCourses: async (id: number) => {
+    const response = await api.post("/lecturer/allCourses", id);
+    return response.data
   },
 
   deleteLecturer: async (id: number) => {

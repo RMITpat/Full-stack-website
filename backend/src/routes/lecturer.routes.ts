@@ -20,6 +20,10 @@ router.post("/lecturer/authenticate", async (req, res) => {
   await lecturerController.authenticate(req, res);
 });
 
+router.post("/lecturer/allCourses", async (req, res) => {
+  await lecturerController.allCourses(req, res);
+});
+
 router.put("/lecturer/:id", async (req, res) => {
   await lecturerController.update(req, res);
 });

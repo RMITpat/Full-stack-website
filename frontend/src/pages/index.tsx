@@ -18,25 +18,23 @@ export default function Home() {
       courseCode: "COSC1048",
       semester: "Semester 1",
       assigned_lecturers: [],
-     
     },
     {
       name: "Cloud Computing",
       courseCode: "COSC4839",
       semester: "Semester 2",
       assigned_lecturers: [],
-     
     },
     {
       name: "Programming Bootcamp",
       courseCode: "COSC4830",
       semester: "Semester 1",
       assigned_lecturers: [],
-     
     },
   ];
 
   const [courses, setCourses] = useState<Course[]>(defaultCourses);
+
   // useEffect(() => {
   //   const lastCourseState = localStorage.getItem("courseDetails");
   //   if (lastCourseState) {
@@ -50,6 +48,7 @@ export default function Home() {
   //     updateApplication(course);
   //   }
   // }, []);
+  
   const renderHomePage = () => {
     const userType = currentUser.user.User_Type;
 
