@@ -16,10 +16,10 @@ import { Application } from "./Application";
 @Entity()
 export class Course {
   @PrimaryColumn()
-  code: string;
+  code: string; 
 
   @Column()
-  semester: string;
+  semester: string; 
 
   @Column({ unique: true })
   name: string;
@@ -37,4 +37,5 @@ export class Course {
 
   @ManyToMany(() => Lecturer, (lecturer) => lecturer.courses_assigned_to)
   assigned_lecturers: Lecturer[];
-}
+  }
+
