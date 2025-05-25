@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Text,
   Flex,
+  Textarea,
 } from "@mantine/core";
 import { BarChart } from "recharts";
 import { useRouter } from "next/router";
@@ -16,13 +17,19 @@ import { useEffect, useState } from "react";
 import { applicationApi } from "@/services/applicationApi";
 import { toast } from "react-toastify";
 import { courseApi } from "@/services/courseApi";
-
+import { Vote } from "@/interfaces/Interfaces";
+import { voteApi } from "@/services/voteApi";
+import { useLoginContext } from "../contexts/LoginContext";
+import { useForm } from "@mantine/form";
+import { IconArrowNarrowLeft, IconArrowNarrowRight } from "@tabler/icons-react";
 export default function CourseDetail() {
+  const currentUser = useLoginContext();
+
   const router = useRouter();
   const { code } = router.query;
   const [applications, setApplications] = useState<Application[]>([]);
   const [course, setCourse] = useState<Course | null>(null);
-  const [ranking, setRanking] = useState<Application[]>([]);
+  const [ranking, setRanking] = useState<Vote[]>([]);
   const fetchApplications = async () => {
     try {
       const applications = await applicationApi.getCourseApplications(
@@ -54,13 +61,25 @@ export default function CourseDetail() {
     //search  through it and look for the applicant being submitted
     for (let index = 0; index < ranking.length; index++) {
       //if it is found then set duplicateSelection to true and replace that application with the new one, in case a tutor has updated their application
-      if (ranking[index].applicant.email == application.applicant.email) {
+      if (
+        ranking[index].application.applicant.email ==
+        application.applicant.email
+      ) {
         duplicateSelection = true;
       }
     }
     //if no duplicate was found, add the applicant to the array
     if (!duplicateSelection) {
-      setRanking((prevItems) => [...prevItems, application]);
+      const newVote: Vote = {
+        id: -1,
+        ranking: ranking.length - 1,
+        lecturerId: currentUser.user.User_id,
+        application: application,
+        comment: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      setRanking((prevItems) => [...prevItems, newVote]);
     }
   };
   const moveLeft = (index: number) => {
@@ -84,6 +103,41 @@ export default function CourseDetail() {
       setRanking([...ranking]);
     }
   };
+
+  const submitRanking = () => {
+    try {
+      ranking.forEach((vote, index) => {
+        try {
+          voteApi.createVote({
+            ranking: index + 1,
+            lecturerId: currentUser.user.User_id,
+            applicationId: vote.application.id,
+            comment: vote.comment,
+          });
+        } catch (err) {
+          toast.error(`Failed to vote on application ${vote.application.id}`);
+        }
+      });
+      toast.success("Ranking submitted successfully!");
+    } catch (err) {
+      toast.error("Failed to submit ranking");
+    }
+  };
+  const commentForm = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      comment: "",
+    },
+
+    validate: {
+      comment: (value: string) =>
+        value.trim().length > 0 ? null : "Comment cannot be empty",
+    },
+  });
+  const handleSubmit = (values: typeof commentForm.values, vote: Vote) => {
+    vote.comment = values.comment;
+    console.log(ranking);
+  };
   return (
     <>
       {course ? (
@@ -97,33 +151,51 @@ export default function CourseDetail() {
             <Group justify="space-between">
               <Title order={3}>Your Chosen Applicants</Title>
               <Group>
-                {/* <Button onClick={() => submitRanking(currentCourse)}>
-                      Update Your Ranking
-                    </Button> */}
-                {/* <Button
-                      bg="red"
-                      onClick={() => clearSelection(currentCourse)}
-                    >
-                      Reset
-                    </Button> */}
+                <Button onClick={() => submitRanking()}>
+                  Update Your Ranking
+                </Button>
+                {/* <Button bg="red" onClick={() => clearSelection(currentCourse)}>
+                  Reset
+                </Button> */}
               </Group>
             </Group>
             {/* displays selected tutors and allows you to submit your rankings */}
             {ranking.length > 0 ? (
               <Flex bg="gray" p="lg">
-                <SimpleGrid bd="black" spacing="40px" cols={6}>
-                  {ranking.map((application, index) => (
-                    <>
-                      <ApplicationCard
-                        application={application}
-                        index={index}
-                        buttonSetting="Rank"
-                        showNumber={"showButtons"}
-                        moveLeft={moveLeft}
-                        moveRight={moveRight}
-                        avg={0}
-                      />
-                    </>
+                <SimpleGrid bd="black" spacing="40px" cols={5}>
+                  {ranking.map((vote, index) => (
+                    <Stack bg="white" p="md" justify="center">
+                      <Group justify="space-between">
+                        <Button
+                          leftSection={<IconArrowNarrowLeft />}
+                          onClick={() => moveLeft(index)}
+                        ></Button>
+                        <Title order={3}>{index + 1}</Title>
+
+                        <Button
+                          rightSection={<IconArrowNarrowRight />}
+                          onClick={() => moveRight(index)}
+                        ></Button>
+                      </Group>
+                      <ApplicationCard application={vote.application} />
+                      <form
+                        onSubmit={commentForm.onSubmit((values: string) =>
+                          handleSubmit(values, vote)
+                        )}
+                      >
+                        <Textarea
+                          {...commentForm.getInputProps("comment")}
+                          mt="md"
+                          //onBlur={() => handleSubmit(commentForm.values, vote)}
+                          label="Comment"
+                          placeholder={vote.comment}
+                          autosize
+                        />
+                        <Group justify="center" mt="md">
+                          <Button type="submit">Add Comment</Button>
+                        </Group>
+                      </form>
+                    </Stack>
                   ))}
                 </SimpleGrid>
               </Flex>
@@ -137,15 +209,7 @@ export default function CourseDetail() {
               <SimpleGrid bd="sm" spacing="40px" cols={6}>
                 {applications.map((application, index) => (
                   <Flex direction="column">
-                    <ApplicationCard
-                      application={application}
-                      index={index}
-                      buttonSetting="Select"
-                      showNumber={"false"}
-                      moveLeft={moveLeft}
-                      moveRight={moveRight}
-                      avg={0}
-                    />
+                    <ApplicationCard application={application} />
                     {/* <Checkbox onChan /> */}
                     <Button
                       disabled={false}

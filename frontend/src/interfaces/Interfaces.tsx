@@ -28,6 +28,7 @@ export interface IndCourse {
   lecturerRankings: Record<string, AppAndComment[]>;
 }
 export interface Application {
+  id: number;
   applicant: Applicant;
   type: ApplicationType;
   previousRoles: string;
@@ -46,7 +47,15 @@ export interface Applicant {
   createdAt: Date;
   updatedAt: Date;
 }
-export interface Vote {}
+export interface Vote {
+  id: number;
+  ranking: number;
+  createdAt: Date;
+  updatedAt: Date;
+  lecturerId: number 
+  application: Application
+  comment: string
+}
 
 export interface Course {
   name: string;

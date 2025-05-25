@@ -5,6 +5,7 @@ import userRoutes from "./routes/applicant.routes";
 import courseRoutes from "./routes/course.routes";
 import lecturerRoutes from "./routes/lecturer.routes";
 import applicationRoutes from "./routes/application.routes";
+import voteRoutes from "./routes/vote.routes";
 import cors from "cors";
 import { populate } from "./controller/populateDatabase";
 const app = express();
@@ -12,7 +13,14 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", userRoutes, lecturerRoutes, applicationRoutes, courseRoutes);
+app.use(
+  "/api",
+  userRoutes,
+  lecturerRoutes,
+  applicationRoutes,
+  courseRoutes,
+  voteRoutes
+);
 
 AppDataSource.initialize()
   .then(async () => {

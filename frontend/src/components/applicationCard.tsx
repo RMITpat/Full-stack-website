@@ -19,22 +19,12 @@ import { useState } from "react";
 
 type ApplicationProps = {
   application: Application;
-  index: number;
-  buttonSetting: string;
-  showNumber: string;
-  moveLeft: ( index: number) => void;
-  moveRight: ( index: number) => void;
-  avg: number;
+  
 };
 //the application card that is used for displaying rankings and selected applicants
 export default function ApplicationCard({
   application,
-  index,
-  buttonSetting,
-  showNumber,
-  moveLeft,
-  moveRight,
-  avg,
+  
 }: ApplicationProps) {
   const currentUser = useLoginContext();
   /*
@@ -42,17 +32,7 @@ export default function ApplicationCard({
 
  Comment cannot be empty 
  */
-  // const form = useForm({
-  //   mode: "uncontrolled",
-  //   initialValues: {
-  //     comment: "",
-  //   },
-
-  //   validate: {
-  //     comment: (value) =>
-  //       value.trim().length > 0 ? null : "Comment cannot be empty",
-  //   },
-  // });
+  
   const [opened, setOpened] = useState(false);
   const [currApplicantion, setCurrApplicantion] = useState<Application | undefined>(
     undefined
@@ -61,15 +41,7 @@ export default function ApplicationCard({
     setOpened(true);
     setCurrApplicantion(application);
   };
-  // const handleSubmit = (values: typeof form.values) => {
-  //   const appAndCommentArray =
-  //     currentCourse.lecturerRankings[currentUser.user.User_Email];
-  //   for (let i = 0; i < appAndCommentArray.length; ++i) {
-  //     if (appAndCommentArray[i].applicant.email == applicant.email) {
-  //       appAndCommentArray[i].comment = values.comment;
-  //     }
-  //   }
-  // };
+  
 
   // const lastComment = (applicant: DetailValues) => {
   //   if (currentCourse.lecturerRankings[currentUser.user.User_Email]) {
@@ -91,27 +63,16 @@ export default function ApplicationCard({
   return (
     <>
       <Card shadow="sm" withBorder>
-        {showNumber == "numberOnly" ? (
+        {/* {showNumber == "numberOnly" ? (
           <>
             <Title order={3}>{index + 1}</Title>
             <Title order={3}>Avg Rank: {avg.toFixed(2)}</Title>
           </>
         ) : showNumber == "showButtons" ? (
-          <Group justify="space-between">
-            <Button
-              leftSection={<IconArrowNarrowLeft />}
-              onClick={() => moveLeft(index)}
-            ></Button>
-            <Title order={3}>{index + 1}</Title>
-
-            <Button
-              rightSection={<IconArrowNarrowRight />}
-              onClick={() => moveRight(index)}
-            ></Button>
-          </Group>
+          <></>
         ) : (
           <></>
-        )}
+        )} */}
        
 
         <Group justify="space-between" mt="md" mb="xs">
@@ -134,25 +95,13 @@ export default function ApplicationCard({
           <Text size="sm" c="dimmed">
             {application.skills}
           </Text>
-          {showNumber == "numberOnly" ? (
+          {/* {showNumber == "numberOnly" ? (
             <Button onClick={() => openModal(application)}>Comments</Button>
           ) : showNumber == "showButtons" ? (
-            // <form onSubmit={form.onSubmit(handleSubmit)}>
-            //   <Textarea
-            //     {...form.getInputProps("comment")}
-            //     mt="md"
-            //     label="Comment"
-            //     placeholder= "last comment"//{lastComment(applicant)}
-            //     autosize
-            //   />
-              <></>
-            //   <Group justify="center" mt="md">
-            //     <Button type="submit">Add Comment</Button>
-            //   </Group>
-            // </form>
+            <></>
           ) : (
             <></>
-          )}
+          )} */}
         </Stack>
       </Card>
       <Modal

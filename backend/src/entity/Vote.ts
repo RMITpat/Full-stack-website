@@ -2,7 +2,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
-  OneToMany, 
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   Column,
@@ -13,8 +13,9 @@ import { Lecturer } from "./Lecturer";
 import { Application } from "./Application";
 @Entity()
 export class Vote {
+  //find all votes for an application, find the average of all their rankings
   @PrimaryGeneratedColumn()
-  voteId: number;
+  id: number;
 
   // @PrimaryColumn()
   // votedOnId: number;
@@ -28,9 +29,12 @@ export class Vote {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column()
+  comment: string
+
   @ManyToOne(() => Lecturer, (lecturer) => lecturer.votes)
-  lecturer: Lecturer
-  
+  lecturer: Lecturer;
+
   @ManyToOne(() => Application, (app) => app.votes)
-  application: Application; 
+  application: Application;
 }

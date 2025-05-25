@@ -92,6 +92,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
   const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
+      id: -1,
       applicant: currentTutor,
       type: ApplicationType.TUTOR,
       course: courses[0],

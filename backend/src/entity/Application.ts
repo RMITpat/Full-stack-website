@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Vote } from "./Vote";
 import { Applicant } from "./Applicant";
 import { Course } from "./Course";
@@ -32,7 +39,9 @@ export class Application {
   @Column()
   credentials: string;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.applications, {eager: true})
+  @ManyToOne(() => Applicant, (applicant) => applicant.applications, {
+    eager: true,
+  })
   applicant: Applicant;
 
   @ManyToOne(() => Course, (course) => course.applications)
@@ -40,6 +49,6 @@ export class Application {
 
   // an application has many different lectures
   // who make 1 vote on each on an application
-  @OneToMany(() => Vote, (vote) => (vote.voteId, vote.lecturer))
+  @OneToMany(() => Vote, (vote) => (vote.id, vote.lecturer))
   votes: Vote[];
 }
