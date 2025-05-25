@@ -114,17 +114,15 @@ export default function CourseDetail() {
                 <SimpleGrid bd="black" spacing="40px" cols={6}>
                   {ranking.map((application, index) => (
                     <>
-                      <Text>{application.applicant.firstName}</Text>
-                      {/* <ApplicationCard
-                            applicant={application.applicant}
-                            index={index}
-                            buttonSetting="Rank"
-                            showNumber={"showButtons"}
-                            moveLeft={moveLeft}
-                            moveRight={moveRight}
-                            avg={0}
-                            currentCourse={course}
-                          /> */}
+                      <ApplicationCard
+                        application={application}
+                        index={index}
+                        buttonSetting="Rank"
+                        showNumber={"showButtons"}
+                        moveLeft={moveLeft}
+                        moveRight={moveRight}
+                        avg={0}
+                      />
                     </>
                   ))}
                 </SimpleGrid>
@@ -139,17 +137,15 @@ export default function CourseDetail() {
               <SimpleGrid bd="sm" spacing="40px" cols={6}>
                 {applications.map((application, index) => (
                   <Flex direction="column">
-                    <Text>{application.applicant.firstName}</Text>
-                    {/* <ApplicationCard
-                          applicant={application.applicant}
-                          index={index}
-                          buttonSetting="Select"
-                          showNumber={"false"}
-                          moveLeft={moveLeft}
-                          moveRight={moveRight}
-                          avg={0}
-                          currentCourse={currentCourse}
-                        /> */}
+                    <ApplicationCard
+                      application={application}
+                      index={index}
+                      buttonSetting="Select"
+                      showNumber={"false"}
+                      moveLeft={moveLeft}
+                      moveRight={moveRight}
+                      avg={0}
+                    />
                     {/* <Checkbox onChan /> */}
                     <Button
                       disabled={false}
