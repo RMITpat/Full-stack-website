@@ -1,4 +1,10 @@
-import { Applicant, Application, Course, DetailValues, IndCourse } from "@/interfaces/Interfaces";
+import {
+  Applicant,
+  Application,
+  Course,
+  DetailValues,
+  IndCourse,
+} from "@/interfaces/Interfaces";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import {
   Card,
@@ -19,29 +25,24 @@ import { useState } from "react";
 
 type ApplicationProps = {
   application: Application;
-  
 };
 //the application card that is used for displaying rankings and selected applicants
-export default function ApplicationCard({
-  application,
-  
-}: ApplicationProps) {
+export default function ApplicationCard({ application }: ApplicationProps) {
   const currentUser = useLoginContext();
   /*
  user Validation:
 
  Comment cannot be empty 
  */
-  
+
   const [opened, setOpened] = useState(false);
-  const [currApplicantion, setCurrApplicantion] = useState<Application | undefined>(
-    undefined
-  );
+  const [currApplicantion, setCurrApplicantion] = useState<
+    Application | undefined
+  >(undefined);
   const openModal = (application: Application) => {
     setOpened(true);
     setCurrApplicantion(application);
   };
-  
 
   // const lastComment = (applicant: DetailValues) => {
   //   if (currentCourse.lecturerRankings[currentUser.user.User_Email]) {
@@ -73,13 +74,21 @@ export default function ApplicationCard({
         ) : (
           <></>
         )} */}
-       
 
         <Group justify="space-between" mt="md" mb="xs">
-          <Text fw={500}>{application.applicant.firstName + " " + application.applicant.lastName}</Text>
+          <Text fw={500}>
+            {application.applicant.firstName +
+              " " +
+              application.applicant.lastName}
+          </Text>
           <Badge>{application.availability}</Badge>
         </Group>
         <Stack gap="0px">
+          <Text size="sm">Type</Text>
+
+          <Text size="sm" c="dimmed">
+            {application.type}
+          </Text>
           <Text size="sm">Credentials</Text>
           <Text size="sm" c="dimmed">
             {application.credentials}

@@ -10,7 +10,10 @@ export const voteApi = {
 
 
  
-
+  getVotes: async () => {
+    const response = await api.get("/votes")
+    return response.data
+  },
   getVoteByApplication: async (appId: number) => {
     const response = await api.get(`/votes/application/${appId}`);
     return response.data;

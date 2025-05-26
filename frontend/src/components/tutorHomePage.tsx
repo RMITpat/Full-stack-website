@@ -84,10 +84,9 @@ If a duplicate is found then it replaces that application to faciliate the updat
       password: currentUser.user.User_Password,
       applications: [],
       createdAt: currentUser.user.User_Date_Joined,
-      updatedAt: currentUser.user.User_Updated_At
-    }
-    setCurrentTutor(applicant)
-
+      updatedAt: currentUser.user.User_Updated_At,
+    };
+    setCurrentTutor(applicant);
   }, [currentUser.user]);
   const form = useForm<Application>({
     mode: "uncontrolled",
@@ -100,6 +99,9 @@ If a duplicate is found then it replaces that application to faciliate the updat
       availability: "Part time",
       skills: "",
       credentials: "",
+      averageRanking: 0,
+      comments: [],
+      timesChosen: 0,
     },
 
     validate: {

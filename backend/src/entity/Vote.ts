@@ -30,12 +30,11 @@ export class Vote {
   updatedAt: Date;
 
   @Column()
-  comment: string
-  
+  comment: string;
 
   @ManyToOne(() => Lecturer, (lecturer) => lecturer.votes)
   lecturer: Lecturer;
 
-  @ManyToOne(() => Application, (app) => app.votes)
+  @ManyToOne(() => Application, (app) => app.votes, { eager: true })
   application: Application;
 }

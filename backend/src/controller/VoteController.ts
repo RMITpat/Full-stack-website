@@ -11,6 +11,12 @@ export class VoteController {
   /* vote doesnt need a get because a lecturer would get their votes and an application would get their votes, we never have
 to displays all votes for all applicants and lecturers */
 
+
+  async all(request: Request, response: Response) {
+    const votes = await this.voteRepository.find();
+
+    return response.json(votes);
+  }
   /* ┌─┐┌─┐┬  ┬┌─┐  ┌─┐┌┐┌┌─┐ */
   /* └─┐├─┤└┐┌┘├┤   │ ││││├┤  */
   /* └─┘┴ ┴ └┘ └─┘  └─┘┘└┘└─┘ */
@@ -61,14 +67,13 @@ to displays all votes for all applicants and lecturers */
       where: {
         lecturer: { id: parseInt(lecturerId) },
       },
-      relations: ["application"]
+      relations: ["application"],
     });
     if (!lecturerVotes) {
-      return response.json("Failed to find any lecturer votes")
+      return response.json("Failed to find any lecturer votes");
     }
-    
 
-    return response.json(lecturerVotes)
+    return response.json(lecturerVotes);
   }
   async getByApplication(request: Request, response: Response) {
     const { appId } = request.params;

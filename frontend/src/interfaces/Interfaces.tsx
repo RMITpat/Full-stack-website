@@ -36,6 +36,9 @@ export interface Application {
   skills: string;
   credentials: string;
   course: Course;
+  averageRanking: number
+  comments: string[]
+  timesChosen: number
 }
 export interface Applicant {
   id: number;

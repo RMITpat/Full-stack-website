@@ -7,18 +7,26 @@ import {
   Group,
   SimpleGrid,
   Text,
+  Modal,
+  List,
 } from "@mantine/core";
-import { BarChart } from "recharts";
+
+import { BarChart } from "@mantine/charts";
 import { useRouter } from "next/router";
-import { Course } from "@/interfaces/Interfaces";
+import { Application, Course, Vote } from "@/interfaces/Interfaces";
 import { useEffect, useState } from "react";
 import { courseApi } from "@/services/courseApi";
 import { toast } from "react-toastify";
+import { voteApi } from "@/services/voteApi";
+import "@mantine/charts/styles.css";
 
 export default function CourseDetail() {
   const router = useRouter();
   const { code } = router.query;
   const [course, setCourse] = useState<Course | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [currentApplication, setCurrentApplication] =
+    useState<Application | null>(null);
 
   const fetchCourse = async () => {
     try {
@@ -28,63 +36,74 @@ export default function CourseDetail() {
       toast.error("Error fetching course");
     }
   };
+
+  const fetchCourseVotes = async () => {
+    try {
+      const votes = await voteApi.getVotes();
+
+      const courseVotes = (await votes).filter(
+        (vote: Vote) => vote.application.course.code == code
+      );
+      calculateAverages(courseVotes);
+    } catch (err) {
+      toast.error("Failed to get course votes");
+    }
+  };
   useEffect(() => {
     if (code) {
       fetchCourse();
+      fetchCourseVotes();
     }
   }, [code]);
-  // const highestRankedTutors = (currentCourse: Course) => {
-  //   const applicationStatuses = getApplicationStatuses();
-  //   console.log("highestRankedtutor called" + currentCourse);
-  //   //splits it so we get the emails for identification, and course for identification,  and avg ranking for sorting
-  //   const transformedData = Object.entries(applicationStatuses).map(
-  //     ([key, details]) => ({
-  //       email: key.split("_")[0],
-  //       course: key.split("_")[1],
-  //       avgRanking: details.Avg_Ranking,
-  //     })
-  //   );
-  //   //will hold the applicants for the current course
-  //   let courseData: {
-  //     email: string;
-  //     course: string;
-  //     avgRanking: number;
-  //   }[] = [];
 
-  //   transformedData.forEach((element) => {
-  //     if (
-  //       element.course == currentCourse.courseCode &&
-  //       element.avgRanking > 0
-  //     ) {
-  //       courseData.push(element);
-  //     }
-  //   });
-  //   //sort the applicants by their ranking
-  //   if (courseData.length > 1) {
-  //     for (let i = 1; i < courseData.length; ++i) {
-  //       let curr = courseData[i];
-  //       let j = i - 1;
-
-  //       while (j >= 0 && courseData[j].avgRanking > curr.avgRanking) {
-  //         courseData[j + 1] = courseData[j];
-  //         j = j - 1;
-  //       }
-  //       courseData[j + 1] = curr;
-  //     }
-  //   }
-  //   //holds the same applicants but in form detailValues so they can be displayed using applicationCard
-  //   const applicantArray: DetailValues[] = [];
-  //   for (let i = 0; i < courseData.length; ++i) {
-  //     let currTutor = courseData[i];
-  //     for (let j = 0; j < currentCourse.applicants.length; ++j) {
-  //       if (currTutor.email == currentCourse.applicants[j].email) {
-  //         applicantArray.push(currentCourse.applicants[j]);
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   return applicantArray;
-  // };
+  const calculateAverages = (votes: Vote[]) => {
+    console.log("caulcated avgs");
+    let applicationIds: number[] = [];
+    let applications: Application[] = [];
+    console.log(votes);
+    votes.forEach((vote) => {
+      if (!applicationIds.includes(vote.application.id)) {
+        applicationIds.push(vote.application.id);
+        applications.push(vote.application);
+      }
+    });
+    let currentSum = 0;
+    let averageRanking = 0;
+    let count = 0;
+    console.log(applicationIds);
+    applications.forEach((application) => {
+      currentSum = 0;
+      averageRanking = 0;
+      count = 0;
+      if (!application.comments) {
+        application.comments = [];
+      }
+      votes.forEach((vote) => {
+        if (vote.application.id == application.id) {
+          if (vote.comment.length > 0) {
+            application.comments.push(vote.comment);
+          }
+          currentSum += vote.ranking;
+          count += 1;
+        }
+      });
+      application.timesChosen = count;
+      application.averageRanking = Math.round((currentSum / count) * 100) / 100;
+      console.log(
+        application.applicant.firstName,
+        " sum is ",
+        currentSum,
+        " count is ",
+        count,
+        " average is ",
+        currentSum / count
+      );
+      console.log(application.comments);
+    });
+    applications.sort((a, b) => a.averageRanking - b.averageRanking);
+    setApplications(applications);
+    console.log(applications);
+  };
 
   // const graphData = (currentCourse: Course) => {
   //   const applicationStatuses = getApplicationStatuses();
@@ -135,47 +154,62 @@ export default function CourseDetail() {
             <Space w="lg"></Space>
             <Group justify="space-between">
               <Title order={2}>Highest Ranked Applicants</Title>
-              <Button onClick={() => router.push(`/applications/${code}`)}>Rank Applicants</Button>
+              <Button onClick={() => router.push(`/applications/${code}`)}>
+                Rank Applicants
+              </Button>
             </Group>
-            {/* <SimpleGrid bd="sm" spacing="70px" cols={5}>
-        {highestRankedTutors(course).length == 0 ? (
-          <Text>No tutors have been ranked.</Text>
-        ) : (
-          highestRankedTutors(course).map(
-            (applicant, index) => (
-              <ApplicationCard
-                key={index}
-                applicant={applicant}
-                index={index}
-                buttonSetting="noButton"
-                avg={getAvgRanking(course, applicant)}
-                showNumber={"numberOnly"}
-                moveLeft={moveLeft}
-                moveRight={moveRight}
-                course={course}
-              />
-            )
-          )
-        )}
-      </SimpleGrid> */}
+            <SimpleGrid bd="sm" spacing="70px" cols={5}>
+              {applications.length == 0 ? (
+                <Text>No tutors have been ranked.</Text>
+              ) : (
+                applications.map((application) => (
+                  <Stack key={application.id}>
+                    {application.averageRanking}
+                    <ApplicationCard application={application} />
+                    <Button onClick={() => setCurrentApplication(application)}>
+                      Comments
+                    </Button>
+                  </Stack>
+                ))
+              )}
+              <Modal
+                opened={currentApplication !== null}
+                onClose={() => setCurrentApplication(null)}
+                title="Lecturer Comments"
+                centered
+              >
+                <Stack>
+                  <List>
+                    {currentApplication != null &&
+                    currentApplication.comments.length > 0 ? (
+                      currentApplication.comments.map((comment) => (
+                        <List.Item>{comment}</List.Item>
+                      ))
+                    ) : (
+                      <Text>No comments</Text>
+                    )}
+                  </List>
+                </Stack>
+              </Modal>
+            </SimpleGrid>
           </Stack>
           <Title order={2}>Applicant Data</Title>
           <Group justify="center" w="100%">
             <Stack align="center" w="50%">
               <Title order={4}>Most Chosen Tutors</Title>
-              {/* {graphData(course).length == 0 ? (
-          <Text>No applicants have been ranked. </Text>
-        ) : (
-          <BarChart
-            h={300}
-            data={graphData(course)}
-            dataKey="email"
-            series={[{ name: "timesChosen", color: "violet.6" }]}
-            tickLine="y"
-            xAxisLabel="Tutors"
-            yAxisLabel="Times Chosen"
-          />
-        )} */}
+              {applications.length == 0 ? (
+                <Text>No applicants have been ranked. </Text>
+              ) : (
+                <BarChart
+                  h={300}
+                  data={applications}
+                  dataKey="applicant.email"
+                  series={[{ name: "timesChosen", color: "violet.6" }]}
+                  tickLine="y"
+                  xAxisLabel="Tutors"
+                  yAxisLabel="Times Chosen"
+                />
+              )}
             </Stack>
           </Group>
         </>

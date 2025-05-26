@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "axios": "^1.9.0"
+    "@mantine/charts": "^8.0.1",
+    "axios": "^1.9.0",
+    "recharts": "^2.15.3"
   }
 }

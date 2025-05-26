@@ -26,7 +26,6 @@ import { toast } from "react-toastify";
 import ApplicantFilters from "@/components/Applications/ApplicantFilters";
 import { useRouter } from "next/router";
 
-
 /*
 Validation of user inputs:
 
@@ -60,13 +59,10 @@ export default function LecturerHomePage() {
 
   const fetchCourses = async () => {
     try {
-      
-
       const assignedCourses = await lecturerApi.allCourses(
         currentUser.user.User_id
       );
-      
-      
+
       setAssignedCourses(assignedCourses);
       console.log(assignedCourses);
     } catch (error) {
@@ -96,11 +92,8 @@ export default function LecturerHomePage() {
   //   setLecturerState("courseView");
   //   console.log(currentCourse);
   // };
-  
 
   //used for ranking. when the left arrow button is chosen, it shifts the applicant to the left (up in ranking).
-
-
 
   // //clears the selection when Reset is pressed
   // const clearSelection = (currentCourse: IndCourse) => {
@@ -207,7 +200,7 @@ export default function LecturerHomePage() {
 
             <Button
               mt="md"
-              onClick={() => router.push(`/course/${course.code}`) }
+              onClick={() => router.push(`/course/${course.code}`)}
             >
               Manage Tutors
             </Button>
@@ -405,5 +398,4 @@ export default function LecturerHomePage() {
     //   )}
     // </>
   );
-};
-
+}
