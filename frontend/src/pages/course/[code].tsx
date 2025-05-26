@@ -163,8 +163,10 @@ export default function CourseDetail() {
                 <Text>No tutors have been ranked.</Text>
               ) : (
                 applications.map((application) => (
-                  <Stack key={application.id}>
-                    {application.averageRanking}
+                  <Stack key={application.id} bd="md">
+                    <Title order={3}>
+                      Avg rank: {application.averageRanking}
+                    </Title>
                     <ApplicationCard application={application} />
                     <Button onClick={() => setCurrentApplication(application)}>
                       Comments
