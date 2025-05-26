@@ -54,10 +54,26 @@ to displays all votes for all applicants and lecturers */
     }
   }
 
+  async getLecturerVotes(request: Request, response: Response) {
+    const { lecturerId } = request.params;
+
+    const lecturerVotes = await this.voteRepository.find({
+      where: {
+        lecturer: { id: parseInt(lecturerId) },
+      },
+      relations: ["application"]
+    });
+    if (!lecturerVotes) {
+      return response.json("Failed to find any lecturer votes")
+    }
+    
+
+    return response.json(lecturerVotes)
+  }
   async getByApplication(request: Request, response: Response) {
     const { appId } = request.params;
 
-    const foundVotes = this.voteRepository.find({
+    const foundVotes = await this.voteRepository.find({
       where: { application: { id: parseInt(appId) } },
     });
 

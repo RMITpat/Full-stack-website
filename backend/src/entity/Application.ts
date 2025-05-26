@@ -44,7 +44,7 @@ export class Application {
   })
   applicant: Applicant;
 
-  @ManyToOne(() => Course, (course) => course.applications)
+  @ManyToOne(() => Course, (course) => course.applications, { eager: true })
   course: Course;
 
   // an application has many different lectures

@@ -10,7 +10,6 @@ import {
   Flex,
   Textarea,
 } from "@mantine/core";
-import { BarChart } from "recharts";
 import { useRouter } from "next/router";
 import { Application, Course } from "@/interfaces/Interfaces";
 import { useEffect, useState } from "react";
@@ -28,6 +27,7 @@ export default function CourseDetail() {
   const router = useRouter();
   const { code } = router.query;
   const [applications, setApplications] = useState<Application[]>([]);
+
   const [course, setCourse] = useState<Course | null>(null);
   const [ranking, setRanking] = useState<Vote[]>([]);
   const fetchApplications = async () => {
@@ -44,13 +44,30 @@ export default function CourseDetail() {
     if (code) {
       fetchApplications();
       fetchCourse();
+      fetchLecturerVotes();
     }
-    setRanking([]);
   }, [code]);
+
+  const fetchLecturerVotes = async () => {
+    try {
+      const lecturerVotes = await voteApi.getLecturerVotes(
+        currentUser.user.User_id
+      );
+      console.log(lecturerVotes);
+      const lecturerCourseVotes = (await lecturerVotes).filter(
+        (vote: Vote) => vote.application.course.code == code
+      );
+      console.log(lecturerCourseVotes);
+      setRanking(lecturerCourseVotes);
+    } catch (error) {
+      toast.error("Failed to find lecturer votes");
+    }
+  };
   const fetchCourse = async () => {
     try {
       const course = await courseApi.getCourseById(code as string);
       setCourse(course);
+      console.log(course);
     } catch (error) {
       toast.error("Error fetching course");
     }
@@ -103,25 +120,42 @@ export default function CourseDetail() {
       setRanking([...ranking]);
     }
   };
+  const saveVotes = async () => {
+    ranking.forEach((vote, index) => {
+      try {
+        voteApi.createVote({
+          ranking: index + 1,
+          lecturerId: currentUser.user.User_id,
+          applicationId: vote.application.id,
+          comment: vote.comment,
+        });
+      } catch (err) {
+        toast.error(`Failed to vote on application ${vote.application.id}`);
+      }
+    });
+    toast.success("Ranking submitted successfully!");
+  };
 
+  const deleteOldVotes = async () => {
+    const lecturerVotes = await voteApi.getLecturerVotes(
+      currentUser.user.User_id
+    );
+    console.log(lecturerVotes);
+    const lecturerCourseVotes = (await lecturerVotes).filter(
+      (vote: Vote) => vote.application.course.code == code
+    );
+
+    lecturerCourseVotes.forEach(async (vote: { application: { id: number; }; }) => {
+        await voteApi.deleteVote(currentUser.user.User_id, vote.application.id)
+    });
+  };
   const submitRanking = () => {
-    try {
-      ranking.forEach((vote, index) => {
-        try {
-          voteApi.createVote({
-            ranking: index + 1,
-            lecturerId: currentUser.user.User_id,
-            applicationId: vote.application.id,
-            comment: vote.comment,
-          });
-        } catch (err) {
-          toast.error(`Failed to vote on application ${vote.application.id}`);
-        }
-      });
-      toast.success("Ranking submitted successfully!");
-    } catch (err) {
-      toast.error("Failed to submit ranking");
-    }
+    deleteOldVotes()
+    saveVotes();
+  };
+
+  const clearSelection = () => {
+    setRanking([]);
   };
   const commentForm = useForm({
     mode: "uncontrolled",
@@ -136,6 +170,9 @@ export default function CourseDetail() {
   });
   const handleSubmit = (values: typeof commentForm.values, vote: Vote) => {
     vote.comment = values.comment;
+    toast.success(
+      `Updated comment for ${vote.application.applicant.firstName} ${vote.application.applicant.lastName}`
+    );
     console.log(ranking);
   };
   return (
@@ -154,15 +191,15 @@ export default function CourseDetail() {
                 <Button onClick={() => submitRanking()}>
                   Update Your Ranking
                 </Button>
-                {/* <Button bg="red" onClick={() => clearSelection(currentCourse)}>
+                <Button bg="red" onClick={() => clearSelection()}>
                   Reset
-                </Button> */}
+                </Button>
               </Group>
             </Group>
             {/* displays selected tutors and allows you to submit your rankings */}
             {ranking.length > 0 ? (
               <Flex bg="gray" p="lg">
-                <SimpleGrid bd="black" spacing="40px" cols={5}>
+                <SimpleGrid bd="black" spacing="40px" cols={3}>
                   {ranking.map((vote, index) => (
                     <Stack bg="white" p="md" justify="center">
                       <Group justify="space-between">
@@ -179,7 +216,7 @@ export default function CourseDetail() {
                       </Group>
                       <ApplicationCard application={vote.application} />
                       <form
-                        onSubmit={commentForm.onSubmit((values: string) =>
+                        onSubmit={commentForm.onSubmit((values) =>
                           handleSubmit(values, vote)
                         )}
                       >
@@ -206,7 +243,7 @@ export default function CourseDetail() {
           <Stack mt="30px">
             <Title order={3}>All Applicants</Title>
             <Flex p="lg">
-              <SimpleGrid bd="sm" spacing="40px" cols={6}>
+              <SimpleGrid bd="sm" spacing="40px" cols={4}>
                 {applications.map((application, index) => (
                   <Flex direction="column">
                     <ApplicationCard application={application} />

@@ -10,6 +10,11 @@ router.post("/votes", async (req, res) => {
   await voteController.save(req, res);
 });
 
+router.get("/votes/lecturer/:lecturerId", async (req, res) => {
+  await voteController.getLecturerVotes(req, res);
+});
+
+
 router.get("/votes/application/:appId", async (req, res) => {
   await voteController.getByApplication(req, res);
 });

@@ -31,6 +31,7 @@ export class Vote {
 
   @Column()
   comment: string
+  
 
   @ManyToOne(() => Lecturer, (lecturer) => lecturer.votes)
   lecturer: Lecturer;

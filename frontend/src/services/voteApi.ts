@@ -16,7 +16,10 @@ export const voteApi = {
     return response.data;
   },
 
-  
+  getLecturerVotes: async ( lecturerId: number) => {
+    const response = await api.get(`/votes/lecturer/${lecturerId}`);
+    return response.data
+  },
 
   createVote: async (values: {ranking: number, lecturerId: number, applicationId: number, comment: string }) => {
     const response = await api.post("/votes", values);
