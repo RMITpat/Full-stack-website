@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 import { Vote } from "./Vote";
 import { Applicant } from "./Applicant";
@@ -16,6 +17,7 @@ export enum ApplicationType {
 }
 
 @Entity()
+@Unique(["applicant", "course", "type"])
 export class Application {
   @PrimaryGeneratedColumn()
   id: number;

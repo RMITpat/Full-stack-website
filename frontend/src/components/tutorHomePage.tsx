@@ -150,7 +150,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
 
       toast.success("Application successful!");
     } catch (err) {
-      toast.error("Application failed");
+      toast.error("You may only apply for this role once");
     }
   };
   const startApplying = async (course: Course) => {
