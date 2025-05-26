@@ -3,18 +3,10 @@ import {
   AccordionControl,
   AccordionItem,
   AccordionPanel,
-  Autocomplete,
-  Flex,
   Stack,
-  TextInput,
-  Text,
   Title,
   Button,
-  useMantineTheme,
-  Box,
-  Modal,
   Group,
-  SegmentedControl,
   Accordion,
 } from "@mantine/core";
 import { applicationApi } from "@/services/applicationApi";
@@ -28,7 +20,7 @@ import {
   IndCourse,
 } from "../interfaces/Interfaces";
 import { DetailValues, Course } from "../interfaces/Interfaces";
-import { User, UserCredential } from "@/interfaces/Types";
+import { UserCredential } from "@/interfaces/Types";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import ApplicationModal from "@/components/Tutor/ApplicationModal";
 
@@ -46,7 +38,6 @@ const tutorHomePage: React.FC<tutorHomePageProps> = ({
   setCourses,
 }) => {
   const currentUser = useLoginContext();
-  const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
   const defaultApplicant: Applicant = {
     id: -1,
@@ -114,35 +105,6 @@ If a duplicate is found then it replaces that application to faciliate the updat
     },
   });
 
-  function updateCredentialsWithTutorDetails(tutorDetailsParsed: DetailValues) {
-    //this function is supposed to run tutor details are set in state
-    //it saves this state to a Record in local storage
-    const allCredentials = localStorage.getItem("Credentials");
-
-    if (allCredentials && !isEmptyDetail(tutorDetailsParsed)) {
-      //console.log(tutorDetailsParsed.email + "(from updateCredentialsWithTutorDetails)")
-      const AlltutorCredentialsParsed: Record<string, UserCredential> =
-        JSON.parse(allCredentials);
-      AlltutorCredentialsParsed[tutorDetailsParsed.email] = {
-        skills: tutorDetailsParsed.skills,
-        previousRoles: tutorDetailsParsed.previousRoles,
-        availability: tutorDetailsParsed.availability,
-        credentials: tutorDetailsParsed.credentials,
-      };
-      console.log(
-        AlltutorCredentialsParsed,
-        "(from updateCredentialsWithTutorDetails)"
-      );
-      localStorage.setItem(
-        "Credentials",
-        JSON.stringify(AlltutorCredentialsParsed)
-      );
-    } else {
-      //console.log(allCredentials+ "(from updateCredentialsWithTutorDetails)")
-      //console.log(tutorDetailsParsed + "(from updateCredentialsWithTutorDetails)")
-    }
-  }
-
   const handleSubmit = async (values: Application) => {
     //update courses applications
     try {
@@ -159,69 +121,6 @@ If a duplicate is found then it replaces that application to faciliate the updat
     setCourseApplication(course);
   };
 
-  const applyForCourse = (course: IndCourse) => {
-    //this function gets tutorDetails from "Credentials" in local storage,
-    //and sets "course details" in local storage
-    //and pushes the applicant to the array of
-    //applicants that IndCourses have
-    if (currentTutor) {
-      toast.success("Applied!");
-      let All_Credentials: Record<string, UserCredential> = {};
-      let tutorDetails: DetailValues = {
-        email: "",
-        name: "",
-        previousRoles: "",
-        availability: "",
-        skills: "",
-        credentials: "",
-        lecturerComments: [],
-      }; //empty
-      try {
-        const storedData = localStorage.getItem("Credentials");
-        if (storedData) {
-          All_Credentials = JSON.parse(storedData);
-          tutorDetails = {
-            email: currentUser.user.User_Email,
-            name: currentUser.user.User_FirstName,
-            previousRoles:
-              All_Credentials[currentUser.user.User_Email].previousRoles,
-            availability:
-              All_Credentials[currentUser.user.User_Email].availability,
-            skills: All_Credentials[currentUser.user.User_Email].skills,
-            credentials:
-              All_Credentials[currentUser.user.User_Email].credentials,
-            lecturerComments: [],
-          };
-        }
-      } catch (e) {
-        console.log(e);
-      }
-      //ensures that the fields are not empty before submitting, as fields are empty by default when you log in for the first time
-      if (!isEmptyDetail(tutorDetails)) {
-        const tutorDetailsParsed: DetailValues = tutorDetails;
-        //searches the course's applicants to see if the tutor has already made an application
-        let duplicateFound: boolean = false;
-        for (let index = 0; index < course.applicants.length; index++) {
-          if (course.applicants[index].email === currentUser.user.User_Email) {
-            console.log("found");
-            //if it is found then it replaces the application
-            course.applicants[index] = tutorDetailsParsed;
-            duplicateFound = true;
-          }
-        }
-        //if it is not found then it adds the application
-        if (!duplicateFound) {
-          console.log("not found");
-          course.applicants.push(tutorDetailsParsed);
-        }
-
-        UpdateApplication(course);
-        localStorage.setItem("courseDetails", JSON.stringify(courses));
-        //console.log(course.applicants);
-        //console.log(courses);
-      }
-    }
-  };
   return (
     <>
       <Group justify="space-between" grow align="flex-start">

@@ -3,12 +3,10 @@ import { useLoginContext } from "./contexts/LoginContext";
 import TutorHomePage from "../components/tutorHomePage";
 import LecturerHomePage from "../components/lecturerHomePage";
 
-import { SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import { Course } from "../interfaces/Interfaces";
-import { Card, Flex, Group, Stack, Text, Title } from "@mantine/core";
-import UpdateApplication from "@/api/UpdateApplications";
-import updateApplication from "@/api/UpdateApplications";
-import { LecturerStateProvider } from "@/pages/contexts/LecturerState";
+import {  Flex, Stack, Text, Title } from "@mantine/core";
+
 
 export default function Home() {
   const currentUser = useLoginContext();
@@ -34,26 +32,11 @@ export default function Home() {
   ];
 
   const [courses, setCourses] = useState<Course[]>(defaultCourses);
+  const userType = currentUser.user.User_Type;
 
-  // useEffect(() => {
-  //   const lastCourseState = localStorage.getItem("courseDetails");
-  //   if (lastCourseState) {
-  //     console.log("lastcoursestate was" + JSON.parse(lastCourseState));
-  //     setCourses(JSON.parse(lastCourseState));
-  //   } else {
-  //     localStorage.setItem("courseDetails", JSON.stringify(defaultCourses));
-  //   }
-  //   for (const course of defaultCourses) {
-  //     console.log("updateApplication", course.name);
-  //     updateApplication(course);
-  //   }
-  // }, []);
-  
-  const renderHomePage = () => {
-    const userType = currentUser.user.User_Type;
-
-    if (userType === "default") {
-      return (
+  return (
+    <>
+      {userType === "default" ? (
         <Flex direction="column" align="center">
           <Stack>
             <Title>Welcome to TeachTeam!</Title>
@@ -64,19 +47,13 @@ export default function Home() {
           </Text>
           <Text size="xl">Apply today!</Text>
         </Flex>
-      );
-    }
-
-    if (userType === "logged_in_lecturer") {
-      return <LecturerHomePage />;
-    }
-
-    if (userType === "logged_in" || userType === "admin_default") {
-      return <TutorHomePage courses={courses} setCourses={setCourses} />;
-    }
-
-    return <p>Unknown status</p>;
-  };
-  //uses the login context, which provides context to all pages on who is currently logged in, to determine which  home page to show
-  return <LecturerStateProvider>{renderHomePage()}</LecturerStateProvider>;
+      ) : userType === "logged_in_lecturer" ? (
+        <LecturerHomePage />
+      ) : userType === "logged_in" || userType === "admin_default" ? (
+        <TutorHomePage courses={courses} setCourses={setCourses} />
+      ) : (
+        <p>Unknown status</p>
+      )}
+    </>
+  );
 }
