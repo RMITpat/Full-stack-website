@@ -8,4 +8,9 @@ export const courseApi = {
     const response = await api.get(`/course/${code}`);
     return response.data;
   },
+
+  getCourses: async () => {
+    const response = await api.get("/course");
+    return response.data;
+  },
 };

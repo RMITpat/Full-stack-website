@@ -14,7 +14,7 @@ export async function populate() {
   //courses
   await runPopulateCourse(courseController);
   //applicants
- // await runPopulateApplicants(applicantController)
+  await runPopulateApplicants(applicantController)
   //
   await runPopulateLecturers(lecturerController)
 

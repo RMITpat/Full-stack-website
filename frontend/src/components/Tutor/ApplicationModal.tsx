@@ -8,13 +8,13 @@ import {
   Text,
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-
+import { useLoginContext } from "@/pages/contexts/LoginContext";
 interface ApplicationProps {
   opened: boolean;
   close: () => void;
   form: UseFormReturnType<Application, (values: Application) => Application>;
   handleSubmit: (values: Application) => void;
-  course: Course
+  course: Course;
 }
 //the modal that is used for entering credentials
 const ApplicationModal: React.FC<ApplicationProps> = ({
@@ -22,11 +22,13 @@ const ApplicationModal: React.FC<ApplicationProps> = ({
   close,
   form,
   handleSubmit,
-  course
+  course,
 }) => {
-  form.setFieldValue("course", course)
+  const currentUser = useLoginContext();
+  form.setFieldValue("course", course);
+  form.setFieldValue("id", currentUser.user.User_id);
   return (
-    <Modal opened={opened} onClose={close} title="Become a candidate">
+    <Modal opened={opened} onClose={close} title={`Become a candidate`}>
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
           {...form.getInputProps("previousRoles")}

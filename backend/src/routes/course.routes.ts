@@ -5,7 +5,7 @@ import { Course } from "../entity/Course";
 const router = Router();
 const courseController = new CourseController();
 
-router.get("/course/get-all", async (req, res) => {
+router.get("/course", async (req, res) => {
   await courseController.getAll(req, res);
 });
 

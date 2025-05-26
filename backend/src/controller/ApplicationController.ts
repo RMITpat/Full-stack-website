@@ -74,6 +74,7 @@ export class ApplicationController {
   async save(request: Request, response: Response) {
     const {
       //these match the front end's type/interface attributes exactly
+      id,
       type,
       previousRoles,
       availability,
@@ -92,7 +93,7 @@ export class ApplicationController {
       return response.status(404).json({ message: "CourseRecord not found" });
     }
     const applicantRecord = await this.applicantRepository.findOneBy({
-      id: request.body.applicant.User_id,
+      id: id
     });
 
     if (!applicantRecord) {

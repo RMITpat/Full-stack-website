@@ -1,6 +1,6 @@
 export const courseData = [
   {
-    name: "Full Stack Developement",
+    name: "Full Stack Development",
     code: "COSC1048",
     semester: "Semester 1",
   },
@@ -13,5 +13,5 @@ export const courseData = [
     name: "Programming Bootcamp",
     code: "COSC4830",
     semester: "Semester 1",
-  }
-]
+  },
+];

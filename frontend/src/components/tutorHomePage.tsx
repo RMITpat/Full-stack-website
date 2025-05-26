@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AccordionControl,
   AccordionItem,
@@ -14,23 +14,19 @@ import { useLoginContext } from "../pages/contexts/LoginContext";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import { Applicant } from "../interfaces/Interfaces";
-import {
-  Application,
-  ApplicationType,
-} from "../interfaces/Interfaces";
-import {  Course } from "../interfaces/Interfaces";
+import { Application, ApplicationType } from "../interfaces/Interfaces";
+import { Course } from "../interfaces/Interfaces";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import ApplicationModal from "@/components/Tutor/ApplicationModal";
 
 import { toast } from "react-toastify";
+import { courseApi } from "@/services/courseApi";
 
-interface tutorHomePageProps {
-  courses: Course[];
-}
+interface tutorHomePageProps {}
 
-const TutorHomePage: React.FC<tutorHomePageProps> = ({
-  courses,
-}) => {
+const TutorHomePage: React.FC<tutorHomePageProps> = ({}) => {
+  const [courses, setCourses] = useState<Course[]>([]);
+
   const currentUser = useLoginContext();
   const [opened, { open, close }] = useDisclosure(false);
   const defaultApplicant: Applicant = {
@@ -60,6 +56,20 @@ If a duplicate is found then it replaces that application to faciliate the updat
 
 
 */
+
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    try {
+      const allCourses = await courseApi.getCourses();
+
+      setCourses(allCourses);
+    } catch {
+      toast.error("Failed to fetch courses");
+    }
+  };
   useEffect(() => {
     const applicant: Applicant = {
       id: currentUser.user.User_id,
@@ -76,7 +86,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
   const form = useForm<Application>({
     mode: "uncontrolled",
     initialValues: {
-      id: -1,
+      id: currentTutor.id,
       applicant: currentTutor,
       type: ApplicationType.TUTOR,
       course: courses[0],
@@ -105,7 +115,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
       await applicationApi.createApplication(values);
 
       toast.success("Application successful!");
-    } catch  {
+    } catch {
       toast.error("You may only apply for this role once");
     }
   };

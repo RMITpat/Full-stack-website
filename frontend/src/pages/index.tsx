@@ -9,28 +9,7 @@ import { Flex, Stack, Text, Title } from "@mantine/core";
 
 export default function Home() {
   const currentUser = useLoginContext();
-  const defaultCourses: Course[] = [
-    {
-      name: "Full Stack Development",
-      code: "COSC1048",
-      semester: "Semester 1",
-      assigned_lecturers: [],
-    },
-    {
-      name: "Cloud Computing",
-      code: "COSC4839",
-      semester: "Semester 2",
-      assigned_lecturers: [],
-    },
-    {
-      name: "Programming Bootcamp",
-      code: "COSC4830",
-      semester: "Semester 1",
-      assigned_lecturers: [],
-    },
-  ];
 
-  const [courses, setCourses] = useState<Course[]>(defaultCourses);
   const userType = currentUser.user.User_Type;
 
   return (
@@ -49,7 +28,7 @@ export default function Home() {
       ) : userType === "logged_in_lecturer" ? (
         <LecturerHomePage />
       ) : userType === "logged_in" || userType === "admin_default" ? (
-        <TutorHomePage courses={courses} />
+        <TutorHomePage />
       ) : (
         <p>Unknown status</p>
       )}
