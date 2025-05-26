@@ -48,14 +48,7 @@ export default function Login() {
   //this authenticates a user signing in with the password
   // associated with the email they entered in the login form
 
-  const printLecturerTable = () => {
-    const lecturers = lecturerApi.getAllLecturers();
-    console.log(lecturers);
-  };
-  const printTable = () => {
-    const applicants = applicantApi.getAllApplicants();
-    console.log(applicants);
-  };
+ 
   const [activeTab, setActiveTab] = useState<string | null>("applicant");
   const handleLogInApplicant = async (values: {
     email: string;
@@ -115,10 +108,7 @@ export default function Login() {
   return (
     <>
       <>
-        <Button onClick={() => printTable()}>log applicants table</Button>
-        <Button onClick={() => printLecturerTable()}>
-          log lecturers table
-        </Button>
+       
 
         <Group justify="center">
           <Flex justify="stretch" align="center" direction="column" p="md">

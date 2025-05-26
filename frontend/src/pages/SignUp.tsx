@@ -84,10 +84,6 @@ export default function SignUp() {
       setError("Failed to create applicant");
     }
   };
-  const printTable = () => {
-    const applicants = applicantApi.getAllApplicants();
-    console.log(applicants);
-  };
 
   const handleCreateLecturer = async (values: Lecturer) => {
     try {
@@ -112,17 +108,12 @@ export default function SignUp() {
       setError("Failed to create lecturer");
     }
   };
-  const printLecturerTable = () => {
-    const lecturers = lecturerApi.getAllLecturers();
-    console.log(lecturers);
-  };
+
   const [activeTab, setActiveTab] = useState<string | null>("applicant");
 
   return (
     <>
       <div className="text-red-500">{error}</div>
-      <Button onClick={() => printTable()}>log applicants table</Button>
-      <Button onClick={() => printLecturerTable()}>log lecturers table</Button>
 
       <Group justify="center">
         <Flex justify="stretch" align="stretch" direction="column" p="md">
