@@ -1,4 +1,4 @@
-import { Application, Course, DetailValues } from "@/interfaces/Interfaces";
+import { Application, Course } from "@/interfaces/Interfaces";
 import {
   Button,
   Group,
@@ -8,7 +8,6 @@ import {
   Text,
 } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
-import { form } from "framer-motion/m";
 
 interface ApplicationProps {
   opened: boolean;

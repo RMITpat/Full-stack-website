@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import {
   AccordionControl,
   AccordionItem,
@@ -17,25 +17,19 @@ import { Applicant } from "../interfaces/Interfaces";
 import {
   Application,
   ApplicationType,
-  IndCourse,
 } from "../interfaces/Interfaces";
-import { DetailValues, Course } from "../interfaces/Interfaces";
-import { UserCredential } from "@/interfaces/Types";
+import {  Course } from "../interfaces/Interfaces";
 import CredentialsDisplay from "@/components/Tutor/CredentialsDisplay";
 import ApplicationModal from "@/components/Tutor/ApplicationModal";
 
-import UpdateApplication from "@/api/UpdateApplications";
-import { isEmptyDetail } from "@/api/isEmpty";
 import { toast } from "react-toastify";
 
 interface tutorHomePageProps {
   courses: Course[];
-  setCourses: Dispatch<SetStateAction<Course[]>>;
 }
 
-const tutorHomePage: React.FC<tutorHomePageProps> = ({
+const TutorHomePage: React.FC<tutorHomePageProps> = ({
   courses,
-  setCourses,
 }) => {
   const currentUser = useLoginContext();
   const [opened, { open, close }] = useDisclosure(false);
@@ -111,7 +105,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
       await applicationApi.createApplication(values);
 
       toast.success("Application successful!");
-    } catch (err) {
+    } catch  {
       toast.error("You may only apply for this role once");
     }
   };
@@ -127,7 +121,7 @@ If a duplicate is found then it replaces that application to faciliate the updat
         <Stack>
           <Title>Courses</Title>
           <Accordion>
-            {courses.map((course, index) => (
+            {courses.map((course) => (
               <>
                 <AccordionItem value={course.name}>
                   <AccordionControl>{course.name}</AccordionControl>
@@ -157,4 +151,4 @@ If a duplicate is found then it replaces that application to faciliate the updat
   );
 };
 
-export default tutorHomePage;
+export default TutorHomePage;

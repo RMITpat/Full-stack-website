@@ -1,4 +1,3 @@
-import { User } from "./Types";
 
 export enum ApplicationType {
   LAB_ASSISTANT = "Lab Assistant",

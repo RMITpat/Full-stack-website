@@ -32,7 +32,7 @@ export default function CourseDetail() {
     try {
       const course = await courseApi.getCourseById(code as string);
       setCourse(course);
-    } catch (error) {
+    } catch {
       toast.error("Error fetching course");
     }
   };
@@ -45,7 +45,7 @@ export default function CourseDetail() {
         (vote: Vote) => vote.application.course.code == code
       );
       calculateAverages(courseVotes);
-    } catch (err) {
+    } catch {
       toast.error("Failed to get course votes");
     }
   };
@@ -58,8 +58,8 @@ export default function CourseDetail() {
 
   const calculateAverages = (votes: Vote[]) => {
     console.log("caulcated avgs");
-    let applicationIds: number[] = [];
-    let applications: Application[] = [];
+    const applicationIds: number[] = [];
+    const applications: Application[] = [];
     console.log(votes);
     votes.forEach((vote) => {
       if (!applicationIds.includes(vote.application.id)) {
@@ -68,12 +68,10 @@ export default function CourseDetail() {
       }
     });
     let currentSum = 0;
-    let averageRanking = 0;
     let count = 0;
     console.log(applicationIds);
     applications.forEach((application) => {
       currentSum = 0;
-      averageRanking = 0;
       count = 0;
       if (!application.comments) {
         application.comments = [];

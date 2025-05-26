@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AppAndComment } from "../interfaces/Interfaces";
 
 import { Button, Card, Group, SimpleGrid, Text, Title } from "@mantine/core";
 
@@ -8,6 +7,7 @@ import { useLoginContext } from "@/pages/contexts/LoginContext";
 
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { Course } from "@/interfaces/Interfaces";
 
 /*
 Validation of user inputs:
@@ -22,17 +22,9 @@ if that applicant is already present. If it is, they are not added. This can be 
 */
 export default function LecturerHomePage() {
   const currentUser = useLoginContext();
-  const currentEmail = currentUser.user.User_Email;
   //const { lecturerState, setLecturerState } = useLecturerState();
-  const [assignedCourses, setAssignedCourses] = useState<any[]>([]);
-  const [chosenApplicants, setChosenApplicants] = useState<AppAndComment[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [availability, setAvailability] = useState<string | null>("Full-Time"); //for the availability filter
-  const [courseFilter, setCourseFilter] = useState<string[]>([
-    "COSC1048",
-    "COSC4839",
-    "COSC4830",
-  ]);
+  const [assignedCourses, setAssignedCourses] = useState<Course[]>([]);
+
 
   const router = useRouter();
 
@@ -48,7 +40,7 @@ export default function LecturerHomePage() {
 
       setAssignedCourses(assignedCourses);
       console.log(assignedCourses);
-    } catch (error) {
+    } catch  {
       toast.error("Failed to fetch courses");
     }
   };

@@ -5,12 +5,11 @@ import LecturerHomePage from "../components/lecturerHomePage";
 
 import { useState } from "react";
 import { Course } from "../interfaces/Interfaces";
-import {  Flex, Stack, Text, Title } from "@mantine/core";
-
+import { Flex, Stack, Text, Title } from "@mantine/core";
 
 export default function Home() {
   const currentUser = useLoginContext();
-  let defaultCourses: Course[] = [
+  const defaultCourses: Course[] = [
     {
       name: "Full Stack Development",
       code: "COSC1048",
@@ -50,7 +49,7 @@ export default function Home() {
       ) : userType === "logged_in_lecturer" ? (
         <LecturerHomePage />
       ) : userType === "logged_in" || userType === "admin_default" ? (
-        <TutorHomePage courses={courses} setCourses={setCourses} />
+        <TutorHomePage courses={courses} />
       ) : (
         <p>Unknown status</p>
       )}

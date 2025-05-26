@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Vote } from "@/interfaces/Interfaces";
 export const api = axios.create({
   baseURL: "http://localhost:3001/api", // Adjust this to match your backend URL
 });

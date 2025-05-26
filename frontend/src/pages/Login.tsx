@@ -48,7 +48,6 @@ export default function Login() {
   //this authenticates a user signing in with the password
   // associated with the email they entered in the login form
 
- 
   const [activeTab, setActiveTab] = useState<string | null>("applicant");
   const handleLogInApplicant = async (values: {
     email: string;
@@ -56,7 +55,7 @@ export default function Login() {
   }) => {
     try {
       const user = await applicantApi.logInApplicant(values);
-      let userObject: User = {
+      const userObject: User = {
         User_id: user.id,
         User_Applications: user.Applications,
         User_Courses_Assigned_To: [],
@@ -73,7 +72,7 @@ export default function Login() {
       setUser(userObject);
       router.push("/");
       toast.success("Applicant log in successful!");
-    } catch (err) {
+    } catch {
       setError("Applicant username or password is incorrect");
     }
   };
@@ -84,7 +83,7 @@ export default function Login() {
   }) => {
     try {
       const user = await lecturerApi.logInLecturer(values);
-      let userObject: User = {
+      const userObject: User = {
         User_id: user.id,
         User_Applications: [],
         User_Courses_Assigned_To: user.courses_assigned_to,
@@ -100,7 +99,7 @@ export default function Login() {
       setUser(userObject);
       router.push("/");
       toast.success("Lecturer log in successful!");
-    } catch (err) {
+    } catch {
       setError("Lecturer username or password is incorrect");
     }
   };
@@ -108,8 +107,6 @@ export default function Login() {
   return (
     <>
       <>
-       
-
         <Group justify="center">
           <Flex justify="stretch" align="center" direction="column" p="md">
             <Tabs value={activeTab} onChange={setActiveTab}>

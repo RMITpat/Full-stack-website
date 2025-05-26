@@ -59,12 +59,11 @@ export default function SignUp() {
     },
   });
 
-  const [newApplicant, setNewApplicant] = useState<Applicant | null>(null);
 
   const handleCreateApplicant = async (values: Applicant) => {
     try {
       const user = await applicantApi.createApplicant(values);
-      let userObject: User = {
+      const userObject: User = {
         User_id: user.id,
         User_Applications: user.Applications,
         User_Courses_Assigned_To: [],
@@ -80,7 +79,7 @@ export default function SignUp() {
       setUser(userObject);
       router.push("/");
       toast.success("Applicant account successfully created!");
-    } catch (err) {
+    } catch {
       setError("Failed to create applicant");
     }
   };
@@ -88,7 +87,7 @@ export default function SignUp() {
   const handleCreateLecturer = async (values: Lecturer) => {
     try {
       const user = await lecturerApi.createLecturer(values);
-      let userObject: User = {
+      const userObject: User = {
         User_id: user.id,
         User_Applications: [],
         User_Courses_Assigned_To: user.courses_assigned_to,
@@ -104,7 +103,7 @@ export default function SignUp() {
       setUser(userObject);
       router.push("/");
       toast.success("Lecturer account successfully created!");
-    } catch (err) {
+    } catch  {
       setError("Failed to create lecturer");
     }
   };

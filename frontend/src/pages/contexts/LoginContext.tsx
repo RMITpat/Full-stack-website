@@ -1,13 +1,6 @@
-import {
-  createContext,
-  ReactNode,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import { createContext, ReactNode, useState, useContext } from "react";
 
 import { User } from "@/interfaces/Types";
-import { Applicant, Lecturer } from "@/interfaces/Interfaces";
 type LoginContextType = {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;

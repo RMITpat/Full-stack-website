@@ -1,20 +1,12 @@
-import { DetailValues } from "@/interfaces/Interfaces";
-import { theme } from "@chakra-ui/react";
-import { Stack, Title, Button, Text, Group, Image } from "@mantine/core";
+import { Stack, Title, Text } from "@mantine/core";
 import { useLoginContext } from "@/pages/contexts/LoginContext";
 import { User } from "@/interfaces/Types";
-let detailArray: [string, keyof DetailValues][] = [
-  ["Previous Roles", "previousRoles"],
-  ["Availability", "availability"],
-  ["Skills", "skills"],
-  ["Credentials", "credentials"],
-];
+
 interface CredentialProps {
   currentTutor: User | undefined;
 }
 ///used to display the credentials for a tutor in the tutor homepage
 const CredentialsDisplay: React.FC<CredentialProps> = ({ currentTutor }) => {
-  const currentUser = useLoginContext();
 
   return (
     <Stack>

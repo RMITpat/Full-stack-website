@@ -6,7 +6,6 @@ import {
   Space,
   Group,
   SimpleGrid,
-  Text,
   Flex,
   Textarea,
 } from "@mantine/core";
@@ -36,7 +35,7 @@ export default function CourseDetail() {
         code as string
       );
       setApplications(applications);
-    } catch (error) {
+    } catch {
       toast.error("Error fetching applications");
     }
   };
@@ -59,7 +58,7 @@ export default function CourseDetail() {
       );
       console.log(lecturerCourseVotes);
       setRanking(lecturerCourseVotes);
-    } catch (error) {
+    } catch {
       toast.error("Failed to find lecturer votes");
     }
   };
@@ -68,7 +67,7 @@ export default function CourseDetail() {
       const course = await courseApi.getCourseById(code as string);
       setCourse(course);
       console.log(course);
-    } catch (error) {
+    } catch {
       toast.error("Error fetching course");
     }
   };
@@ -102,7 +101,7 @@ export default function CourseDetail() {
   const moveLeft = (index: number) => {
     //checks that the applicant isnt first as you can't move an applicant higher than first
     if (index > 0) {
-      let temp = ranking[index - 1];
+      const temp = ranking[index - 1];
       ranking[index - 1] = ranking[index];
       ranking[index] = temp;
       setRanking([...ranking]);
@@ -114,7 +113,7 @@ export default function CourseDetail() {
     //checks that the applicant isnt last as you can't move an applicant higher than first
 
     if (index < ranking.length - 1) {
-      let temp = ranking[index + 1];
+      const temp = ranking[index + 1];
       ranking[index + 1] = ranking[index];
       ranking[index] = temp;
       setRanking([...ranking]);
@@ -129,7 +128,7 @@ export default function CourseDetail() {
           applicationId: vote.application.id,
           comment: vote.comment,
         });
-      } catch (err) {
+      } catch {
         toast.error(`Failed to vote on application ${vote.application.id}`);
       }
     });
@@ -145,12 +144,14 @@ export default function CourseDetail() {
       (vote: Vote) => vote.application.course.code == code
     );
 
-    lecturerCourseVotes.forEach(async (vote: { application: { id: number; }; }) => {
-        await voteApi.deleteVote(currentUser.user.User_id, vote.application.id)
-    });
+    lecturerCourseVotes.forEach(
+      async (vote: { application: { id: number } }) => {
+        await voteApi.deleteVote(currentUser.user.User_id, vote.application.id);
+      }
+    );
   };
   const submitRanking = () => {
-    deleteOldVotes()
+    deleteOldVotes();
     saveVotes();
   };
 
@@ -244,7 +245,7 @@ export default function CourseDetail() {
             <Title order={3}>All Applicants</Title>
             <Flex p="lg">
               <SimpleGrid bd="sm" spacing="40px" cols={4}>
-                {applications.map((application, index) => (
+                {applications.map((application) => (
                   <Flex direction="column">
                     <ApplicationCard application={application} />
                     {/* <Checkbox onChan /> */}
