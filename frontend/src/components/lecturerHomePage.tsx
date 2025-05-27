@@ -30,7 +30,7 @@ export default function LecturerHomePage() {
 
   useEffect(() => {
     fetchCourses();
-  }, [currentUser.user.User_id]);
+  }, []);
 
   const fetchCourses = async () => {
     try {
