@@ -1,7 +1,5 @@
 ## getting started
 
-GITHUB URL: https://github.com/rmit-fsd-2025-s1/s3976017-s4092047-a2
-
 ```
 ███████╗████████╗███████╗██████╗      ██████╗ ███╗   ██╗███████╗
 ██╔════╝╚══██╔══╝██╔════╝██╔══██╗    ██╔═══██╗████╗  ██║██╔════╝
@@ -12,7 +10,7 @@ GITHUB URL: https://github.com/rmit-fsd-2025-s1/s3976017-s4092047-a2
 ```
 
 DATABASE CONNECTION INFORMATION
-There is a provided .env file in backend which contains my (Patrick) database logins. If you wish to use your own, please change it to your own logins.
+Please create a .env file with your database logins
 
 After starting the backend, please type "y" when prompted to populate db with some data such as lecturer, admin and applicant sign ins, 3 premade courses and assigning those lecturers to those courses
 or type "n" if you want to sign up manually and add yourself to courses manually using the admin dashboard
@@ -116,13 +114,3 @@ Lectorial Week 09 code archive
 Example 1 and example 2
 
 -Mantine (2025). Get started | Mantine. [online] Mantine.dev. Available at: https://mantine.dev/core/package/ [Accessed 7 Jun. 2025].
-
-GENERATIVE AI Declaration
-
-Patrick
-I primarily used generative ai for debugging, clarification of concepts, and syntax checking. If I had an error I could not fix, I would copy paste the error message ChatGpt to better understand how to solve it. It was particularly helpful in week 8 when we were first introduced to backends, when I asked many questions regarding REST api calls and the way routing worked. It helped me understand the example code much better, as most of the backend stuff was adapted from week 9 example 1 and 2, which I used as a guide throughout the assignment.
-Overall, everything from controllers to routing to frontend ui was devised by me, and occasionally bugfixed by ChatGPT. I am proud to never have copied a single line from the spec into AI 🙂
-
-Lach
-I used chatgpt for debugging, and for rewriting the tsx in our old assignment to use the new backend fetch functions. I used chat gpt for fixing some resolver bugs caused by a merge I didn't notice, changing the parameters of the applicants resolver.  
-any where i used a lot of ai, added a declaration at the top of the file
