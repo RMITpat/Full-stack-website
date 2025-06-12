@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@mantine/charts": "^8.0.1",
+    "axios": "^1.9.0",
+    "graphql": "^16.11.0",
+    "recharts": "^2.15.3"
+  }
+}
