@@ -1,4 +1,6 @@
-TeachTeam is a Typescript React app which uses REST API and GraphQL to make requests to an SQL database. 
+TeachTeam is a web app that allows university lecturers to review and select tutors for their courses.
+
+Stack: Typescript React app which uses REST API and GraphQL to make requests to an SQL database. 
 
 
 
