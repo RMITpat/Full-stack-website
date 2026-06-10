@@ -1,4 +1,4 @@
-TeachTeam is a web app that allows university lecturers to review and select tutors for their courses.
+TeachTeam is a web app that allows lecturers from a hypothetical university to review and select tutors for their courses.
 
 Stack: Typescript React app which uses REST API and GraphQL to make requests to an SQL database. 
 
